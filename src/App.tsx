@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useKioskStore } from './store/kioskStore';
 import { eventLogger } from './logger/eventLogger';
 
@@ -27,6 +27,26 @@ import './styles/kiosk.css';
 
 export const App: React.FC = () => {
   const { currentScreen, isAccessibilityMode } = useKioskStore();
+
+  useEffect(() => {
+    const viewport = document.querySelector<HTMLElement>('.kiosk-screen-viewport');
+    if (!viewport) return;
+    const getInteractiveElements = () => Array.from(viewport.querySelectorAll<HTMLElement>(
+      'button:not(:disabled), a[href], input:not(:disabled), [role="button"], [role="alert"], [data-aoi]'
+    ));
+    eventLogger.logScreen(currentScreen, viewport.getBoundingClientRect(), getInteractiveElements());
+
+    let frame = 0;
+    const observer = new MutationObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => eventLogger.syncAois(currentScreen, getInteractiveElements()));
+    });
+    observer.observe(viewport, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style', 'aria-hidden', 'disabled'] });
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, [currentScreen]);
 
   // Przechwytywanie kliknięć w nieaktywne tło ekranu (AOI_tlo - dotknięcia obok celu wg Tabeli 8)
   const handleViewportBackgroundClick = (e: React.MouseEvent) => {
@@ -77,7 +97,7 @@ export const App: React.FC = () => {
     <div className="kiosk-app-environment" onClick={handleViewportBackgroundClick}>
       {/* Widok obejmuje wyłącznie pionowy ekran kiosku. */}
       <div className="kiosk-screen-shell">
-        <div className={`kiosk-screen-viewport ${isAccessibilityMode ? 'a11y-mode' : ''}`}>
+        <div className={`kiosk-screen-viewport ${isAccessibilityMode ? 'a11y-mode' : ''}`} data-screen={currentScreen}>
           <div className="kiosk-screen-content">
             {renderActiveScreen()}
 

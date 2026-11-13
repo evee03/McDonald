@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useKioskStore } from '../../store/kioskStore';
-import { eventLogger, type SessionMetrics } from '../../logger/eventLogger';
+import { eventLogger, type ResearchVersion, type SessionMetrics } from '../../logger/eventLogger';
 
 export const DevPanel: React.FC = () => {
   const {
@@ -15,6 +15,23 @@ export const DevPanel: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [metrics, setMetrics] = useState<SessionMetrics>(eventLogger.getMetrics());
+  const [interfaceCode, setInterfaceCode] = useState('6');
+  const [version, setVersion] = useState<ResearchVersion>('A');
+  const [order, setOrder] = useState<'AB' | 'BA'>('AB');
+
+  const updateConfiguration = (next: { interfaceCode?: string; version?: ResearchVersion; order?: 'AB' | 'BA'; participantId?: string }) => {
+    const config = {
+      interfaceCode: next.interfaceCode ?? interfaceCode,
+      version: next.version ?? version,
+      order: next.order ?? order,
+      participantId: next.participantId ?? participantId,
+    };
+    eventLogger.configure(config);
+    setInterfaceCode(config.interfaceCode);
+    setVersion(config.version);
+    setOrder(config.order);
+    setMetrics(eventLogger.getMetrics());
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,7 +41,7 @@ export const DevPanel: React.FC = () => {
   }, []);
 
   const handleDownloadCSV = () => {
-    eventLogger.downloadCSV(`PUN_dane_badania_${participantId}_${activeScenario}.csv`);
+    eventLogger.downloadCSV();
   };
 
   const handleDownloadJSON = () => {
@@ -33,6 +50,16 @@ export const DevPanel: React.FC = () => {
 
   const handleResetSession = () => {
     eventLogger.resetSession();
+    setMetrics(eventLogger.getMetrics());
+  };
+
+  const handleStartScenario = () => {
+    eventLogger.setScenario(activeScenario);
+    setMetrics(eventLogger.getMetrics());
+  };
+
+  const handleFinishScenario = (success: 0 | 1) => {
+    eventLogger.markCompleted(success);
     setMetrics(eventLogger.getMetrics());
   };
 
@@ -61,8 +88,34 @@ export const DevPanel: React.FC = () => {
               type="text"
               value={participantId}
               onChange={(e) => setParticipant(e.target.value)}
+              onBlur={(e) => updateConfiguration({ participantId: e.target.value })}
               className="dev-input-field"
             />
+          </div>
+
+          <div className="dev-row">
+            <label htmlFor="dev-interface-input">Interfejs:</label>
+            <input id="dev-interface-input" type="number" min="1" max="10" value={interfaceCode}
+              onChange={(e) => setInterfaceCode(e.target.value)}
+              onBlur={(e) => updateConfiguration({ interfaceCode: e.target.value })} className="dev-input-field" />
+          </div>
+
+          <div className="dev-row">
+            <label htmlFor="dev-version-select">Wersja:</label>
+            <select id="dev-version-select" value={version}
+              onChange={(e) => updateConfiguration({ version: e.target.value as ResearchVersion })} className="dev-select-field">
+              <option value="A">A</option>
+              <option value="B">B</option>
+            </select>
+          </div>
+
+          <div className="dev-row">
+            <label htmlFor="dev-order-select">Kolejność:</label>
+            <select id="dev-order-select" value={order}
+              onChange={(e) => updateConfiguration({ order: e.target.value as 'AB' | 'BA' })} className="dev-select-field">
+              <option value="AB">AB</option>
+              <option value="BA">BA</option>
+            </select>
           </div>
 
           <div className="dev-row">
@@ -78,6 +131,11 @@ export const DevPanel: React.FC = () => {
               <option value="S3">S3: Płatność i podsumowanie</option>
               <option value="FREE">Eksploracja swobodna</option>
             </select>
+          </div>
+          <div className="quick-nav-buttons">
+            <button type="button" onClick={handleStartScenario} className="dev-btn-small">Rozpocznij scenariusz</button>
+            <button type="button" onClick={() => handleFinishScenario(1)} className="dev-btn-small">Ukończ zadanie</button>
+            <button type="button" onClick={() => handleFinishScenario(0)} className="dev-btn-small">Przerwij zadanie</button>
           </div>
 
           <div className="panel-divider" />
@@ -127,7 +185,7 @@ export const DevPanel: React.FC = () => {
           <div className="panel-section-title">EKSPORT DANYCH DO STATYSTYK</div>
           <div className="export-actions">
             <button type="button" onClick={handleDownloadCSV} className="dev-export-btn">
-              📥 Pobierz CSV (PUN_dane_badania.csv)
+              📥 Pobierz CSV zdarzeń ({eventLogger.getCsvFilename()})
             </button>
             <button type="button" onClick={handleDownloadJSON} className="dev-export-btn">
               📄 Pobierz JSON ze zdarzeniami
