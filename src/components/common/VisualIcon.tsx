@@ -25,7 +25,7 @@ export const VisualIcon: React.FC<{ kind?: string; className?: string; label?: s
     'bacon-supreme': '/product-photos/burger.png',
     cheeseburger: '/product-photos/burger.png',
     'veggie-burger': '/product-photos/burger.png',
-    'spicy-crispy': '/product-photos/chicken.png',
+    'spicy-crispy': '/product-photos/burger.png',
     'crispy-strips-3': '/product-photos/chicken.png',
     'crispy-strips-5': '/product-photos/chicken.png',
     'chicken-wings-6': '/product-photos/chicken.png',

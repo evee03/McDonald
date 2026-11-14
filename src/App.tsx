@@ -17,6 +17,7 @@ import { PaymentSuccessScreen } from './components/screens/PaymentSuccessScreen'
 import { AllergensScreen } from './components/screens/AllergensScreen';
 
 // Modale
+import { DevPanel } from './components/common/DevPanel';
 import { ProductDetailModal } from './components/modals/ProductDetailModal';
 import { RestartModal } from './components/modals/RestartModal';
 import { ErrorModal } from './components/modals/ErrorModal';
@@ -110,6 +111,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+      <DevPanel />
     </div>
   );
 };

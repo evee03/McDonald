@@ -8,7 +8,6 @@ export const BottomBar: React.FC = () => {
   const {
     getCartTotal,
     getCartItemsCount,
-    navigateTo,
     openModal,
     toggleAccessibility,
     isAccessibilityMode,
@@ -27,7 +26,7 @@ export const BottomBar: React.FC = () => {
       total,
       count,
     });
-    navigateTo('cart', 'AOI_cel', 'Przejście do koszyka');
+    openModal('upsell');
   };
 
   const handleRestartClick = (e: React.MouseEvent) => {

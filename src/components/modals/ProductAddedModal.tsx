@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from '../common/VisualIcon';
@@ -6,25 +6,16 @@ import { useT } from '../../i18n';
 
 export const ProductAddedModal: React.FC = () => {
   const t = useT();
-  const { activeModal, openModal, getCartTotal, currentScreen } = useKioskStore();
+  const { activeModal, closeModal, getCartTotal, currentScreen, navigateTo } = useKioskStore();
 
   const total = getCartTotal();
-
-  useEffect(() => {
-    if (activeModal === 'product-added') {
-      const timer = setTimeout(() => {
-        // Po krótkiej chwili proponujemy Upsell ("A może coś jeszcze?")
-        openModal('upsell');
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [activeModal, openModal]);
 
   if (activeModal !== 'product-added') return null;
 
   const handleContinue = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', 'Potwierdzenie dodania produktu', e, currentScreen);
-    openModal('upsell');
+    closeModal('AOI_cel');
+    navigateTo('menu', 'AOI_cel', 'Powrót do menu po dodaniu produktu.')
   };
 
   return (

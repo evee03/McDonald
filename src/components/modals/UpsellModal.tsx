@@ -17,13 +17,13 @@ export const UpsellModal: React.FC = () => {
     eventLogger.logTouch('AOI_cel', `Wybór upsell: ${product.name}`, e, currentScreen);
     addProductToCart(product, 1);
     closeModal('AOI_cel');
-    navigateTo('menu', 'AOI_cel', 'Powrót do menu');
+    navigateTo('cart', 'AOI_cel', 'Przejście do podsumowania zamówienia.');
   };
 
   const handleNoThanks = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Odrzucenie upsell (Nie dziś)', e, currentScreen);
     closeModal('AOI_wstecz');
-    navigateTo('menu', 'AOI_wstecz', 'Powrót do menu');
+    navigateTo('cart', 'AOI_cel', 'Przejście do podsumowanie zamówienia.');
   };
 
   return (

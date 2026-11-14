@@ -350,13 +350,14 @@ export const useKioskStore = create<KioskState>((set, get) => ({
           { id: 'lettuce', name: 'Sałata', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
         ];
 
-    set({
+    set((state) =>({
       selectedProduct: product,
       selectedCartItemId: cartItemId || null,
       tempIngredients: initialIngredients,
+      previousScreen: state.currentScreen,
       currentScreen: 'personalize',
       activeModal: 'none',
-    });
+    }));
   },
 
   updateIngredientQty: (ingredientId, delta) => {

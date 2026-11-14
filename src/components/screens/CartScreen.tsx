@@ -107,6 +107,7 @@ export const CartScreen: React.FC = () => {
                       <button
                         type="button"
                         className="btn-cart-qty-minus"
+                        disabled={item.quantity <= 1}
                         onClick={(e) => {
                           eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość pozycji w koszyku', e, 'cart');
                           updateCartQuantity(item.id, -1);
