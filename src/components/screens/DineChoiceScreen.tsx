@@ -1,30 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
 
-const TAKEAWAY_BAG_PHOTO = 'https://www.mcdonalds.com/content/dam/sites/ch/nfl/newsroom/McDonalds%20G%C3%BCtertransport%20mit%2056%20Prozent%20per%20Bahn.jpg';
-
 const DineChoicePhoto: React.FC<{ type: 'dine-in' | 'takeaway' }> = ({ type }) => {
-  const [failed, setFailed] = useState(false);
   const isTakeaway = type === 'takeaway';
-  const source = isTakeaway ? TAKEAWAY_BAG_PHOTO : '/product-photos/burger.png';
 
   return (
     <div className={`dine-choice-photo-wrap ${isTakeaway ? 'takeaway' : 'dine-in'}`}>
-      {!failed ? (
-        <img
-          className="dine-choice-photo"
-          src={source}
-          alt={isTakeaway ? 'Papierowa torba na wynos McDonald’s' : 'Burger podawany na miejscu'}
-          loading="eager"
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        <VisualIcon kind={isTakeaway ? 'bag' : 'category'} label={isTakeaway ? 'Na wynos' : 'Na miejscu'} />
-      )}
+      <VisualIcon kind={isTakeaway ? 'bag' : 'burger'} label={isTakeaway ? 'Na wynos' : 'Na miejscu'} />
     </div>
   );
 };
