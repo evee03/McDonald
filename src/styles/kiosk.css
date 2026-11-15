@@ -1814,13 +1814,20 @@ body, html, #root {
 }
 
 .btn-toggle-details {
-  background: none;
-  border: none;
-  font-size: 11px;
+  width: 100px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid var(--kiosk-border);
+  border-radius: 4px;
   font-weight: 700;
-  color: #0066cc;
+  font-size: 12px;
+  padding: 0;
   cursor: pointer;
-  padding: 2px 0;
+  text-align: center;
 }
 
 .cart-item-custom-note {
@@ -1861,13 +1868,20 @@ body, html, #root {
 }
 
 .btn-cart-item-remove {
-  background: none;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  font-size: 10px;
-  color: #555;
-  padding: 2px 6px;
+  width: 78px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  box-sizing: border-box;
+  border: 1px solid var(--kiosk-border);
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 14px;
+  padding: 0;
   cursor: pointer;
+  text-align: center;
 }
 
 .btn-cart-qty-minus:disabled {
@@ -1946,6 +1960,7 @@ body, html, #root {
 .total-label-text {
   font-size: 18px;
   font-weight: 800;
+  margin-left: 170px;
 }
 
 .total-value-big {
@@ -4223,33 +4238,36 @@ body,
 }
 
 /* Spójny, klikalny pasek przewijania na ekranach kiosku. */
-.kiosk-screen-content * {
+/* Pasek przewijania tylko na liście składników */
+.ingredients-list-section {
+  overflow-y: auto;
+  overflow-x: hidden;
+
   scrollbar-color: #969696 #f1f1f1;
   scrollbar-width: thin;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar {
+.ingredients-list-section::-webkit-scrollbar {
   width: 16px;
-  height: 16px;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-track {
+.ingredients-list-section::-webkit-scrollbar-track {
   background: #f1f1f1;
   border-radius: 9px;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-thumb {
+.ingredients-list-section::-webkit-scrollbar-thumb {
   min-height: 36px;
   background: #999;
   border: 3px solid #f1f1f1;
   border-radius: 9px;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-thumb:hover {
+.ingredients-list-section::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-button {
+.ingredients-list-section::-webkit-scrollbar-button {
   display: block;
   width: 16px;
   height: 16px;
@@ -4260,24 +4278,10 @@ body,
   cursor: pointer;
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-button:vertical:decrement {
+.ingredients-list-section::-webkit-scrollbar-button:vertical:decrement {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M2 8l4-4 4 4z'/%3E%3C/svg%3E");
 }
 
-.kiosk-screen-content *::-webkit-scrollbar-button:vertical:increment {
+.ingredients-list-section::-webkit-scrollbar-button:vertical:increment {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M2 4l4 4 4-4z'/%3E%3C/svg%3E");
-}
-
-.kiosk-screen-content *::-webkit-scrollbar-button:horizontal:decrement {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M8 2 4 6l4 4z'/%3E%3C/svg%3E");
-}
-
-.kiosk-screen-content *::-webkit-scrollbar-button:horizontal:increment {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='m4 2 4 4-4 4z'/%3E%3C/svg%3E");
-}
-
-.kiosk-screen-content .menu-sidebar::-webkit-scrollbar,
-.kiosk-screen-content .sidebar-categories-scroll::-webkit-scrollbar {
-  display: block;
-  width: 16px;
 }

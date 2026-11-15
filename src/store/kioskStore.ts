@@ -55,6 +55,7 @@ export interface ConfiguredCombo {
   sauce: ComboOption;
   drink: ComboOption;
   extra?: ComboOption;
+  customIngredients?: Ingredient[];
 }
 
 export interface CartItem {
@@ -125,7 +126,7 @@ interface KioskState {
 
   // Obsługa produktów
   openProductDetail: (product: Product) => void;
-  startComboBuilder: (product: Product) => void;
+  startComboBuilder: (product: Product, cartItemId?: string) => void;
   setComboSize: (size: 'standard' | 'large') => void;
   setComboSide: (side: 'frytki' | 'salatka') => void;
   setComboSauce: (sauce: ComboOption) => void;
@@ -255,9 +256,20 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     set({ selectedProduct: product, activeModal: 'product-detail' });
   },
 
-  startComboBuilder: (product) => {
+  startComboBuilder: (product, cartItemId) => {
+    const existingItem = cartItemId
+      ? get().cart.find((item) => item.id === cartItemId)
+      : undefined;
+
     // Inicjalizacja domyślnego zestawu
-    const initialCombo: ConfiguredCombo = {
+    const initialCombo: ConfiguredCombo = existingItem?.comboConfig ?
+    {
+      ...existingItem.comboConfig,
+      customIngredients: existingItem.customIngredients
+        ? [...existingItem.customIngredients]
+        : undefined,
+    }
+    :{
       baseProduct: product,
       size: 'standard',
       side: 'frytki',
@@ -268,6 +280,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
     set({
       selectedProduct: product,
+      selectedCartItemId: cartItemId || null,
       tempCombo: initialCombo,
       comboStep: 1,
       currentScreen: 'combo-builder',
@@ -303,54 +316,99 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   setComboStep: (step) => set({ comboStep: step }),
 
   finishComboBuilder: () => {
-    const combo = get().tempCombo;
-    if (!combo) return;
+    const { tempCombo, selectedCartItemId } = get();
+    if (!tempCombo) return;
 
     // Obliczenie ceny zestawu
     // Zestaw bazowo kosztuje bazowy produkt + 12.80 zł, duży + 3.00 zł
-    let price = combo.baseProduct.price + 12.80;
-    if (combo.size === 'large') price += 3.00;
-    if (combo.sauce.priceAdd) price += combo.sauce.priceAdd;
-    if (combo.drink.priceAdd) price += combo.drink.priceAdd;
-    if (combo.extra?.priceAdd) price += combo.extra.priceAdd;
+    let price = tempCombo.baseProduct.price + 12.80;
+    if (tempCombo.size === 'large') price += 3.00;
+    if (tempCombo.sauce.priceAdd) price += tempCombo.sauce.priceAdd;
+    if (tempCombo.drink.priceAdd) price += tempCombo.drink.priceAdd;
+    if (tempCombo.extra?.priceAdd) price += tempCombo.extra.priceAdd;
 
-    const cartItem: CartItem = {
-      id: `ITEM_${Date.now()}`,
-      isCombo: true,
-      product: combo.baseProduct,
-      quantity: 1,
-      comboConfig: combo,
-      calculatedUnitPrice: Math.round(price * 100) / 100,
-    };
+    const calculatedUnitPrice = Math.round(price * 100) / 100;
 
     eventLogger.logTouch(
       'AOI_cel',
-      `Dodanie zestawu do koszyka: ${combo.baseProduct.name} (Zestaw ${combo.size})`,
+      `Zapisano zestaw: ${tempCombo.baseProduct.name}`,
       {} as MouseEvent,
       'combo-builder'
     );
 
-    set((state) => ({
-      cart: [...state.cart, cartItem],
-      tempCombo: null,
-      activeModal: 'product-added',
-    }));
+    if (selectedCartItemId) {
+      // Aktualizacja istniejącego zestawu
+      set((state) => ({
+        cart: state.cart.map((item) =>
+          item.id === selectedCartItemId
+            ? {
+                ...item,
+                product: tempCombo.baseProduct,
+                comboConfig: tempCombo,
+                customIngredients: tempCombo.customIngredients
+                  ? [...tempCombo.customIngredients]
+                  : item.customIngredients,
+                calculatedUnitPrice,
+              }
+            : item
+        ),
+        tempCombo: null,
+        selectedCartItemId: null,
+        currentScreen: 'cart',
+        activeModal: 'none',
+      }));
+    } else {
+      // Dodanie nowego zestawu
+      const cartItem: CartItem = {
+        id: `ITEM_${Date.now()}`,
+        isCombo: true,
+        product: tempCombo.baseProduct,
+        quantity: 1,
+        comboConfig: tempCombo,
+        customIngredients: tempCombo.customIngredients
+          ? [...tempCombo.customIngredients]
+          : undefined,
+        calculatedUnitPrice,
+      };
+
+      set((state) => ({
+        cart: [...state.cart, cartItem],
+        tempCombo: null,
+        selectedCartItemId: null,
+        activeModal: 'product-added',
+      }));
+    }
   },
 
   // Personalizacja (S2)
   openPersonalize: (product, cartItemId) => {
-    // Kopia składników produktu lub domyślnych
-    const initialIngredients = product.ingredients
-      ? JSON.parse(JSON.stringify(product.ingredients))
-      : [
-          { id: 'beef', name: 'Mięso wołowe', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-          { id: 'cheese', name: 'Ser cheddar', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-          { id: 'pickles', name: 'Pikle', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-          { id: 'sauce', name: 'Sos burgerowy', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-          { id: 'lettuce', name: 'Sałata', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-        ];
+    const state = get();
 
-    set((state) =>({
+    const existingCartItem = cartItemId
+      ? state.cart.find((item) => item.id === cartItemId)
+      : undefined;
+
+    const existingComboIngredients =
+      state.previousScreen === 'combo-builder'
+        ? state.tempCombo?.customIngredients
+        : undefined;
+
+    const savedIngredients =
+      existingCartItem?.customIngredients || existingComboIngredients;
+
+    const initialIngredients = savedIngredients
+      ? JSON.parse(JSON.stringify(savedIngredients))
+      : product.ingredients
+        ? JSON.parse(JSON.stringify(product.ingredients))
+        : [
+            { id: 'beef', name: 'Mięso wołowe', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+            { id: 'cheese', name: 'Ser cheddar', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+            { id: 'pickles', name: 'Pikle', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+            { id: 'sauce', name: 'Sos burgerowy', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+            { id: 'lettuce', name: 'Sałata', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+          ];
+
+    set((state) => ({
       selectedProduct: product,
       selectedCartItemId: cartItemId || null,
       tempIngredients: initialIngredients,
@@ -378,22 +436,32 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   },
 
   savePersonalization: () => {
-    const { selectedCartItemId, selectedProduct, tempIngredients, cart } = get();
+    const { selectedCartItemId, selectedProduct, tempIngredients, cart, previousScreen, tempCombo } = get();
 
-    if (selectedCartItemId) {
-      // Edycja istniejącej pozycji w koszyku
+    // Personalizacja burgera podczas konfiguracji zestawu
+    if (previousScreen === 'combo-builder' && tempCombo) {
       set({
-        cart: cart.map((item) => {
-          if (item.id !== selectedCartItemId) return item;
-          return {
-            ...item,
-            customIngredients: [...tempIngredients],
-          };
-        }),
+        tempCombo: {
+          ...tempCombo,
+          customIngredients: [...tempIngredients],
+        },
+        currentScreen: 'combo-builder',
+        previousScreen: 'personalize',
+      });
+    } else if (selectedCartItemId) {
+      // Edycja burgera w istniejącym zestawie lub produktu w koszyku
+      set({
+        cart: cart.map((item) =>
+          item.id === selectedCartItemId
+            ? { ...item, customIngredients: [...tempIngredients] }
+            : item
+        ),
         currentScreen: 'cart',
+        previousScreen: 'personalize',
+        selectedCartItemId: null,
       });
     } else if (selectedProduct) {
-      // Dodanie nowo spersonalizowanego produktu
+      // Dodanie nowego spersonalizowanego produktu
       const cartItem: CartItem = {
         id: `ITEM_${Date.now()}`,
         isCombo: false,
@@ -402,13 +470,19 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         customIngredients: [...tempIngredients],
         calculatedUnitPrice: selectedProduct.price,
       };
+
       set((state) => ({
         cart: [...state.cart, cartItem],
         activeModal: 'product-added',
       }));
     }
 
-    eventLogger.logTouch('AOI_cel', 'Zapisano personalizację produktu', {} as MouseEvent, 'personalize');
+    eventLogger.logTouch(
+      'AOI_cel',
+      'Zapisano personalizację produktu',
+      {} as MouseEvent,
+      'personalize'
+    );
   },
 
   // Koszyk i Zamówienie
@@ -443,10 +517,8 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const item = get().cart.find((i) => i.id === itemId);
     if (!item) return;
 
-    const newQty = item.quantity + delta;
-    if (newQty <= 0) {
-      get().removeCartItem(itemId);
-    } else {
+    const newQty = Math.max(1,item.quantity + delta);
+    if (newQty !== item.quantity) {
       eventLogger.logTouch(
         'AOI_cel',
         `Zmiana ilości w koszyku (${item.product.name}): ${newQty}`,

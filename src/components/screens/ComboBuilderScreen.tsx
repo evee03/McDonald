@@ -11,6 +11,7 @@ export const ComboBuilderScreen: React.FC = () => {
   const {
     tempCombo,
     comboStep,
+    selectedCartItemId,
     setComboStep,
     setComboSize,
     setComboSide,
@@ -41,9 +42,13 @@ export const ComboBuilderScreen: React.FC = () => {
     setComboStep(stepIndex);
   };
 
-  const handleNextStep = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', `Kolejny krok (${comboStep} -> ${comboStep + 1})`, e, 'combo-builder');
-    setComboStep(Math.min(6, comboStep + 1));
+  const handleBack = (e: React.MouseEvent) => {
+    eventLogger.logTouch('AOI_wstecz', `Cofnij do poprzedniego kroku (${comboStep} -> ${comboStep - 1})`, e, 'combo-builder');
+    if (comboStep > 1) {
+      setComboStep(comboStep - 1);
+    } else {
+      navigateTo('menu', 'AOI_wstecz', 'Powrót do menu');
+    }
   };
 
   const handleFinish = (e: React.MouseEvent) => {
@@ -53,7 +58,11 @@ export const ComboBuilderScreen: React.FC = () => {
 
   const handleCancel = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Anuluj konfigurator zestawu', e, 'combo-builder');
-    navigateTo('menu', 'AOI_wstecz', 'Powrót do menu');
+    if (selectedCartItemId) {
+      navigateTo('cart', 'AOI_wstecz', 'Powrót do koszyka');
+    } else {
+      navigateTo('menu', 'AOI_wstecz', 'Powrót do menu');
+    }
   };
 
   // Filtrowanie napojów
@@ -181,6 +190,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Wybór: Zestaw Standardowy', e, 'combo-builder');
                     setComboSize('standard');
+                    setComboStep(2);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -195,6 +205,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Wybór: Zestaw Powiększony (+3,00 zł)', e, 'combo-builder');
                     setComboSize('large');
+                    setComboStep(2);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -217,6 +228,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Wybór dodatku: Frytki', e, 'combo-builder');
                     setComboSide('frytki');
+                    setComboStep(3);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -230,6 +242,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Wybór dodatku: Sałatka', e, 'combo-builder');
                     setComboSide('salatka');
+                    setComboStep(3);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -253,6 +266,7 @@ export const ComboBuilderScreen: React.FC = () => {
                     onClick={(e) => {
                       eventLogger.logTouch('AOI_cel', `Wybór sosu: ${sauce.name}`, e, 'combo-builder');
                       setComboSauce(sauce);
+                      setComboStep(4);
                     }}
                     data-aoi="AOI_cel"
                   >
@@ -318,6 +332,7 @@ export const ComboBuilderScreen: React.FC = () => {
                     onClick={(e) => {
                       eventLogger.logTouch('AOI_cel', `Wybór napoju: ${drink.name}`, e, 'combo-builder');
                       setComboDrink(drink);
+                      setComboStep(5);
                     }}
                     data-aoi="AOI_cel"
                   >
@@ -344,6 +359,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Wybór extra dodatku: Lody', e, 'combo-builder');
                     setComboExtra(comboExtras[0]);
+                    setComboStep(6);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -358,6 +374,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={(e) => {
                     eventLogger.logTouch('AOI_cel', 'Brak extra dodatku (Nie, dziękuję)', e, 'combo-builder');
                     setComboExtra(undefined);
+                    setComboStep(6);
                   }}
                   data-aoi="AOI_cel"
                 >
@@ -382,7 +399,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   <button
                     type="button"
                     className="btn-summary-personalize"
-                    onClick={() => openPersonalize(tempCombo.baseProduct)}
+                    onClick={() => openPersonalize(tempCombo.baseProduct, selectedCartItemId || undefined)}
                     data-aoi="AOI_cel"
                   >
                     {t('Personalizuj')}
@@ -468,16 +485,16 @@ export const ComboBuilderScreen: React.FC = () => {
             {comboStep < 6 ? (
               <button
                 type="button"
-                className="btn-combo-next"
-                onClick={handleNextStep}
-                data-aoi="AOI_cel"
+                className="btn-combo-cancel"
+                onClick={handleBack}
+                data-aoi="AOI_wstecz"
               >
-                {t('Dalej →')}
+                {t('Cofnij')}
               </button>
             ) : (
               <button
                 type="button"
-                className="btn-combo-add-final"
+                className="btn-combo-cancel"
                 onClick={handleFinish}
                 data-aoi="AOI_cel"
               >

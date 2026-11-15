@@ -97,6 +97,7 @@ export const ProductDetailModal: React.FC = () => {
           <button
             type="button"
             className="qty-btn"
+            disabled={quantity <= 1}
             onClick={(e) => {
               eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość [-]', e, currentScreen);
               setQuantity((q) => Math.max(1, q - 1));

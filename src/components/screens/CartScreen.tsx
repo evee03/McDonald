@@ -14,6 +14,7 @@ export const CartScreen: React.FC = () => {
     removeCartItem,
     navigateTo,
     openPersonalize,
+    startComboBuilder,
   } = useKioskStore();
 
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
@@ -27,7 +28,11 @@ export const CartScreen: React.FC = () => {
 
   const handleEditMeal = (item: typeof cart[0], e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Edytuj posiłek: ${item.product.name}`, e, 'cart');
-    openPersonalize(item.product, item.id);
+    if (item.isCombo && item.comboConfig) {
+      startComboBuilder(item.product, item.id);
+    } else {
+      openPersonalize(item.product, item.id);
+    }
   };
 
   const handleAddMoreProducts = (e: React.MouseEvent) => {
@@ -90,7 +95,7 @@ export const CartScreen: React.FC = () => {
                         onClick={(e) => toggleDetails(item.id, e)}
                         data-aoi="AOI_cel"
                       >
-                        {isExpanded ? `${t('Ukryj szczegóły')} ▲` : `${t('Pokaż szczegóły')} ▼`}
+                        {isExpanded ? `${t('Ukryj szczegóły')}` : `${t('Pokaż szczegóły')}`}
                       </button>
                     )}
 
