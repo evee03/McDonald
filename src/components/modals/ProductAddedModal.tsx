@@ -3,19 +3,35 @@ import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const ProductAddedModal: React.FC = () => {
   const t = useT();
   const { activeModal, closeModal, getCartTotal, currentScreen, navigateTo } = useKioskStore();
 
   const total = getCartTotal();
+  const isPaymentFlow = currentScreen === 'cart';
 
   if (activeModal !== 'product-added') return null;
 
   const handleContinue = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', 'Potwierdzenie dodania produktu', e, currentScreen);
     closeModal('AOI_cel');
-    navigateTo('menu', 'AOI_cel', 'Powrót do menu po dodaniu produktu.')
+    navigateTo(
+      isPaymentFlow ? 'payment-method' : 'menu',
+      'AOI_cel',
+      isPaymentFlow ? 'Przejście do wyboru płatności' : 'Powrót do menu po dodaniu produktu.'
+    );
+  };
+
+  const handleGoToSummary = (e: React.MouseEvent) => {
+    eventLogger.logTouch('AOI_cel', 'Przejście do podsumowania zamówienia', e, currentScreen);
+    closeModal('AOI_cel');
+    navigateTo(
+      isPaymentFlow ? 'payment-method' : 'cart',
+      'AOI_cel',
+      isPaymentFlow ? 'Przejście do wyboru płatności' : 'Przejście do podsumowania zamówienia'
+    );
   };
 
   return (
@@ -33,16 +49,24 @@ export const ProductAddedModal: React.FC = () => {
         <h2 className="added-title">{t('Produkt dodany do zamówienia')}</h2>
         <p className="added-subtitle">{t('Łączna kwota została zaktualizowana')}</p>
 
-        <div className="added-total-amount">{total.toFixed(2)} zł</div>
+        <div className="added-total-amount">{formatPrice(total)} zł</div>
 
-        <button
-          type="button"
-          className="btn-added-continue"
-          onClick={handleContinue}
-          data-aoi="AOI_cel"
-        >
-          {t('Dalej →')}
-        </button>
+        <div className="added-modal-actions">
+          {isPaymentFlow ? (
+            <button type="button" className="btn-added-summary" onClick={handleContinue} data-aoi="AOI_cel">
+              Przejdź do płatności
+            </button>
+          ) : (
+            <>
+              <button type="button" className="btn-added-continue" onClick={handleContinue} data-aoi="AOI_cel">
+                {t('Dalej')}
+              </button>
+              <button type="button" className="btn-added-summary" onClick={handleGoToSummary} data-aoi="AOI_cel">
+                {t('Przejdź do podsumowania')}
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

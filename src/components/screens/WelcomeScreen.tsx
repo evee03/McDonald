@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
 
 export const WelcomeScreen: React.FC = () => {
-  const { navigateTo, toggleAccessibility, isAccessibilityMode } = useKioskStore();
+  const { navigateTo, toggleAccessibility, isAccessibilityMode, activeScenario } = useKioskStore();
   const t = useT();
+  const [showScenarioInstructions, setShowScenarioInstructions] = useState(true);
+
+  const scenarioInstructions = {
+    S1: 'Zamów dwa burgery z bekonem na wynos i zapłać kartą.',
+    S2: 'Zamów zwykłego burgera na miejscu, zmodyfikuj go, aby zawierał 3 plastry sera i zapłać kartą.',
+    S3: 'Zamów standardowy zestaw na wynos składający się ze zwykłego burgera, frytek oraz soku pomarańczowego i zapłać gotówką.',
+  } as const;
+  const scenarioNumber = activeScenario.replace('S', '');
 
   const handleStartOrder = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', 'Kliknij tutaj aby rozpocząć zamówienie', e, 'welcome');
@@ -30,6 +38,32 @@ export const WelcomeScreen: React.FC = () => {
 
   return (
     <div className="welcome-screen-container">
+      {showScenarioInstructions && activeScenario !== 'FREE' && (
+        <div className="kiosk-modal-backdrop">
+          <div
+            className="scenario-instruction-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="scenario-instruction-title"
+          >
+            <h2 id="scenario-instruction-title">Zadanie {scenarioNumber}</h2>
+            <p>{scenarioInstructions[activeScenario]}</p>
+            <button
+              type="button"
+              className="btn-error-confirm"
+              onClick={(e) => {
+                eventLogger.logTouch('AOI_cel', 'Potwierdzenie instrukcji scenariusza', e, 'welcome');
+                eventLogger.startTask();
+                setShowScenarioInstructions(false);
+              }}
+              data-aoi="AOI_cel"
+            >
+              Rozumiem
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="welcome-hero-banner">
         <div className="hero-graphic-center">
           <VisualIcon kind="burger" label="Burger" photoKey="classic-burger" />

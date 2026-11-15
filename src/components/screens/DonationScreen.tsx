@@ -2,6 +2,7 @@ import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const DonationScreen: React.FC = () => {
   const { getCartTotal, setDonation } = useKioskStore();
@@ -13,12 +14,12 @@ export const DonationScreen: React.FC = () => {
   const roundAmount = roundDiff > 0 ? roundDiff : 1.00;
 
   const handleRoundDonation = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', `Wybór darowizny (zaokrąglenie): ${roundAmount.toFixed(2)} zł`, e, 'donation');
+    eventLogger.logTouch('AOI_cel', `Wybór darowizny (zaokrąglenie): ${formatPrice(roundAmount)} zł`, e, 'donation');
     setDonation(roundAmount);
   };
 
   const handleFixedDonation = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', 'Wybór stałej darowizny: 0.10 zł', e, 'donation');
+    eventLogger.logTouch('AOI_cel', 'Wybór stałej darowizny: 0,10 zł', e, 'donation');
     setDonation(0.10);
   };
 
@@ -52,7 +53,7 @@ export const DonationScreen: React.FC = () => {
             onClick={handleRoundDonation}
             data-aoi="AOI_cel"
           >
-            Zaokrąglij {roundAmount.toFixed(2)} zł
+            Zaokrąglij {formatPrice(roundAmount)} zł
           </button>
 
           <span className="donation-or-separator">lub</span>

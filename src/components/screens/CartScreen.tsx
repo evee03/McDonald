@@ -3,7 +3,11 @@ import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
 import { VisualIcon } from '../common/VisualIcon';
+import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
+import { getDisplayedIngredients } from '../../utils/productIngredients';
+import { AllergensScrollbar } from '../common/AllergensScrollbar';
 
 export const CartScreen: React.FC = () => {
   const t = useT();
@@ -13,6 +17,7 @@ export const CartScreen: React.FC = () => {
     updateCartQuantity,
     removeCartItem,
     navigateTo,
+    openModal,
     openPersonalize,
     startComboBuilder,
   } = useKioskStore();
@@ -41,11 +46,11 @@ export const CartScreen: React.FC = () => {
   };
 
   const handleCheckoutOrder = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', `Złożenie zamówienia (Suma: ${total.toFixed(2)} zł)`, e, 'cart', {
+    eventLogger.logTouch('AOI_cel', `Złożenie zamówienia (Suma: ${formatPrice(total)} zł)`, e, 'cart', {
       total,
       itemsCount: cart.length,
     });
-    navigateTo('payment-method', 'AOI_cel', 'Przejście do wyboru płatności');
+    openModal('upsell');
   };
 
   return (
@@ -59,7 +64,11 @@ export const CartScreen: React.FC = () => {
       </header>
 
       {/* Lista zamówionych produktów */}
-      <main className="cart-items-scroll-list">
+      <AllergensScrollbar
+        className="cart-scroll-shell"
+        contentClassName="cart-items-scroll-list"
+        contentElement="div"
+      >
         {cart.length === 0 ? (
           <div className="empty-cart-state">
             <span className="empty-icon"><VisualIcon kind="bag" label="Papierowa torba na wynos" photoKey="takeaway-bag" /></span>
@@ -77,26 +86,37 @@ export const CartScreen: React.FC = () => {
           cart.map((item) => {
             const isExpanded = !!expandedItems[item.id];
             const itemTotal = item.calculatedUnitPrice * item.quantity;
+            const displayedIngredients = getDisplayedIngredients(item.product, item.customIngredients);
+            const hasDetails = item.isCombo || displayedIngredients.length > 0;
+            const canEdit = item.isCombo || Boolean(item.product.ingredients?.length || item.customIngredients?.length);
 
             return (
               <div key={item.id} className="cart-item-card-row">
                 <div className="cart-item-main-bar">
-                  <div className="cart-item-visual"><VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} /></div>
+                  <div className="cart-item-visual">
+                    {item.product.id.startsWith('sauce-')
+                      ? <IngredientIcon id={item.product.id} label={item.product.name} />
+                      : <VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} />}
+                  </div>
 
                   <div className="cart-item-details-column">
-                    <h2 className="cart-item-name-heading">
-                      {t(item.product.name)} {item.isCombo ? `(${t('Zestaw')} ${item.comboConfig?.size === 'large' ? t('Powiększony') : t('Standardowy')})` : ''}
-                    </h2>
+                    <div className="cart-item-name-price-row">
+                      <h2 className="cart-item-name-heading">
+                        {t(item.product.name)} {item.isCombo ? `(${t('Zestaw')} ${item.comboConfig?.size === 'large' ? t('Powiększony') : t('Standardowy')})` : ''}
+                      </h2>
+                    </div>
 
-                    {item.isCombo && (
-                      <button
-                        type="button"
-                        className="btn-toggle-details"
-                        onClick={(e) => toggleDetails(item.id, e)}
-                        data-aoi="AOI_cel"
-                      >
-                        {isExpanded ? `${t('Ukryj szczegóły')}` : `${t('Pokaż szczegóły')}`}
-                      </button>
+                    {hasDetails && (
+                      <div className="cart-item-inline-actions">
+                        <button
+                          type="button"
+                          className="btn-toggle-details"
+                          onClick={(e) => toggleDetails(item.id, e)}
+                          data-aoi="AOI_cel"
+                        >
+                          {isExpanded ? t('Ukryj szczegóły') : t('Pokaż szczegóły')}
+                        </button>
+                      </div>
                     )}
 
                     {/* Składniki zmodyfikowane w S2 */}
@@ -108,33 +128,35 @@ export const CartScreen: React.FC = () => {
                   </div>
 
                   <div className="cart-item-controls-column">
-                    <div className="cart-qty-picker">
-                      <button
-                        type="button"
-                        className="btn-cart-qty-minus"
-                        disabled={item.quantity <= 1}
-                        onClick={(e) => {
-                          eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość pozycji w koszyku', e, 'cart');
-                          updateCartQuantity(item.id, -1);
-                        }}
-                        data-aoi="AOI_cel"
-                      >
-                        —
-                      </button>
-                      <span className="cart-qty-number">{item.quantity}</span>
-                      <button
-                        type="button"
-                        className="btn-cart-qty-plus"
-                        onClick={(e) => {
-                          eventLogger.logTouch('AOI_cel', 'Zwiększ ilość pozycji w koszyku', e, 'cart');
-                          updateCartQuantity(item.id, 1);
-                        }}
-                        data-aoi="AOI_cel"
-                      >
-                        +
-                      </button>
+                    <div className="cart-qty-price-row">
+                      <div className="cart-qty-picker">
+                        <button
+                          type="button"
+                          className="btn-cart-qty-minus"
+                          disabled={item.quantity <= 1}
+                          onClick={(e) => {
+                            eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość pozycji w koszyku', e, 'cart');
+                            updateCartQuantity(item.id, -1);
+                          }}
+                          data-aoi="AOI_cel"
+                        >
+                          —
+                        </button>
+                        <span className="cart-qty-number">{item.quantity}</span>
+                        <button
+                          type="button"
+                          className="btn-cart-qty-plus"
+                          onClick={(e) => {
+                            eventLogger.logTouch('AOI_cel', 'Zwiększ ilość pozycji w koszyku', e, 'cart');
+                            updateCartQuantity(item.id, 1);
+                          }}
+                          data-aoi="AOI_cel"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <div className="cart-item-price-sum">{formatPrice(itemTotal)} zł</div>
                     </div>
-
                     <button
                       type="button"
                       className="btn-cart-item-remove"
@@ -147,60 +169,94 @@ export const CartScreen: React.FC = () => {
                       {t('Usuń')}
                     </button>
 
-                    <div className="cart-item-price-sum">{itemTotal.toFixed(2)} zł</div>
                   </div>
                 </div>
 
-                {/* Rozwinięty widok zestawu z przyciskiem "Edytuj posiłek" (S2) */}
-                {item.isCombo && isExpanded && item.comboConfig && (
+                {/* Rozwinięty widok składników produktu lub zestawu */}
+                {hasDetails && isExpanded && (
                   <div className="cart-combo-expanded-drawer">
-                    <div className="combo-elements-preview-grid">
-                      <div className="preview-sub-box">
-                        <span className="preview-icon"><VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} /></span>
-                        <span className="preview-label">{t(item.product.name)}</span>
-                      </div>
-                      <div className="preview-sub-box">
-                        <span className="preview-icon"><VisualIcon kind="fries" label={item.comboConfig.side} /></span>
-                        <span className="preview-label">{t(item.comboConfig.side === 'frytki' ? 'Frytki i Dodatki' : 'Sałatka')}</span>
-                      </div>
-                      <div className="preview-sub-box">
-                        <span className="preview-icon"><VisualIcon kind={item.comboConfig.sauce.image} label={item.comboConfig.sauce.name} /></span>
-                        <span className="preview-label">{t(item.comboConfig.sauce.name)}</span>
-                      </div>
-                      <div className="preview-sub-box">
-                        <span className="preview-icon"><VisualIcon kind={item.comboConfig.drink.image} label={item.comboConfig.drink.name} photoKey={item.comboConfig.drink.id} /></span>
-                        <span className="preview-label">{t(item.comboConfig.drink.name)}</span>
-                      </div>
-                      {item.comboConfig.extra && (
+                    {item.isCombo && item.comboConfig ? (
+                      <div className="combo-elements-preview-grid">
                         <div className="preview-sub-box">
-                          <span className="preview-icon"><VisualIcon kind={item.comboConfig.extra.image} label={item.comboConfig.extra.name} /></span>
-                          <span className="preview-label">{t(item.comboConfig.extra.name)}</span>
+                          <span className="preview-icon">
+                            {item.product.id.startsWith('sauce-')
+                              ? <IngredientIcon id={item.product.id} label={item.product.name} />
+                              : <VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} />}
+                          </span>
+                          <span className="preview-label">{t(item.product.name)}</span>
                         </div>
-                      )}
-                    </div>
+                        <div className="preview-sub-box">
+                          <span className="preview-icon">
+                            {item.comboConfig.side === 'frytki'
+                              ? <VisualIcon kind="fries" label="Frytki" />
+                              : item.comboConfig.side === 'salatka'
+                                ? <IngredientIcon id="salad" label="Sałatka" />
+                                : <span>—</span>}
+                          </span>
+                          <span className="preview-label">
+                            {item.comboConfig.side
+                              ? t(item.comboConfig.side === 'frytki' ? 'Frytki i Dodatki' : 'Sałatka')
+                              : 'Nie wybrano'}
+                          </span>
+                        </div>
+                        <div className="preview-sub-box">
+                          <span className="preview-icon">
+                            {item.comboConfig.sauce
+                              ? <IngredientIcon id={item.comboConfig.sauce.id} label={item.comboConfig.sauce.name} />
+                              : <span>—</span>}
+                          </span>
+                          <span className="preview-label">{item.comboConfig.sauce ? t(item.comboConfig.sauce.name) : 'Nie wybrano'}</span>
+                        </div>
+                        <div className="preview-sub-box">
+                          <span className="preview-icon">
+                            {item.comboConfig.drink
+                              ? <VisualIcon kind={item.comboConfig.drink.image} label={item.comboConfig.drink.name} photoKey={item.comboConfig.drink.id} />
+                              : <span>—</span>}
+                          </span>
+                          <span className="preview-label">{item.comboConfig.drink ? t(item.comboConfig.drink.name) : 'Nie wybrano'}</span>
+                        </div>
+                        {item.comboConfig.extra && (
+                          <div className="preview-sub-box">
+                            <span className="preview-icon"><VisualIcon kind={item.comboConfig.extra.image} label={item.comboConfig.extra.name} /></span>
+                            <span className="preview-label">{t(item.comboConfig.extra.name)}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="product-ingredients-preview-grid">
+                        {displayedIngredients.map((ingredient) => (
+                          <div key={ingredient.id} className="preview-sub-box">
+                            <span className="preview-icon"><IngredientIcon id={ingredient.id} label={ingredient.name} /></span>
+                            <span className="preview-label">{t(ingredient.name)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
-                    <button
-                      type="button"
-                      className="btn-edit-meal-action"
-                      onClick={(e) => handleEditMeal(item, e)}
-                      data-aoi="AOI_cel"
-                    >
-                      {t('Edytuj posiłek (modyfikacja składników)')}
-                    </button>
+                    {canEdit && (
+                      <button
+                        type="button"
+                        className="btn-edit-meal-action"
+                        onClick={(e) => handleEditMeal(item, e)}
+                        data-aoi="AOI_cel"
+                      >
+                        {t('Edytuj posiłek')}
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
             );
           })
         )}
-      </main>
+      </AllergensScrollbar>
 
       {/* Podsumowanie kwoty i przyciski zamówienia */}
       {cart.length > 0 && (
         <div className="cart-bottom-checkout-panel">
           <div className="cart-total-display-row">
             <span className="total-label-text">{t('Suma')}</span>
-            <span className="total-value-big">{total.toFixed(2)} zł</span>
+            <span className="total-value-big">{formatPrice(total)} zł</span>
           </div>
 
           <div className="cart-main-action-buttons">

@@ -4,11 +4,13 @@ import { eventLogger } from '../../logger/eventLogger';
 import { Header } from '../common/Header';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const ComboPromptScreen: React.FC = () => {
   const t = useT();
   const {
     selectedProduct,
+    pendingComboQuantity,
     startComboBuilder,
     addProductToCart,
     navigateTo,
@@ -23,12 +25,12 @@ export const ComboPromptScreen: React.FC = () => {
 
   const handleSelectCombo = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Wybór: Tak, chcę zamówić Zestaw (${selectedProduct.name})`, e, 'combo-prompt');
-    startComboBuilder(selectedProduct);
+    startComboBuilder(selectedProduct, undefined, pendingComboQuantity);
   };
 
   const handleSelectOnlyProduct = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Wybór: Chcę tylko ten produkt (${selectedProduct.name})`, e, 'combo-prompt');
-    addProductToCart(selectedProduct, 1);
+    addProductToCart(selectedProduct, pendingComboQuantity);
   };
 
   const handleCancel = (e: React.MouseEvent) => {
@@ -69,7 +71,6 @@ export const ComboPromptScreen: React.FC = () => {
               <VisualIcon kind="meal" label="Zestaw" />
             </div>
             <h2 className="prompt-card-label">{t('Tak, chcę zamówić Zestaw')}</h2>
-            <span className="prompt-card-sublabel">{t('Więcej smaku w zestawie z frytkami i napojem')}</span>
           </div>
 
           {/* Opcja 2: Tylko ten produkt */}
@@ -82,7 +83,7 @@ export const ComboPromptScreen: React.FC = () => {
               <span className="single-icon-big"><VisualIcon kind={selectedProduct.image} label={selectedProduct.name} photoKey={selectedProduct.id} /></span>
             </div>
             <h2 className="prompt-card-label">{t('Chcę tylko ten produkt')}</h2>
-            <div className="prompt-card-single-price">{selectedProduct.price.toFixed(2)} zł</div>
+            <div className="prompt-card-single-price">{formatPrice(selectedProduct.price * pendingComboQuantity)} zł</div>
           </div>
         </div>
 

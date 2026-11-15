@@ -10,7 +10,7 @@ const DineChoicePhoto: React.FC<{ type: 'dine-in' | 'takeaway' }> = ({ type }) =
 
   return (
     <div className={`dine-choice-photo-wrap ${isTakeaway ? 'takeaway' : 'dine-in'}`}>
-      <VisualIcon kind={isTakeaway ? 'bag' : 'burger'} label={isTakeaway ? 'Na wynos' : 'Na miejscu'} />
+      <VisualIcon kind={isTakeaway ? 'bag' : 'dine-in'} label={isTakeaway ? 'Na wynos' : 'Na miejscu'} />
     </div>
   );
 };
@@ -70,7 +70,6 @@ export const DineChoiceScreen: React.FC = () => {
         {/* Sekcja wyboru języków */}
         <div className="language-selector-section">
           <div className="lang-section-label">
-            <span className="lang-icon-small">PL</span>
             <span>{t('Dostępne Języki')}</span>
           </div>
 

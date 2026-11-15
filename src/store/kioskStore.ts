@@ -15,10 +15,6 @@ import type {
   Ingredient,
   ComboOption,
 } from '../data/products';
-import {
-  frySauces,
-  comboDrinks,
-} from '../data/products';
 import { eventLogger, type StandardAOI } from '../logger/eventLogger';
 
 export type ScreenId =
@@ -50,10 +46,10 @@ export type ModalType =
 
 export interface ConfiguredCombo {
   baseProduct: Product;
-  size: 'standard' | 'large';
-  side: 'frytki' | 'salatka';
-  sauce: ComboOption;
-  drink: ComboOption;
+  size?: 'standard' | 'large';
+  side?: 'frytki' | 'salatka';
+  sauce?: ComboOption;
+  drink?: ComboOption;
   extra?: ComboOption;
   customIngredients?: Ingredient[];
 }
@@ -91,6 +87,9 @@ interface KioskState {
   // Wybrany produkt do podglądu / personalizacji
   selectedProduct: Product | null;
   selectedCartItemId: string | null;
+  pendingComboQuantity: number;
+  pendingProductIngredients: Ingredient[] | null;
+  personalizeReturnModal: ModalType;
 
   // Konfigurator zestawu (Combo Builder)
   comboStep: number; // 1: Rozmiar, 2: Dodatek, 3: Sos, 4: Napój, 5: Extra, 6: Podsumowanie
@@ -126,14 +125,16 @@ interface KioskState {
 
   // Obsługa produktów
   openProductDetail: (product: Product) => void;
-  startComboBuilder: (product: Product, cartItemId?: string) => void;
+  setPendingComboQuantity: (quantity: number) => void;
+  startComboBuilder: (product: Product, cartItemId?: string, quantity?: number) => void;
   setComboSize: (size: 'standard' | 'large') => void;
   setComboSide: (side: 'frytki' | 'salatka') => void;
   setComboSauce: (sauce: ComboOption) => void;
   setComboDrink: (drink: ComboOption) => void;
   setComboExtra: (extra?: ComboOption) => void;
   setComboStep: (step: number) => void;
-  finishComboBuilder: () => void;
+  finishComboBuilder: (quantity?: number) => void;
+  cancelComboBuilder: (removeProduct: boolean) => void;
 
   // Personalizacja (S2)
   openPersonalize: (product: Product, cartItemId?: string) => void;
@@ -180,6 +181,9 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
   selectedProduct: null,
   selectedCartItemId: null,
+  pendingComboQuantity: 1,
+  pendingProductIngredients: null,
+  personalizeReturnModal: 'none',
 
   comboStep: 1,
   tempCombo: null,
@@ -194,26 +198,24 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   paymentTerminalStep: 1,
 
   // Nawigacja
-  navigateTo: (screen, aoi = 'AOI_cel', label = `Przejście do ${screen}`) => {
+  navigateTo: (screen, _aoi = 'AOI_cel', _label = `Przejście do ${screen}`) => {
     const prev = get().currentScreen;
-    eventLogger.logTouch(aoi, label, {} as MouseEvent, screen);
     set({ currentScreen: screen, previousScreen: prev });
   },
 
-  goBack: (aoi = 'AOI_wstecz') => {
-    const prev = get().previousScreen || 'menu';
-    eventLogger.logTouch(aoi, 'Przycisk Wstecz / Powrót', {} as MouseEvent, prev);
-    set({ currentScreen: prev, previousScreen: null });
+  goBack: (_aoi = 'AOI_wstecz') => {
+    const { currentScreen, previousScreen, personalizeReturnModal, activeModal } = get();
+    const prev = previousScreen || 'menu';
+    set({
+      currentScreen: prev,
+      previousScreen: null,
+      activeModal: currentScreen === 'personalize' ? personalizeReturnModal : activeModal,
+      personalizeReturnModal: currentScreen === 'personalize' ? 'none' : personalizeReturnModal,
+    });
   },
 
   toggleAccessibility: () => {
     const nextState = !get().isAccessibilityMode;
-    eventLogger.logTouch(
-      'AOI_dostepnosc',
-      `Przełączenie trybu dostępności na: ${nextState ? 'WŁ' : 'WYŁ'}`,
-      {} as MouseEvent,
-      get().currentScreen
-    );
     set({ isAccessibilityMode: nextState });
   },
 
@@ -232,13 +234,11 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   setActiveCategory: (catId) => set({ activeCategory: catId }),
 
   // Modale
-  openModal: (modal, metadata) => {
-    eventLogger.logTouch('AOI_cel', `Otwarcie modala: ${modal}`, {} as MouseEvent, get().currentScreen, metadata);
+  openModal: (modal, _metadata) => {
     set({ activeModal: modal });
   },
 
-  closeModal: (aoi = 'AOI_wstecz') => {
-    eventLogger.logTouch(aoi, 'Zamknięcie modala', {} as MouseEvent, get().currentScreen);
+  closeModal: (_aoi = 'AOI_wstecz') => {
     set({ activeModal: 'none' });
   },
 
@@ -253,13 +253,18 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
   // Produkty i Zestawy (S1)
   openProductDetail: (product) => {
-    set({ selectedProduct: product, activeModal: 'product-detail' });
+    set({ selectedProduct: product, activeModal: 'product-detail', pendingProductIngredients: null });
   },
 
-  startComboBuilder: (product, cartItemId) => {
+  setPendingComboQuantity: (quantity) => {
+    set({ pendingComboQuantity: Math.max(1, Math.min(9, Math.round(quantity))) });
+  },
+
+  startComboBuilder: (product, cartItemId, quantity = 1) => {
     const existingItem = cartItemId
       ? get().cart.find((item) => item.id === cartItemId)
       : undefined;
+    const pendingIngredients = get().pendingProductIngredients;
 
     // Inicjalizacja domyślnego zestawu
     const initialCombo: ConfiguredCombo = existingItem?.comboConfig ?
@@ -271,20 +276,25 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     }
     :{
       baseProduct: product,
-      size: 'standard',
-      side: 'frytki',
-      sauce: frySauces[0], // Ketchup
-      drink: comboDrinks[1], // Cola
+      size: undefined,
+      side: undefined,
+      sauce: undefined,
+      drink: undefined,
       extra: undefined,
+      customIngredients: pendingIngredients
+        ? [...pendingIngredients]
+        : undefined,
     };
 
     set({
       selectedProduct: product,
       selectedCartItemId: cartItemId || null,
+      pendingComboQuantity: Math.max(1, Math.min(9, Math.round(quantity))),
       tempCombo: initialCombo,
-      comboStep: 1,
+      comboStep: cartItemId ? 6 : 1,
       currentScreen: 'combo-builder',
       activeModal: 'none',
+      pendingProductIngredients: null,
     });
   },
 
@@ -315,9 +325,27 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
   setComboStep: (step) => set({ comboStep: step }),
 
-  finishComboBuilder: () => {
+  cancelComboBuilder: (removeProduct) => {
+    const { selectedCartItemId } = get();
+    const returnScreen = selectedCartItemId ? 'cart' : 'menu';
+
+    set((state) => ({
+      cart: removeProduct && selectedCartItemId
+        ? state.cart.filter((item) => item.id !== selectedCartItemId)
+        : state.cart,
+      selectedProduct: null,
+      selectedCartItemId: null,
+      tempCombo: null,
+      currentScreen: returnScreen,
+      previousScreen: 'combo-builder',
+      activeModal: 'none',
+    }));
+  },
+
+  finishComboBuilder: (quantity = 1) => {
     const { tempCombo, selectedCartItemId } = get();
-    if (!tempCombo) return;
+    if (!tempCombo || !tempCombo.size || !tempCombo.side || !tempCombo.sauce || !tempCombo.drink || !tempCombo.extra) return;
+    const normalizedQuantity = Math.max(1, Math.min(9, Math.round(quantity)));
 
     // Obliczenie ceny zestawu
     // Zestaw bazowo kosztuje bazowy produkt + 12.80 zł, duży + 3.00 zł
@@ -328,13 +356,6 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     if (tempCombo.extra?.priceAdd) price += tempCombo.extra.priceAdd;
 
     const calculatedUnitPrice = Math.round(price * 100) / 100;
-
-    eventLogger.logTouch(
-      'AOI_cel',
-      `Zapisano zestaw: ${tempCombo.baseProduct.name}`,
-      {} as MouseEvent,
-      'combo-builder'
-    );
 
     if (selectedCartItemId) {
       // Aktualizacja istniejącego zestawu
@@ -348,6 +369,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
                 customIngredients: tempCombo.customIngredients
                   ? [...tempCombo.customIngredients]
                   : item.customIngredients,
+                quantity: normalizedQuantity,
                 calculatedUnitPrice,
               }
             : item
@@ -363,7 +385,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         id: `ITEM_${Date.now()}`,
         isCombo: true,
         product: tempCombo.baseProduct,
-        quantity: 1,
+        quantity: normalizedQuantity,
         comboConfig: tempCombo,
         customIngredients: tempCombo.customIngredients
           ? [...tempCombo.customIngredients]
@@ -415,6 +437,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       previousScreen: state.currentScreen,
       currentScreen: 'personalize',
       activeModal: 'none',
+      personalizeReturnModal: !cartItemId && state.currentScreen === 'menu' ? 'product-detail' : 'none',
     }));
   },
 
@@ -447,6 +470,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         },
         currentScreen: 'combo-builder',
         previousScreen: 'personalize',
+        personalizeReturnModal: 'none',
       });
     } else if (selectedCartItemId) {
       // Edycja burgera w istniejącym zestawie lub produktu w koszyku
@@ -459,42 +483,39 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         currentScreen: 'cart',
         previousScreen: 'personalize',
         selectedCartItemId: null,
+        personalizeReturnModal: 'none',
       });
     } else if (selectedProduct) {
-      // Dodanie nowego spersonalizowanego produktu
-      const cartItem: CartItem = {
-        id: `ITEM_${Date.now()}`,
-        isCombo: false,
-        product: selectedProduct,
-        quantity: 1,
-        customIngredients: [...tempIngredients],
-        calculatedUnitPrice: selectedProduct.price,
-      };
-
-      set((state) => ({
-        cart: [...state.cart, cartItem],
-        activeModal: 'product-added',
-      }));
+      // Zachowaj personalizację i wróć do szczegółów produktu przed dodaniem.
+      set({
+        currentScreen: previousScreen || 'menu',
+        previousScreen: 'personalize',
+        activeModal: 'product-detail',
+        pendingProductIngredients: [...tempIngredients],
+        personalizeReturnModal: 'none',
+      });
     }
 
-    eventLogger.logTouch(
-      'AOI_cel',
-      'Zapisano personalizację produktu',
-      {} as MouseEvent,
-      'personalize'
-    );
   },
 
   // Koszyk i Zamówienie
   addProductToCart: (product, quantity = 1) => {
+    const pendingIngredients = get().pendingProductIngredients;
     const existing = get().cart.find((i) => !i.isCombo && i.product.id === product.id);
 
     if (existing) {
       set((state) => ({
         cart: state.cart.map((item) =>
-          item.id === existing.id ? { ...item, quantity: item.quantity + quantity } : item
+          item.id === existing.id
+            ? {
+                ...item,
+                quantity: item.quantity + quantity,
+                customIngredients: pendingIngredients ? [...pendingIngredients] : item.customIngredients,
+              }
+            : item
         ),
         activeModal: 'product-added',
+        pendingProductIngredients: null,
       }));
     } else {
       const cartItem: CartItem = {
@@ -502,15 +523,16 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         isCombo: false,
         product,
         quantity,
+        customIngredients: pendingIngredients ? [...pendingIngredients] : undefined,
         calculatedUnitPrice: product.price,
       };
       set((state) => ({
         cart: [...state.cart, cartItem],
         activeModal: 'product-added',
+        pendingProductIngredients: null,
       }));
     }
 
-    eventLogger.logTouch('AOI_cel', `Dodano do koszyka: ${product.name}`, {} as MouseEvent, get().currentScreen);
   },
 
   updateCartQuantity: (itemId, delta) => {
@@ -519,12 +541,6 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
     const newQty = Math.max(1,item.quantity + delta);
     if (newQty !== item.quantity) {
-      eventLogger.logTouch(
-        'AOI_cel',
-        `Zmiana ilości w koszyku (${item.product.name}): ${newQty}`,
-        {} as MouseEvent,
-        'cart'
-      );
       set((state) => ({
         cart: state.cart.map((i) => (i.id === itemId ? { ...i, quantity: newQty } : i)),
       }));
@@ -532,13 +548,6 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   },
 
   removeCartItem: (itemId) => {
-    const item = get().cart.find((i) => i.id === itemId);
-    eventLogger.logTouch(
-      'AOI_cel',
-      `Usunięto z koszyka: ${item?.product.name}`,
-      {} as MouseEvent,
-      'cart'
-    );
     set((state) => ({
       cart: state.cart.filter((i) => i.id !== itemId),
     }));
@@ -554,13 +563,15 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   },
 
   resetAll: () => {
-    eventLogger.logTouch('AOI_wstecz', 'Reset aplikacji i koszyka', {} as MouseEvent, get().currentScreen);
+    eventLogger.resetTask();
     set({
       currentScreen: 'welcome',
       previousScreen: null,
       activeModal: 'none',
       cart: [],
       selectedProduct: null,
+      pendingProductIngredients: null,
+      personalizeReturnModal: 'none',
       tempCombo: null,
       tempIngredients: [],
       nipInput: '',
@@ -591,23 +602,15 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     if (nip.length !== 10 || !/^\d{10}$/.test(nip)) {
       get().triggerError('Nieprawidłowy numer NIP! Upewnij się, że wprowadzono dokładnie 10 cyfr.', 'AOI_blad');
     } else {
-      eventLogger.logTouch('AOI_cel', `Poprawny NIP: ${nip}`, {} as MouseEvent, 'nip-entry');
       set({ currentScreen: 'donation' });
     }
   },
 
   setDonation: (amount) => {
-    eventLogger.logTouch(
-      'AOI_cel',
-      amount > 0 ? `Wybrano darowiznę: ${amount.toFixed(2)} zł` : 'Pominięto darowiznę',
-      {} as MouseEvent,
-      'donation'
-    );
     set({ donationAdded: amount, currentScreen: 'payment-method' });
   },
 
   startCardPayment: () => {
-    eventLogger.logTouch('AOI_cel', 'Wybrano płatność: Zapłać tutaj kartą lub BLIKIEM', {} as MouseEvent, 'payment-method');
     set({
       currentScreen: 'payment-processing',
       paymentTerminalStep: 1,
@@ -621,7 +624,6 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   completePayment: () => {
     const randomOrder = Math.floor(Math.random() * 90) + 10;
     eventLogger.markCompleted();
-    eventLogger.logTouch('AOI_cel', `Płatność zakończona sukcesem! Zamówienie #${randomOrder}`, {} as MouseEvent, 'payment-success');
     set({
       orderNumber: randomOrder,
       currentScreen: 'payment-success',

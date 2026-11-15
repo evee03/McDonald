@@ -59,6 +59,24 @@ const safeLabel = (label: string) => label
   .replace(/((?:nip|blik|kod(?: kuponu)?|numer)\s*[:#]?\s*)(?:\d[\d\s-]{2,}|[A-Z0-9]{6,})/gi, '$1[ukryto]')
   .slice(0, 240);
 
+const viewInterfaceCodes: Record<string, string> = {
+  welcome: '1',
+  'language-select': '2',
+  'dine-choice': '3',
+  menu: '4',
+  'combo-prompt': '5',
+  'combo-builder': '6',
+  personalize: '7',
+  cart: '8',
+  'nip-entry': '9',
+  donation: '10',
+  'payment-method': '11',
+  'payment-processing': '12',
+  'payment-success': '13',
+  allergens: '14',
+  'scan-code': '15',
+};
+
 class EventLogger {
   private logs: PUNEvent[] = [];
   private activeAois = new Map<string, Pick<PUNEvent, 'ekran' | 'element' | 'etykieta' | 'x' | 'y' | 'szer' | 'wys' | 'aoi'>>();
@@ -68,9 +86,11 @@ class EventLogger {
   private interfaceCode = '6';
   private version: ResearchVersion = 'A';
   private order: 'AB' | 'BA' = 'AB';
-  private sessionStart = Date.now();
   private taskStart: number | null = null;
   private taskCompleted = false;
+  private loggingEnabled = false;
+  private lastScreenId = 'welcome';
+  private metricsStartIndex = 0;
 
   constructor() {
     this.logSession();
@@ -79,13 +99,15 @@ class EventLogger {
   private createSessionId() { return `SES_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`; }
 
   private append(data: Partial<PUNEvent>) {
+    if (!this.loggingEnabled) return;
     const now = Date.now();
+    const screenId = data.ekran || this.lastScreenId;
     this.logs.push({
-      interfejs: this.interfaceCode,
+      interfejs: viewInterfaceCodes[screenId] || this.interfaceCode,
       uczestnik: this.participantId,
       wersja: this.version,
       kolejnosc: this.order,
-      scenariusz: this.scenarioId === 'FREE' ? '' : this.scenarioId,
+      scenariusz: this.taskStart === null || this.scenarioId === 'FREE' ? '' : this.scenarioId,
       czas_lokalny: localTimestamp(new Date(now)),
       czas_epoch_ms: now,
       czas_ms: this.taskStart === null ? '' : now - this.taskStart,
@@ -104,6 +126,7 @@ class EventLogger {
   }
 
   private recordCurrentScreen() {
+    if (!this.loggingEnabled) return;
     const viewport = document.querySelector<HTMLElement>('.kiosk-screen-viewport');
     if (!viewport) return;
     const screenId = viewport.dataset.screen || 'start';
@@ -121,24 +144,44 @@ class EventLogger {
     this.logs = [];
     this.activeAois.clear();
     this.sessionId = this.createSessionId();
-    this.sessionStart = Date.now();
+    this.loggingEnabled = false;
     this.taskStart = null;
     this.taskCompleted = false;
-    this.logSession();
-    this.recordCurrentScreen();
+    this.metricsStartIndex = 0;
   }
 
   setScenario(scenario: ResearchScenario) {
     if (this.taskStart !== null && !this.taskCompleted) this.markCompleted(0);
     this.scenarioId = scenario;
     this.taskCompleted = false;
-    this.taskStart = scenario === 'FREE' ? null : Date.now();
-    if (scenario !== 'FREE') this.append({ zdarzenie: 'scenariusz_start', czas_ms: 0 });
+    this.loggingEnabled = false;
+    this.taskStart = null;
+  }
+
+  startTask() {
+    if (this.scenarioId === 'FREE' || this.taskStart !== null) return;
+    const viewport = document.querySelector<HTMLElement>('.kiosk-screen-viewport');
+    this.lastScreenId = viewport?.dataset.screen || this.lastScreenId;
+    this.loggingEnabled = true;
+    this.logSession();
+    this.taskStart = Date.now();
+    this.append({ zdarzenie: 'scenariusz_start', czas_ms: 0 });
+    window.setTimeout(() => this.recordCurrentScreen(), 0);
   }
 
   setParticipant(id: string) { this.participantId = id.trim() || 'P01'; }
 
   logScreen(screenId: string, rect: DOMRect, interactiveElements: HTMLElement[]) {
+    if (!this.loggingEnabled) return;
+    this.lastScreenId = screenId;
+    for (const previous of this.activeAois.values()) {
+      this.append({
+        zdarzenie: 'aoi_znika',
+        ekran: previous.ekran,
+        element: previous.element,
+        aoi: previous.aoi,
+      });
+    }
     this.activeAois.clear();
     const x = Math.round(window.screenX + rect.left);
     const y = Math.round(window.screenY + rect.top);
@@ -147,6 +190,8 @@ class EventLogger {
   }
 
   syncAois(screenId: string, interactiveElements: HTMLElement[]) {
+    if (!this.loggingEnabled) return;
+    this.lastScreenId = screenId;
     const nextAois = new Map<string, Pick<PUNEvent, 'ekran' | 'element' | 'etykieta' | 'x' | 'y' | 'szer' | 'wys' | 'aoi'>>();
     for (const element of interactiveElements) {
       const bounds = element.getBoundingClientRect();
@@ -185,31 +230,35 @@ class EventLogger {
   }
 
   logTouch(aoi: StandardAOI, elementLabel: string, event: React.MouseEvent | MouseEvent | React.TouchEvent, screenId: string, _metadata?: Record<string, unknown>) {
-    const hasPointer = 'clientX' in event || ('touches' in event && event.touches.length > 0) || ('changedTouches' in event && event.changedTouches.length > 0);
-    const hasTarget = 'currentTarget' in event && event.currentTarget instanceof HTMLElement;
-    if (!hasPointer && !hasTarget) return;
+    if (!this.loggingEnabled) return;
+    const target = 'currentTarget' in event ? event.currentTarget : null;
+    if (!(target instanceof HTMLElement)) return;
 
     let clientX = 0;
     let clientY = 0;
+    let hasCoordinates = false;
     if ('changedTouches' in event && event.changedTouches.length > 0) {
       clientX = event.changedTouches[0].clientX;
       clientY = event.changedTouches[0].clientY;
+      hasCoordinates = true;
     } else if ('touches' in event && event.touches.length > 0) {
       clientX = event.touches[0].clientX;
       clientY = event.touches[0].clientY;
-    } else if ('clientX' in event) {
+      hasCoordinates = true;
+    } else if ('clientX' in event && typeof event.clientX === 'number' && typeof event.clientY === 'number') {
       clientX = event.clientX;
       clientY = event.clientY;
+      hasCoordinates = true;
     }
+    if (!hasCoordinates) return;
 
-    const target = 'currentTarget' in event ? event.currentTarget : null;
-    const element = target instanceof HTMLElement ? target : null;
-    const bounds = element?.getBoundingClientRect();
+    this.lastScreenId = screenId;
+    const bounds = target.getBoundingClientRect();
     const rect = bounds;
-    const label = safeLabel(element?.getAttribute('aria-label') || elementLabel);
+    const label = safeLabel(target.getAttribute('aria-label') || elementLabel);
     this.append({
       zdarzenie: 'dotkniecie', ekran: screenId,
-      element: element?.dataset.log || element?.id || identifier(label), etykieta: label,
+      element: aoi === 'AOI_tlo' ? 'tlo' : target.dataset.log || target.id || identifier(label), etykieta: label,
       x: Math.round(window.screenX + clientX), y: Math.round(window.screenY + clientY),
       szer: rect ? Math.round(rect.width) : '', wys: rect ? Math.round(rect.height) : '',
       trafienie: aoi === 'AOI_tlo' ? 0 : 1,
@@ -219,6 +268,8 @@ class EventLogger {
   }
 
   logError(errorMessage: string, screenId: string, metadata?: Record<string, unknown>) {
+    if (!this.loggingEnabled) return;
+    this.lastScreenId = screenId;
     this.append({ zdarzenie: 'blad', ekran: screenId, element: 'blad', etykieta: safeLabel(errorMessage), aoi: 'AOI_blad', opis: metadata ? JSON.stringify(metadata) : '' });
   }
 
@@ -226,11 +277,20 @@ class EventLogger {
     if (this.taskStart === null || this.taskCompleted) return;
     this.taskCompleted = true;
     this.append({ zdarzenie: 'scenariusz_koniec', sukces: success });
+    this.loggingEnabled = false;
+  }
+
+  resetTask() {
+    if (this.taskStart !== null && !this.taskCompleted) this.markCompleted(0);
+    this.taskStart = null;
+    this.loggingEnabled = false;
+    this.activeAois.clear();
+    this.metricsStartIndex = this.logs.length;
   }
 
   getMetrics(): SessionMetrics {
     const taskLogs = this.taskStart === null
-      ? this.logs
+      ? this.logs.slice(this.metricsStartIndex)
       : this.logs.filter((entry) => entry.czas_epoch_ms >= this.taskStart!);
     const completedDuration = taskLogs.findLast((entry) => entry.zdarzenie === 'scenariusz_koniec')?.czas_ms;
     const totalTouches = taskLogs.filter((entry) => entry.zdarzenie === 'dotkniecie').length;
@@ -238,7 +298,9 @@ class EventLogger {
       sessionId: this.sessionId,
       scenarioId: this.scenarioId,
       participantId: this.participantId,
-      durationSeconds: Math.round((Number(completedDuration) || (Date.now() - (this.taskStart ?? this.sessionStart))) / 1000),
+      durationSeconds: this.taskStart === null
+        ? 0
+        : Math.round((Number(completedDuration) || (Date.now() - this.taskStart)) / 1000),
       totalTouches,
       targetTouches: taskLogs.filter((entry) => entry.zdarzenie === 'dotkniecie' && entry.aoi === 'AOI_cel').length,
       missTouches: taskLogs.filter((entry) => entry.zdarzenie === 'dotkniecie' && entry.trafienie === 0).length,
@@ -290,9 +352,10 @@ class EventLogger {
     this.logs = [];
     this.activeAois.clear();
     this.sessionId = this.createSessionId();
-    this.sessionStart = Date.now();
+    this.loggingEnabled = false;
     this.taskStart = null;
     this.taskCompleted = false;
+    this.metricsStartIndex = 0;
     this.logSession();
     this.recordCurrentScreen();
   }
