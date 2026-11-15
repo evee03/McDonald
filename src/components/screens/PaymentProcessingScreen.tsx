@@ -58,10 +58,10 @@ export const PaymentProcessingScreen: React.FC = () => {
         )}
 
         {paymentTerminalStep === 3 && (
-          <div className="processing-step-box animated-fade">
+          <div className="processing-step-box processing-payment-simulation-step animated-fade">
             <h1 className="processing-instruction-text">{t('Wprowadź kartę')}</h1>
             <p className="processing-instruction-sub">
-              {t('Wybierz przycisk, aby zakończyć symulację płatności.')}
+              {t('Kliknij przycisk, aby zasymulować płatność.')}
             </p>
             <div className="card-swipe-animation-visual">
               <span className="card-motion-icon">••••</span>
@@ -76,16 +76,18 @@ export const PaymentProcessingScreen: React.FC = () => {
           </div>
         )}
 
-        <div className="processing-sim-floating-bar">
-          <button
-            type="button"
-            className="btn-proc-sim-quick"
-            onClick={handleConfirmPayment}
-            data-aoi="AOI_cel"
-          >
-            {t('Potwierdź płatność')}
-          </button>
-        </div>
+        {paymentTerminalStep === 3 && (
+          <div className="processing-sim-floating-bar">
+            <button
+              type="button"
+              className="btn-proc-sim-quick"
+              onClick={handleConfirmPayment}
+              data-aoi="AOI_cel"
+            >
+              {t('Potwierdź płatność')}
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );

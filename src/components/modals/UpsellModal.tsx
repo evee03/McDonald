@@ -4,6 +4,7 @@ import { eventLogger } from '../../logger/eventLogger';
 import { products, upsellProducts } from '../../data/products';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const UpsellModal: React.FC = () => {
   const t = useT();
@@ -16,14 +17,12 @@ export const UpsellModal: React.FC = () => {
   const handleSelectUpsell = (product: typeof products[0], e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Wybór upsell: ${product.name}`, e, currentScreen);
     addProductToCart(product, 1);
-    closeModal('AOI_cel');
-    navigateTo('menu', 'AOI_cel', 'Powrót do menu');
   };
 
   const handleNoThanks = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Odrzucenie upsell (Nie dziś)', e, currentScreen);
     closeModal('AOI_wstecz');
-    navigateTo('menu', 'AOI_wstecz', 'Powrót do menu');
+    navigateTo('payment-method', 'AOI_cel', 'Przejście do wyboru płatności.');
   };
 
   return (
@@ -46,7 +45,7 @@ export const UpsellModal: React.FC = () => {
               {item.isNew && <span className="upsell-new-tag">{t('Nowość!')}</span>}
               <div className="upsell-item-image"><VisualIcon kind={item.image} label={item.name} photoKey={item.id} /></div>
               <div className="upsell-item-name">{t(item.name)}</div>
-              <div className="upsell-item-price">{item.price.toFixed(2)} zł</div>
+              <div className="upsell-item-price">{formatPrice(item.price)} zł</div>
             </div>
           ))}
         </div>

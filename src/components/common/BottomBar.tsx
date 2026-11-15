@@ -3,13 +3,13 @@ import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from './VisualIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const BottomBar: React.FC = () => {
   const {
     getCartTotal,
     getCartItemsCount,
     navigateTo,
-    openModal,
     toggleAccessibility,
     isAccessibilityMode,
     currentScreen,
@@ -27,12 +27,7 @@ export const BottomBar: React.FC = () => {
       total,
       count,
     });
-    navigateTo('cart', 'AOI_cel', 'Przejście do koszyka');
-  };
-
-  const handleRestartClick = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_wstecz', 'Kliknięcie: Zacznij od nowa', e, currentScreen);
-    openModal('restart-confirm');
+    navigateTo('cart', 'AOI_cel', 'Przejście do podsumowania zamówienia');
   };
 
   const handleAccessibilityClick = (e: React.MouseEvent) => {
@@ -54,7 +49,7 @@ export const BottomBar: React.FC = () => {
               <span className="cart-icon"><VisualIcon kind="bag" label="Koszyk" /></span>
               {count > 0 && <span className="cart-counter">{count}</span>}
             </div>
-            <span className="cart-price-text">{total.toFixed(2)} zł</span>
+            <span className="cart-price-text">{formatPrice(total)} zł</span>
           </div>
 
           <button
@@ -71,15 +66,6 @@ export const BottomBar: React.FC = () => {
       {/* Dolny pasek ekranowy */}
       <div className="bottom-utilities-row">
         <div className="utility-buttons-right" style={{ marginLeft: 'auto' }}>
-          <button
-            type="button"
-            className="utility-action-btn"
-            onClick={handleRestartClick}
-            data-aoi="AOI_wstecz"
-          >
-            {t('Zacznij od nowa')}
-          </button>
-
           <button
             type="button"
             className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}

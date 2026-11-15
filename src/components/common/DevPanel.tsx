@@ -10,24 +10,21 @@ export const DevPanel: React.FC = () => {
     setParticipant,
     currentScreen,
     navigateTo,
-    triggerError,
+    resetAll,
   } = useKioskStore();
 
   const [isOpen, setIsOpen] = useState(false);
   const [metrics, setMetrics] = useState<SessionMetrics>(eventLogger.getMetrics());
-  const [interfaceCode, setInterfaceCode] = useState('6');
   const [version, setVersion] = useState<ResearchVersion>('A');
   const [order, setOrder] = useState<'AB' | 'BA'>('AB');
 
-  const updateConfiguration = (next: { interfaceCode?: string; version?: ResearchVersion; order?: 'AB' | 'BA'; participantId?: string }) => {
+  const updateConfiguration = (next: { version?: ResearchVersion; order?: 'AB' | 'BA'; participantId?: string }) => {
     const config = {
-      interfaceCode: next.interfaceCode ?? interfaceCode,
       version: next.version ?? version,
       order: next.order ?? order,
       participantId: next.participantId ?? participantId,
     };
     eventLogger.configure(config);
-    setInterfaceCode(config.interfaceCode);
     setVersion(config.version);
     setOrder(config.order);
     setMetrics(eventLogger.getMetrics());
@@ -40,26 +37,31 @@ export const DevPanel: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key.toLowerCase() === 'b') {
+        event.preventDefault();
+        setIsOpen((open) => !open);
+      }
+    };
+
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, []);
+
   const handleDownloadCSV = () => {
     eventLogger.downloadCSV();
   };
 
-  const handleDownloadJSON = () => {
-    eventLogger.downloadJSON(`PUN_zdarzenia_${participantId}_${activeScenario}.json`);
-  };
+  const handlePrepareNextStudy = () => {
+    const match = participantId.trim().match(/^(.*?)(\d+)$/);
+    const nextParticipantId = match
+      ? `${match[1]}${String(Number(match[2]) + 1).padStart(match[2].length, '0')}`
+      : `${participantId.trim() || 'P'}01`;
 
-  const handleResetSession = () => {
-    eventLogger.resetSession();
-    setMetrics(eventLogger.getMetrics());
-  };
-
-  const handleStartScenario = () => {
-    eventLogger.setScenario(activeScenario);
-    setMetrics(eventLogger.getMetrics());
-  };
-
-  const handleFinishScenario = (success: 0 | 1) => {
-    eventLogger.markCompleted(success);
+    setScenario('S1');
+    resetAll();
+    setParticipant(nextParticipantId);
     setMetrics(eventLogger.getMetrics());
   };
 
@@ -68,15 +70,6 @@ export const DevPanel: React.FC = () => {
       className={`researcher-dev-panel ${isOpen ? 'expanded' : 'collapsed'}`}
       aria-label="Panel badacza PUN"
     >
-      <button
-        type="button"
-        className="dev-panel-toggle-btn"
-        onClick={() => setIsOpen(!isOpen)}
-        title="Otwórz panel analityczny badacza PUN"
-      >
-        🔬 {isOpen ? 'Ukryj panel badacza' : 'Panel Badacza (PUN / Metryki)'}
-      </button>
-
       {isOpen && (
         <div className="dev-panel-body">
           <div className="panel-section-title">KONFIGURACJA BADANIA (PUN 2026)</div>
@@ -91,13 +84,6 @@ export const DevPanel: React.FC = () => {
               onBlur={(e) => updateConfiguration({ participantId: e.target.value })}
               className="dev-input-field"
             />
-          </div>
-
-          <div className="dev-row">
-            <label htmlFor="dev-interface-input">Interfejs:</label>
-            <input id="dev-interface-input" type="number" min="1" max="10" value={interfaceCode}
-              onChange={(e) => setInterfaceCode(e.target.value)}
-              onBlur={(e) => updateConfiguration({ interfaceCode: e.target.value })} className="dev-input-field" />
           </div>
 
           <div className="dev-row">
@@ -126,16 +112,18 @@ export const DevPanel: React.FC = () => {
               onChange={(e) => setScenario(e.target.value as 'S1' | 'S2' | 'S3' | 'FREE')}
               className="dev-select-field"
             >
-              <option value="S1">S1: Zamówienie zestawu</option>
-              <option value="S2">S2: Modyfikacja zamówienia</option>
-              <option value="S3">S3: Płatność i podsumowanie</option>
-              <option value="FREE">Eksploracja swobodna</option>
+              <option value="S1">S1 — Dwa burgery z bekonem</option>
+              <option value="S2">S2 — Burger z modyfikacją</option>
+              <option value="S3">S3 — Zestaw z sokiem</option>
             </select>
           </div>
+          <div className="dev-scenario-instruction">
+            {activeScenario === 'S1' && 'Zamów dwa burgery z bekonem na wynos i zapłać kartą.'}
+            {activeScenario === 'S2' && 'Zamów zwykłego burgera na miejscu, zmodyfikuj go, aby zawierał 3 plastry sera i zapłać kartą.'}
+            {activeScenario === 'S3' && 'Zamów standardowy zestaw na wynos składający się ze zwykłego burgera, frytek oraz soku pomarańczowego i zapłać gotówką.'}
+          </div>
           <div className="quick-nav-buttons">
-            <button type="button" onClick={handleStartScenario} className="dev-btn-small">Rozpocznij scenariusz</button>
-            <button type="button" onClick={() => handleFinishScenario(1)} className="dev-btn-small">Ukończ zadanie</button>
-            <button type="button" onClick={() => handleFinishScenario(0)} className="dev-btn-small">Przerwij zadanie</button>
+            <button type="button" onClick={handlePrepareNextStudy} className="dev-btn-small">Przygotuj do kolejnego badania</button>
           </div>
 
           <div className="panel-divider" />
@@ -176,8 +164,6 @@ export const DevPanel: React.FC = () => {
             <button type="button" onClick={() => navigateTo('menu')} className="dev-btn-small">Menu (S1)</button>
             <button type="button" onClick={() => navigateTo('cart')} className="dev-btn-small">Koszyk (S2)</button>
             <button type="button" onClick={() => navigateTo('payment-method')} className="dev-btn-small">Płatność (S3)</button>
-            <button type="button" onClick={() => triggerError('Symulowany błąd terminala (brak środków)')} className="dev-btn-small dev-btn-error">Błąd terminala</button>
-            <button type="button" onClick={() => triggerError('Symulowany błąd skanera kodów')} className="dev-btn-small dev-btn-error">Błąd skanera</button>
           </div>
 
           <div className="panel-divider" />
@@ -185,13 +171,7 @@ export const DevPanel: React.FC = () => {
           <div className="panel-section-title">EKSPORT DANYCH DO STATYSTYK</div>
           <div className="export-actions">
             <button type="button" onClick={handleDownloadCSV} className="dev-export-btn">
-              📥 Pobierz CSV zdarzeń ({eventLogger.getCsvFilename()})
-            </button>
-            <button type="button" onClick={handleDownloadJSON} className="dev-export-btn">
-              📄 Pobierz JSON ze zdarzeniami
-            </button>
-            <button type="button" onClick={handleResetSession} className="dev-reset-btn">
-              🔄 Nowa sesja / Zeruj licznik
+              📥 Eksportuj CSV
             </button>
           </div>
           <div className="dev-screen-info">

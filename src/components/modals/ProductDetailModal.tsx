@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from '../common/VisualIcon';
+import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const ProductDetailModal: React.FC = () => {
   const t = useT();
@@ -14,9 +16,16 @@ export const ProductDetailModal: React.FC = () => {
     openPersonalize,
     addProductToCart,
     currentScreen,
+    activeCategory,
+    startComboBuilder,
+    setPendingComboQuantity,
   } = useKioskStore();
 
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    setQuantity(1);
+  }, [selectedProduct?.id]);
 
   if (activeModal !== 'product-detail' || !selectedProduct) return null;
 
@@ -40,9 +49,15 @@ export const ProductDetailModal: React.FC = () => {
     eventLogger.logTouch('AOI_cel', `Dodaj produkt: ${selectedProduct.name} (x${quantity})`, e, currentScreen);
 
     if (selectedProduct.canBeCombo) {
-      // Wyświetl prompt: Czy zestaw?
       openModal('none');
-      useKioskStore.getState().navigateTo('combo-prompt', 'AOI_cel', 'A może zestaw?');
+      if (activeCategory === 'zestawy') {
+        eventLogger.logTouch('AOI_cel', `Rozpoczęcie konfiguracji zestawu: ${selectedProduct.name}`, e, currentScreen);
+        startComboBuilder(selectedProduct, undefined, quantity);
+      } else {
+        // Poza kategorią zestawów zapytaj, czy produkt ma być zestawem.
+        setPendingComboQuantity(quantity);
+        useKioskStore.getState().navigateTo('combo-prompt', 'AOI_cel', 'A może zestaw?');
+      }
     } else {
       addProductToCart(selectedProduct, quantity);
     }
@@ -65,12 +80,16 @@ export const ProductDetailModal: React.FC = () => {
         </button>
 
         <div className="detail-product-visual">
-          <span className="product-visual-emoji"><VisualIcon kind={selectedProduct.image} label={selectedProduct.name} photoKey={selectedProduct.id} /></span>
+          <span className="product-visual-emoji">
+            {selectedProduct.id.startsWith('sauce-')
+              ? <IngredientIcon id={selectedProduct.id} label={selectedProduct.name} />
+              : <VisualIcon kind={selectedProduct.image} label={selectedProduct.name} photoKey={selectedProduct.id} />}
+          </span>
         </div>
 
         <h2 className="detail-product-name">{t(selectedProduct.name)}</h2>
         <div className="detail-product-price">
-          {(selectedProduct.price * quantity).toFixed(2)} zł
+          {formatPrice(selectedProduct.price * quantity)} zł
         </div>
 
         <button
@@ -97,6 +116,7 @@ export const ProductDetailModal: React.FC = () => {
           <button
             type="button"
             className="qty-btn"
+            disabled={quantity <= 1}
             onClick={(e) => {
               eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość [-]', e, currentScreen);
               setQuantity((q) => Math.max(1, q - 1));

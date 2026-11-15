@@ -17,6 +17,7 @@ import { PaymentSuccessScreen } from './components/screens/PaymentSuccessScreen'
 import { AllergensScreen } from './components/screens/AllergensScreen';
 
 // Modale
+import { DevPanel } from './components/common/DevPanel';
 import { ProductDetailModal } from './components/modals/ProductDetailModal';
 import { RestartModal } from './components/modals/RestartModal';
 import { ErrorModal } from './components/modals/ErrorModal';
@@ -51,15 +52,10 @@ export const App: React.FC = () => {
   // Przechwytywanie kliknięć w nieaktywne tło ekranu (AOI_tlo - dotknięcia obok celu wg Tabeli 8)
   const handleViewportBackgroundClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    // Sprawdzamy czy kliknięto bezpośrednio w kontener lub tło, a nie w przycisk lub kafelek
-    if (
-      target.classList.contains('kiosk-screen-content') ||
-      target.classList.contains('menu-main-content') ||
-      target.classList.contains('kiosk-page-view') ||
-      target.classList.contains('kiosk-screen-viewport')
-    ) {
-      eventLogger.logTouch('AOI_tlo', 'Dotknięcie obok celu (w tło interfejsu)', e, currentScreen);
-    }
+    if (!target.closest('.kiosk-screen-viewport') || target.closest('.researcher-dev-panel')) return;
+    if (target.closest('button, a, input, [role="button"], [data-aoi]')) return;
+
+    eventLogger.logTouch('AOI_tlo', 'Dotknięcie obok celu (w tło interfejsu)', e, currentScreen);
   };
 
   const renderActiveScreen = () => {
@@ -110,6 +106,7 @@ export const App: React.FC = () => {
           </div>
         </div>
       </div>
+      <DevPanel />
     </div>
   );
 };

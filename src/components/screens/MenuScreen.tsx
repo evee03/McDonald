@@ -1,10 +1,13 @@
 import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
-import { menuCategories, products, type Product } from '../../data/products';
+import { getComboProductLabel, menuCategories, products, type Product } from '../../data/products';
 import { BottomBar } from '../common/BottomBar';
 import { VisualIcon } from '../common/VisualIcon';
+import { IngredientIcon } from '../common/IngredientIcon';
+import { AllergensScrollbar } from '../common/AllergensScrollbar';
 import { useT } from '../../i18n';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const MenuScreen: React.FC = () => {
   const t = useT();
@@ -12,6 +15,7 @@ export const MenuScreen: React.FC = () => {
     activeCategory,
     setActiveCategory,
     openProductDetail,
+    startComboBuilder,
   } = useKioskStore();
 
   const handleCategoryClick = (catId: string, catName: string, e: React.MouseEvent) => {
@@ -20,8 +24,20 @@ export const MenuScreen: React.FC = () => {
   };
 
   const handleProductClick = (product: Product, e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', `Wybór produktu: ${product.name} (${product.price.toFixed(2)} zł)`, e, 'menu');
-    openProductDetail(product);
+    eventLogger.logTouch('AOI_cel', `Wybór produktu: ${product.name} (${formatPrice(product.price)} zł)`, e, 'menu');
+    if (activeCategory === 'zestawy' && product.canBeCombo) {
+      startComboBuilder(product, undefined, 1);
+    } else {
+      openProductDetail(product);
+    }
+  };
+
+  const getCategoryIcon = (categoryId: string): string => {
+    if (categoryId === 'zestawy') return 'meal';
+    if (categoryId === 'burgery') return 'burger';
+    if (categoryId === 'frytki') return 'fries';
+    if (categoryId === 'napoje' || categoryId === 'kawy') return 'drink';
+    return 'category';
   };
 
   // Filtrowanie produktów
@@ -76,7 +92,7 @@ export const MenuScreen: React.FC = () => {
                   onClick={(e) => handleCategoryClick(cat.id, cat.name, e)}
                   data-aoi="AOI_cel"
                 >
-                  <span className="nav-item-icon"><VisualIcon kind={cat.id === 'menu-glowne' ? 'home' : cat.id === 'zestawy' ? 'meal' : 'category'} label={cat.name} /></span>
+                  <span className="nav-item-icon"><VisualIcon kind={getCategoryIcon(cat.id)} label={cat.name} photoKey={cat.id} /></span>
                   <span className="nav-item-text">{t(cat.name)}</span>
                 </button>
               ))}
@@ -85,6 +101,7 @@ export const MenuScreen: React.FC = () => {
 
         {/* Prawy obszar z kafelkami produktów */}
         <main className="menu-main-content">
+          <AllergensScrollbar className="menu-scroll-shell" contentClassName="menu-scroll-body" contentElement="div">
           {activeCategory === 'menu-glowne' ? (
             /* WIDOK GŁÓWNY: Kafelki sekcji + Nowości */
             <div className="menu-hub-view">
@@ -140,9 +157,9 @@ export const MenuScreen: React.FC = () => {
                       data-aoi="AOI_cel"
                     >
                       {product.isNew && <span className="product-badge-new">{t('Nowość!')}</span>}
-                      <div className="card-visual-wrapper"><VisualIcon label={product.name} kind={product.image} photoKey={product.id} /></div>
+                        <div className="card-visual-wrapper"><VisualIcon label={product.name} kind={product.image} photoKey={product.id} /></div>
                       <div className="card-title-text">{t(product.name)}</div>
-                      <div className="card-price-value">{product.price.toFixed(2)} zł</div>
+                      <div className="card-price-value">{formatPrice(product.price)} zł</div>
                     </div>
                   ))}
                 </div>
@@ -170,14 +187,19 @@ export const MenuScreen: React.FC = () => {
                   >
                     {product.isNew && <span className="product-badge-new">{t('Nowość!')}</span>}
                     {!product.isNew && product.isDeal && <span className="product-badge-new">{t('Oferta!')}</span>}
-                    <div className="card-visual-wrapper"><VisualIcon label={product.name} kind={product.image} photoKey={product.id} /></div>
-                    <div className="card-title-text">{t(product.name)}</div>
-                    <div className="card-price-value">{product.price.toFixed(2)} zł</div>
+                    <div className="card-visual-wrapper">
+                      {product.category === 'frytki' && product.id.startsWith('sauce-')
+                        ? <IngredientIcon id={product.id} label={product.name} />
+                        : <VisualIcon label={product.name} kind={product.image} photoKey={product.id} />}
+                    </div>
+                    <div className="card-title-text">{t(activeCategory === 'zestawy' ? getComboProductLabel(product.name) : product.name)}</div>
+                    <div className="card-price-value">{formatPrice(product.price)} zł</div>
                   </div>
                 ))}
               </div>
             </div>
           )}
+          </AllergensScrollbar>
         </main>
       </div>
 

@@ -48,6 +48,17 @@ export interface MenuCategory {
   icon: string;
 }
 
+export const getComboProductLabel = (productName: string): string => {
+  const instrumentalForms: Record<string, string> = {
+    'Burger zwykły': 'burgerem zwykłym',
+    'Burger z bekonem': 'burgerem z bekonem',
+    'Burger serowy': 'burgerem serowym',
+    'Burger roślinny': 'burgerem roślinnym',
+  };
+
+  return `Zestaw z ${instrumentalForms[productName] || productName}`;
+};
+
 // Kategorie menu
 export const menuCategories: MenuCategory[] = [
   { id: 'menu-glowne', name: 'Menu Główne', icon: 'home' },
@@ -68,7 +79,7 @@ export const products: Product[] = [
   // Burgery
   {
     id: 'classic-burger',
-    name: 'Klasyczny Burger',
+    name: 'Burger zwykły',
     price: 22.80,
     image: 'burger',
     category: 'burgery',
@@ -97,23 +108,23 @@ export const products: Product[] = [
   },
   {
     id: 'spicy-crispy',
-    name: 'Pikantny Chrupiący',
+    name: 'Chrupiący kurczak pikantny',
     price: 21.90,
-    image: 'burger',
-    category: 'burgery',
+    image: 'category',
+    category: 'kurczaki',
     isNew: true,
-    canBeCombo: true,
+    canBeCombo: false,
     allergens: 'Produkt zawiera: gluten pszenny, mleko, jaja. Może zawierać: soja, gorczyca.',
     ingredients: [
       { id: 'chicken', name: 'Panierowane mięso z piersi kurczaka', image: 'category', quantity: 1, maxQuantity: 1, minQuantity: 1 },
-      { id: 'habanero', name: 'Sos Habanero', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+      { id: 'habanero', name: 'Sos paprykowy', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
       { id: 'cheese-top', name: 'Ser cheddar topiony', image: 'category', quantity: 1, maxQuantity: 3, minQuantity: 0 },
       { id: 'pickles', name: 'Pikle', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
     ],
   },
   {
     id: 'bacon-supreme',
-    name: 'Bekonowy Supreme',
+    name: 'Burger z bekonem',
     price: 25.90,
     image: 'burger',
     category: 'burgery',
@@ -124,12 +135,12 @@ export const products: Product[] = [
       { id: 'bacon', name: 'Bekon', image: 'category', quantity: 2, maxQuantity: 3, minQuantity: 0 },
       { id: 'cheese', name: 'Ser cheddar', image: 'category', quantity: 1, maxQuantity: 3, minQuantity: 0 },
       { id: 'onion', name: 'Cebula prażona', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
-      { id: 'sauce', name: 'Sos BBQ', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
+      { id: 'sauce', name: 'Sos dymny', image: 'category', quantity: 1, maxQuantity: 2, minQuantity: 0 },
     ],
   },
   {
     id: 'cheeseburger',
-    name: 'Serowy Burger',
+    name: 'Burger serowy',
     price: 7.50,
     image: 'burger',
     category: 'burgery',
@@ -146,7 +157,7 @@ export const products: Product[] = [
   },
   {
     id: 'veggie-burger',
-    name: 'Burger Wege Deluxe',
+    name: 'Burger roślinny',
     price: 23.90,
     image: 'burger',
     category: 'burgery',
@@ -163,7 +174,7 @@ export const products: Product[] = [
   // Kurczaki
   {
     id: 'crispy-strips-3',
-    name: 'Chrupiące Stripsy 3 szt.',
+    name: 'Chrupiące kawałki kurczaka 3 szt.',
     price: 13.90,
     image: 'category',
     category: 'kurczaki',
@@ -172,7 +183,7 @@ export const products: Product[] = [
   },
   {
     id: 'crispy-strips-5',
-    name: 'Chrupiące Stripsy 5 szt.',
+    name: 'Chrupiące kawałki kurczaka 5 szt.',
     price: 5.00,
     image: 'category',
     category: 'kurczaki',
@@ -181,7 +192,7 @@ export const products: Product[] = [
   },
   {
     id: 'chicken-wings-6',
-    name: 'Skrzydełka 6 szt.',
+    name: 'Skrzydełka z kurczaka 6 szt.',
     price: 16.90,
     image: 'category',
     category: 'kurczaki',
@@ -214,14 +225,14 @@ export const products: Product[] = [
   // Napoje
   {
     id: 'cola',
-    name: 'Napój Cola',
+    name: 'Napój gazowany',
     price: 8.50,
     image: 'drink',
     category: 'napoje',
   },
   {
     id: 'cola-zero',
-    name: 'Napój Cola Zero',
+    name: 'Napój gazowany bez cukru',
     price: 8.50,
     image: 'drink',
     category: 'napoje',
@@ -229,7 +240,7 @@ export const products: Product[] = [
   },
   {
     id: 'sprite',
-    name: 'Napój Cytrynowy',
+    name: 'Napój cytrynowy',
     price: 8.50,
     image: 'drink',
     category: 'napoje',
@@ -237,28 +248,28 @@ export const products: Product[] = [
   },
   {
     id: 'fanta',
-    name: 'Napój Pomarańczowy',
+    name: 'Napój pomarańczowy',
     price: 8.50,
     image: 'drink',
     category: 'napoje',
   },
   {
     id: 'ice-tea',
-    name: 'Mrożona Herbata',
+    name: 'Herbata mrożona',
     price: 8.50,
     image: 'drink',
     category: 'napoje',
   },
   {
     id: 'water-sparkling',
-    name: 'Woda Gazowana',
+    name: 'Woda gazowana',
     price: 6.00,
     image: 'drink',
     category: 'napoje',
   },
   {
     id: 'water-still',
-    name: 'Woda Niegazowana',
+    name: 'Woda niegazowana',
     price: 6.00,
     image: 'drink',
     category: 'napoje',
@@ -267,21 +278,21 @@ export const products: Product[] = [
   // Kawy
   {
     id: 'latte-small',
-    name: 'Café Latte Mała',
+    name: 'Kawa mleczna mała',
     price: 10.00,
     image: 'drink',
     category: 'kawy',
   },
   {
     id: 'cappuccino-small',
-    name: 'Cappuccino Małe',
+    name: 'Kawa spieniona mała',
     price: 10.00,
     image: 'drink',
     category: 'kawy',
   },
   {
     id: 'flat-white',
-    name: 'Flat White Mały',
+    name: 'Kawa biała mała',
     price: 10.00,
     image: 'drink',
     category: 'kawy',
@@ -290,7 +301,7 @@ export const products: Product[] = [
   // Desery
   {
     id: 'sundae-caramel',
-    name: 'Lody Karmelowe',
+    name: 'Lody z karmelem',
     price: 11.50,
     image: 'category',
     category: 'desery',
@@ -298,7 +309,7 @@ export const products: Product[] = [
   },
   {
     id: 'apple-pie',
-    name: 'Ciastko Jabłko',
+    name: 'Ciastko z jabłkiem',
     price: 9.20,
     image: 'category',
     category: 'desery',
@@ -308,7 +319,7 @@ export const products: Product[] = [
   // Sosy (jako dodatki)
   {
     id: 'sauce-sweet-spicy',
-    name: 'Sos Sweet & Spicy',
+    name: 'Sos słodko-pikantny',
     price: 1.90,
     image: 'category',
     category: 'frytki',
@@ -316,7 +327,7 @@ export const products: Product[] = [
   },
   {
     id: 'sauce-dragon-chili',
-    name: 'Sos Dragon Chili',
+    name: 'Sos chili',
     price: 1.90,
     image: 'category',
     category: 'frytki',
@@ -324,7 +335,7 @@ export const products: Product[] = [
   },
   {
     id: 'sauce-blue-cheese',
-    name: 'Sos Blue Cheese',
+    name: 'Sos serowy',
     price: 1.90,
     image: 'category',
     category: 'frytki',
@@ -336,38 +347,38 @@ export const products: Product[] = [
 export const frySauces: ComboOption[] = [
   { id: 'ketchup', name: 'Ketchup', priceAdd: 0, image: 'category' },
   { id: 'no-sauce', name: 'Bez sosu', priceAdd: 0, image: 'category' },
-  { id: 'blue-cheese', name: 'Sos Blue Cheese', priceAdd: 1.90, image: 'category' },
-  { id: 'sweet-spicy', name: 'Sos Sweet & Spicy', priceAdd: 1.90, image: 'category' },
-  { id: 'dragon-chili', name: 'Sos Dragon Chili', priceAdd: 1.90, image: 'category' },
-  { id: 'szechuan', name: 'Sos Szechuan Style', priceAdd: 1.90, image: 'category' },
-  { id: 'truffle-cheese', name: 'Sos Truffle Cheese', priceAdd: 1.90, image: 'category' },
-  { id: 'honey-mustard', name: 'Sos Honey Mustard', priceAdd: 1.90, image: 'category' },
-  { id: 'sesame-korean', name: 'Sos Sesame Korean', priceAdd: 1.90, image: 'category' },
-  { id: 'sour-cream', name: 'Sos Śmietanowy', priceAdd: 1.90, image: 'category' },
-  { id: 'sweet-sour', name: 'Sos Słodko-Kwaśny', priceAdd: 1.90, image: 'category' },
-  { id: 'bbq', name: 'Sos Barbecue', priceAdd: 1.90, image: 'category' },
-  { id: 'garlic', name: 'Sos Czosnkowy', priceAdd: 1.90, image: 'category' },
-  { id: 'sriracha', name: 'Sriracha Mayo', priceAdd: 1.90, image: 'category' },
+  { id: 'blue-cheese', name: 'Sos serowy', priceAdd: 1.90, image: 'category' },
+  { id: 'sweet-spicy', name: 'Sos słodko-pikantny', priceAdd: 1.90, image: 'category' },
+  { id: 'dragon-chili', name: 'Sos chili', priceAdd: 1.90, image: 'category' },
+  { id: 'szechuan', name: 'Sos korzenny', priceAdd: 1.90, image: 'category' },
+  { id: 'truffle-cheese', name: 'Sos truflowo-serowy', priceAdd: 1.90, image: 'category' },
+  { id: 'honey-mustard', name: 'Sos miodowo-musztardowy', priceAdd: 1.90, image: 'category' },
+  { id: 'sesame-korean', name: 'Sos sezamowy', priceAdd: 1.90, image: 'category' },
+  { id: 'sour-cream', name: 'Sos śmietanowy', priceAdd: 1.90, image: 'category' },
+  { id: 'sweet-sour', name: 'Sos słodko-kwaśny', priceAdd: 1.90, image: 'category' },
+  { id: 'bbq', name: 'Sos dymny', priceAdd: 1.90, image: 'category' },
+  { id: 'garlic', name: 'Sos czosnkowy', priceAdd: 1.90, image: 'category' },
+  { id: 'sriracha', name: 'Sos pikantny majonezowy', priceAdd: 1.90, image: 'category' },
 ];
 
 // Napoje do zestawu
 export const comboDrinks: ComboOption[] = [
-  { id: 'sprite-sakura', name: 'Napój Sakura', priceAdd: 2.00, image: 'drink' },
-  { id: 'cola', name: 'Napój Cola', priceAdd: 0, image: 'drink' },
-  { id: 'cola-zero', name: 'Napój Cola Zero', priceAdd: 0, image: 'drink' },
-  { id: 'sprite', name: 'Napój Cytrynowy', priceAdd: 0, image: 'drink' },
-  { id: 'fanta', name: 'Napój Pomarańczowy', priceAdd: 0, image: 'category' },
-  { id: 'ice-tea', name: 'Mrożona Herbata', priceAdd: 0, image: 'drink' },
-  { id: 'water-sparkling', name: 'Woda Gazowana', priceAdd: 0, image: 'drink' },
-  { id: 'water-still', name: 'Woda Niegazowana', priceAdd: 0, image: 'drink' },
-  { id: 'latte', name: 'Café Latte Mała', priceAdd: 2.00, image: 'drink' },
-  { id: 'cappuccino', name: 'Cappuccino Małe', priceAdd: 2.00, image: 'drink' },
-  { id: 'flat-white', name: 'Flat White Mały', priceAdd: 2.00, image: 'drink' },
+  { id: 'sprite-sakura', name: 'Napój owocowy', priceAdd: 2.00, image: 'drink' },
+  { id: 'cola', name: 'Napój gazowany', priceAdd: 0, image: 'drink' },
+  { id: 'cola-zero', name: 'Napój gazowany bez cukru', priceAdd: 0, image: 'drink' },
+  { id: 'sprite', name: 'Napój cytrynowy', priceAdd: 0, image: 'drink' },
+  { id: 'fanta', name: 'Napój pomarańczowy', priceAdd: 0, image: 'drink' },
+  { id: 'ice-tea', name: 'Herbata mrożona', priceAdd: 0, image: 'drink' },
+  { id: 'water-sparkling', name: 'Woda gazowana', priceAdd: 0, image: 'drink' },
+  { id: 'water-still', name: 'Woda niegazowana', priceAdd: 0, image: 'drink' },
+  { id: 'latte', name: 'Kawa mleczna mała', priceAdd: 2.00, image: 'drink' },
+  { id: 'cappuccino', name: 'Kawa spieniona mała', priceAdd: 2.00, image: 'drink' },
+  { id: 'flat-white', name: 'Kawa biała mała', priceAdd: 2.00, image: 'drink' },
 ];
 
 // Extra dodatki do zestawu
 export const comboExtras: ComboOption[] = [
-  { id: 'sundae-caramel', name: 'Lody Karmelowe', priceAdd: 0.90, image: 'category' },
+  { id: 'sundae-caramel', name: 'Lody z karmelem', priceAdd: 0.90, image: 'category' },
   { id: 'no-thanks', name: 'Nie, dziękuję', priceAdd: 0, image: 'category' },
 ];
 

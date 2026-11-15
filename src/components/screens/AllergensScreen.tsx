@@ -5,6 +5,8 @@ import { products } from '../../data/products';
 import { VisualIcon } from '../common/VisualIcon';
 import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
+import { getDisplayedIngredients } from '../../utils/productIngredients';
+import { AllergensScrollbar } from '../common/AllergensScrollbar';
 
 export const AllergensScreen: React.FC = () => {
   const t = useT();
@@ -12,6 +14,7 @@ export const AllergensScreen: React.FC = () => {
 
   const prod = selectedProduct || products[0];
   const isWater = prod.id === 'water-sparkling' || prod.id === 'water-still';
+  const displayedIngredients = getDisplayedIngredients(prod);
 
   const handleBack = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Powrót z ekranu alergenów (Cofnij)', e, 'allergens');
@@ -20,7 +23,7 @@ export const AllergensScreen: React.FC = () => {
 
   return (
     <div className="kiosk-page-view allergens-page">
-      <main className="allergens-scroll-body">
+      <AllergensScrollbar>
         <h1 className="allergens-headline">{t('Alergeny i składniki')}</h1>
 
         <div className="allergens-product-intro">
@@ -109,19 +112,21 @@ export const AllergensScreen: React.FC = () => {
         </div>
 
         {/* Lista składników */}
-        <div className="allergens-ingredients-list-section">
-          <h3 className="section-title">{t('Składniki')}</h3>
-          <div className="ingredients-display-list">
-            {(prod.ingredients || []).map((ing) => (
-              <div key={ing.id} className="ing-display-row">
-                <span className="ingredient-icon-wrap"><IngredientIcon id={ing.id} label={t(ing.name)} /></span>
-                <span className="ing-title">{t(ing.name)}</span>
-              </div>
-            ))}
+        {displayedIngredients.length > 0 && (
+          <div className="allergens-ingredients-list-section">
+            <h3 className="section-title">{t('Składniki')}</h3>
+            <div className="ingredients-display-list">
+              {displayedIngredients.map((ing) => (
+                <div key={ing.id} className="ing-display-row">
+                  <span className="ingredient-icon-wrap"><IngredientIcon id={ing.id} label={t(ing.name)} /></span>
+                  <span className="ing-title">{t(ing.name)}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-      </main>
+      </AllergensScrollbar>
 
       <footer className="allergens-footer-bar">
         <button

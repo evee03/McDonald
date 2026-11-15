@@ -3,6 +3,32 @@ import React from 'react';
 type IngredientIconProps = { id: string; label: string };
 
 export const IngredientIcon: React.FC<IngredientIconProps> = ({ id, label }) => {
+  const visualId = id.startsWith('sauce-') ? id.slice('sauce-'.length) : id;
+
+  if (id === 'salad') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M7 25h34c-1 12-8 18-17 18S8 37 7 25Z" fill="#e9edf0" stroke="#aeb8bd" strokeWidth="2" /><path d="M9 25c2-9 8-14 14-8 6-8 13-2 16 8-7 5-23 5-30 0Z" fill="#75a74f" stroke="#4d7b35" strokeWidth="2" /><circle cx="18" cy="21" r="2" fill="#dc5140" /><circle cx="29" cy="19" r="2" fill="#f3c441" /></svg>;
+  }
+
+  if (id === 'chicken') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M11 30c0-10 8-18 18-18 7 0 12 5 12 11 0 8-8 15-18 15-7 0-12-3-12-8Z" fill="#e9a934" stroke="#c57d20" strokeWidth="2" /><circle cx="23" cy="24" r="2" fill="#f7cf71" /><circle cx="32" cy="29" r="2" fill="#f7cf71" /></svg>;
+  }
+
+  if (id === 'potato') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M9 29 15 13h8v16h5V10h8v19h5l-4 9H13z" fill="#f3bd35" stroke="#d4931f" strokeWidth="2" /></svg>;
+  }
+
+  if (id === 'salt') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M14 18h20l-3 24H17z" fill="#e9edf0" stroke="#aeb8bd" strokeWidth="2" /><path d="M17 18h14V12H17z" fill="#d7d2c9" stroke="#aeb8bd" strokeWidth="2" /><circle cx="21" cy="15" r="1" fill="#777"/><circle cx="26" cy="15" r="1" fill="#777"/></svg>;
+  }
+
+  if (id === 'drink' || id === 'coffee' || id === 'dessert') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M13 13h22l-3 29H16z" fill={id === 'coffee' ? '#c18a57' : id === 'dessert' ? '#fff9ef' : '#d04432'} stroke="#875b39" strokeWidth="2" /><path d="M17 21h14" stroke="#f7f4ef" strokeWidth="3" strokeLinecap="round" /></svg>;
+  }
+
+  if (id === 'no-sauce') {
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M12 24h24" stroke="#8f8f8f" strokeWidth="4" strokeLinecap="round" /></svg>;
+  }
+
   if (id === 'cheese' || id === 'cheese-top') {
     return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M5 17 37 7l7 6v27H5z" fill="#f3c441" stroke="#d99a20" strokeWidth="2"/><circle cx="17" cy="25" r="2.5" fill="#fff0a8"/><circle cx="33" cy="19" r="2" fill="#fff0a8"/><circle cx="29" cy="34" r="2.5" fill="#fff0a8"/></svg>;
   }
@@ -18,7 +44,7 @@ export const IngredientIcon: React.FC<IngredientIconProps> = ({ id, label }) => 
   }
 
   if (id === 'bun') {
-    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M6 28C6 16 14 9 24 9s18 7 18 19v6H6z" fill="#dba257"/><path d="M7 29h34M9 35h30" stroke="#f0c77f" strokeWidth="3" strokeLinecap="round"/><circle cx="18" cy="18" r="1.2" fill="#fff0c4"/><circle cx="27" cy="15" r="1.2" fill="#fff0c4"/><circle cx="33" cy="21" r="1.2" fill="#fff0c4"/></svg>;
+    return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M6 27C6 16 14 8 24 8s18 8 18 19v4H6z" fill="#dba257" stroke="#b87835" strokeWidth="2"/><path d="M7 31h34v8H7z" fill="#c9863d" stroke="#a9682d" strokeWidth="2"/><path d="M9 34h30" stroke="#f0c77f" strokeWidth="2" strokeLinecap="round"/><circle cx="17" cy="17" r="1.2" fill="#fff0c4"/><circle cx="25" cy="13" r="1.2" fill="#fff0c4"/><circle cx="33" cy="19" r="1.2" fill="#fff0c4"/></svg>;
   }
 
   if (id === 'pickles') {
@@ -29,8 +55,31 @@ export const IngredientIcon: React.FC<IngredientIconProps> = ({ id, label }) => 
     return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><circle cx="24" cy="24" r="17" fill="#f6f2ed" stroke="#c7b6a7" strokeWidth="3"/><circle cx="24" cy="24" r="10" fill="none" stroke="#d7a7a3" strokeWidth="3"/><circle cx="24" cy="24" r="3" fill="#d7a7a3"/></svg>;
   }
 
-  if (id === 'sauce' || id === 'habanero' || id === 'ketchup' || id === 'mustard') {
-    const sauceColor = id === 'mustard' ? '#e9bb32' : id === 'habanero' ? '#d84c36' : '#b84232';
+  if (
+    visualId === 'sauce'
+    || visualId === 'habanero'
+    || visualId === 'ketchup'
+    || visualId === 'mustard'
+    || visualId === 'blue-cheese'
+    || visualId === 'sweet-spicy'
+    || visualId === 'dragon-chili'
+    || visualId === 'szechuan'
+    || visualId === 'truffle-cheese'
+    || visualId === 'honey-mustard'
+    || visualId === 'sesame-korean'
+    || visualId === 'sour-cream'
+    || visualId === 'sweet-sour'
+    || visualId === 'bbq'
+    || visualId === 'garlic'
+    || visualId === 'sriracha'
+  ) {
+    const sauceColor =
+      visualId === 'mustard' || visualId === 'honey-mustard' ? '#e9bb32'
+        : visualId === 'blue-cheese' || visualId === 'truffle-cheese' || visualId === 'sour-cream' ? '#e5ddd0'
+          : visualId === 'sweet-sour' || visualId === 'sesame-korean' ? '#d2763c'
+            : visualId === 'dragon-chili' || visualId === 'sriracha' || visualId === 'habanero' ? '#d84c36'
+              : visualId === 'garlic' ? '#f0e2c2'
+                : '#b84232';
     return <svg className="ingredient-visual" viewBox="0 0 48 48" role="img" aria-label={label}><path d="M24 6C19 15 10 24 10 32a14 14 0 0 0 28 0c0-8-9-17-14-26Z" fill={sauceColor}/><path d="M17 32c0 4 3 7 7 7" fill="none" stroke="#fff2dc" strokeWidth="2.5" strokeLinecap="round"/></svg>;
   }
 

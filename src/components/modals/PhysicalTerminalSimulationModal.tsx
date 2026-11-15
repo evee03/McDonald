@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
+import { formatPrice } from '../../utils/formatPrice';
 
 export const PhysicalTerminalSimulationModal: React.FC = () => {
   const {
@@ -86,7 +87,7 @@ export const PhysicalTerminalSimulationModal: React.FC = () => {
           <div className="terminal-screen-status">
             {isProcessing ? 'AUTORYZACJA TRANSAKCJI...' : 'KWOTA DO ZAPŁATY:'}
           </div>
-          <div className="terminal-screen-sum">{total.toFixed(2)} PLN</div>
+          <div className="terminal-screen-sum">{formatPrice(total)} PLN</div>
           <div className="terminal-screen-hint">
             {isProcessing ? 'Proszę czekać, nie wyjmuj karty' : 'Zbliż kartę lub wprowadź kod BLIK'}
           </div>
