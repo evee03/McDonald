@@ -4,6 +4,7 @@ import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { DineOptionButton } from '../common/DineOptionButton';
 
 export const PaymentMethodScreen: React.FC = () => {
   const t = useT();
@@ -29,6 +30,7 @@ export const PaymentMethodScreen: React.FC = () => {
     <div className="kiosk-page-view payment-method-page">
       <header className="payment-method-header">
         <div className="kiosk-neutral-logo">M</div>
+        <DineOptionButton sourceScreen="payment-method" />
       </header>
 
       <main className="payment-method-body">

@@ -1088,3 +1088,33 @@
   font-weight: 800;
   border-radius: 6px;
 }
+
+
+/* Styl nagłówków dla wskaźnika formy zamówienia na innych ekranach (Wersja B) */
+.kiosk-version-b .cart-top-header {
+  justify-content: space-between;
+  padding: 0 20px;
+  min-height: 54px;
+  height: 54px;
+}
+
+.kiosk-version-b .payment-method-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.kiosk-version-b .combo-header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kiosk-version-b .kiosk-header .header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

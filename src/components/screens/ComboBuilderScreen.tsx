@@ -7,6 +7,7 @@ import { VisualIcon } from '../common/VisualIcon';
 import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
 import { formatPrice } from '../../utils/formatPrice';
+import { DineOptionButton } from '../common/DineOptionButton';
 import { AllergensScrollbar } from '../common/AllergensScrollbar';
 
 export const ComboBuilderScreen: React.FC = () => {
@@ -120,16 +121,19 @@ export const ComboBuilderScreen: React.FC = () => {
             </button>
           )}
         </div>
-        {comboStep !== 6 && (
-          <button
-            type="button"
-            className="combo-nutrition-link"
-            onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
-            data-aoi="AOI_cel"
-          >
-            {t('Wartości odżywcze i składniki')}
-          </button>
-        )}
+        <div className="combo-header-right-actions">
+          <DineOptionButton sourceScreen="combo-builder" />
+          {comboStep !== 6 && (
+            <button
+              type="button"
+              className="combo-nutrition-link"
+              onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
+              data-aoi="AOI_cel"
+            >
+              {t('Wartości odżywcze i składniki')}
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Główny obszar z lewym stepperem i prawą zawartością */}

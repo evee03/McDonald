@@ -2,6 +2,7 @@ import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { useT } from '../../i18n';
+import { DineOptionButton } from './DineOptionButton';
 
 interface HeaderProps {
   title?: string;
@@ -11,7 +12,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack, rightAction }) => {
-  const { goBack } = useKioskStore();
+  const { goBack, interfaceVersion } = useKioskStore();
   const t = useT();
 
   const handleBack = (e: React.MouseEvent) => {
@@ -41,7 +42,16 @@ export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack, rightAc
         </div>
         {title && <h1 className="header-title">{t(title)}</h1>}
       </div>
-      <div className="header-right">{rightAction}</div>
+      <div className="header-right">
+        {rightAction ? (
+          <div className="header-actions-group">
+            {interfaceVersion === 'B' && <DineOptionButton sourceScreen="header" />}
+            {rightAction}
+          </div>
+        ) : (
+          interfaceVersion === 'B' ? <DineOptionButton sourceScreen="header" /> : null
+        )}
+      </div>
     </header>
   );
 };

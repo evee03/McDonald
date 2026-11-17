@@ -8,6 +8,7 @@ import { useT } from '../../i18n';
 import { formatPrice } from '../../utils/formatPrice';
 import { getDisplayedIngredients } from '../../utils/productIngredients';
 import { AllergensScrollbar } from '../common/AllergensScrollbar';
+import { DineOptionButton } from '../common/DineOptionButton';
 
 export const CartScreen: React.FC = () => {
   const t = useT();
@@ -61,6 +62,7 @@ export const CartScreen: React.FC = () => {
           <span className="cart-brand-m">M</span>
           <h1 className="cart-header-title">{t('Twoje zamówienie')}</h1>
         </div>
+        <DineOptionButton sourceScreen="cart" />
       </header>
 
       {/* Lista zamówionych produktów */}
