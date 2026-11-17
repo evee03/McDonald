@@ -28,9 +28,11 @@ export const ComboBuilderScreen: React.FC = () => {
     navigateTo,
     cancelComboBuilder,
     openPersonalize,
+    interfaceVersion,
   } = useKioskStore();
 
   const [drinkCategory, setDrinkCategory] = useState<'all' | 'cold' | 'water' | 'hot'>('all');
+  const isVersionB = interfaceVersion === 'B';
   const [comboQuantity, setComboQuantity] = useState(1);
   const isEditingCombo = Boolean(selectedCartItemId);
   const comboTitle = t(getComboProductLabel(tempCombo?.baseProduct.name || ''));
@@ -104,26 +106,52 @@ export const ComboBuilderScreen: React.FC = () => {
       <header className="combo-top-header">
         <div className="combo-header-brand">
           <span className="brand-letter-m">M</span>
-          {comboStep !== 6 && (
+          {isVersionB ? (
             <div className="combo-title-stack">
               <h1 className="combo-name-heading">{comboTitle}</h1>
-              <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
+              <div className="combo-price-and-info">
+                <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
+                <span className="combo-info-divider" aria-hidden="true">·</span>
+                <button
+                  type="button"
+                  className="combo-nutrition-link-inline"
+                  onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
+                  data-aoi="AOI_cel"
+                  title={t('Wartości odżywcze i składniki')}
+                >
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                  <span>{t('Składniki i alergeny')}</span>
+                </button>
+              </div>
             </div>
-          )}
-          {comboStep === 6 && (
-            <button
-              type="button"
-              className="combo-nutrition-link"
-              onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
-              data-aoi="AOI_cel"
-            >
-              {t('Wartości odżywcze i składniki')}
-            </button>
+          ) : (
+            <>
+              {comboStep !== 6 && (
+                <div className="combo-title-stack">
+                  <h1 className="combo-name-heading">{comboTitle}</h1>
+                  <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
+                </div>
+              )}
+              {comboStep === 6 && (
+                <button
+                  type="button"
+                  className="combo-nutrition-link"
+                  onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
+                  data-aoi="AOI_cel"
+                >
+                  {t('Wartości odżywcze i składniki')}
+                </button>
+              )}
+            </>
           )}
         </div>
         <div className="combo-header-right-actions">
           <DineOptionButton sourceScreen="combo-builder" />
-          {comboStep !== 6 && (
+          {!isVersionB && comboStep !== 6 && (
             <button
               type="button"
               className="combo-nutrition-link"
