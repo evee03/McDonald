@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useKioskStore } from '../../store/kioskStore';
-import { eventLogger } from '../../logger/eventLogger';
-import { VisualIcon } from '../common/VisualIcon';
-import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
+import { eventLogger } from '../../logger/eventLogger';
+import { useKioskStore } from '../../store/kioskStore';
 import { formatPrice } from '../../utils/formatPrice';
+import { IngredientIcon } from '../common/IngredientIcon';
+import { VisualIcon } from '../common/VisualIcon';
 
 export const ProductDetailModal: React.FC = () => {
   const t = useT();
@@ -95,90 +95,160 @@ export const ProductDetailModal: React.FC = () => {
           {formatPrice(selectedProduct.price * quantity)} zł
         </div>
 
-        <button
-          type="button"
-          className="btn-nutrition-info"
-          onClick={handleNutritionClick}
-          data-aoi="AOI_cel"
-        >
-          {t('Wartości odżywcze i składniki')}
-        </button>
+        {isVersionB ? (
+          <>
+            <button
+              type="button"
+              className="btn-nutrition-info"
+              onClick={handleNutritionClick}
+              data-aoi="AOI_cel"
+            >
+              {t('Wartości odżywcze i składniki')}
+            </button>
 
-        {selectedProduct.ingredients && selectedProduct.ingredients.length > 0 && (
-          <button
-            type="button"
-            className="btn-open-personalize"
-            onClick={handlePersonalize}
-            data-aoi="AOI_cel"
-          >
-            {t('Personalizuj')}
-          </button>
-        )}
+            {/* Ważniejsza personalizacja — w sekcji konfiguracji produktu */}
+            {selectedProduct.ingredients && selectedProduct.ingredients.length > 0 && (
+              <button
+                type="button"
+                className="btn-open-personalize"
+                onClick={handlePersonalize}
+                data-aoi="AOI_cel"
+              >
+                <span className="btn-personalize-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </span>
+                <span>{t('Personalizuj')}</span>
+              </button>
+            )}
 
-        <div className="detail-quantity-bar">
-          <button
-            type="button"
-            className="qty-btn"
-            disabled={quantity <= 1}
-            onClick={(e) => {
-              eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość [-]', e, currentScreen);
-              setQuantity((q) => Math.max(1, q - 1));
-            }}
-            data-aoi="AOI_cel"
-            aria-label={isVersionB ? t('Zmniejsz ilość') : undefined}
-            title={isVersionB ? t('Zmniejsz ilość') : undefined}
-          >
-            {isVersionB ? (
-              <>
+            {/* Wybór ilości ze stepperem */}
+            <div className="detail-quantity-bar">
+              <button
+                type="button"
+                className="qty-btn qty-btn-minus"
+                disabled={quantity <= 1}
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość [-]', e, currentScreen);
+                  setQuantity((q) => Math.max(1, q - 1));
+                }}
+                data-aoi="AOI_cel"
+                aria-label={t('Zmniejsz ilość')}
+                title={t('Zmniejsz ilość')}
+              >
                 <span className="qty-symbol" aria-hidden="true">—</span>
                 <span className="qty-text-label">{t('Zmniejsz')}</span>
-              </>
-            ) : (
-              '—'
-            )}
-          </button>
-          <span className="qty-number">{quantity}</span>
-          <button
-            type="button"
-            className="qty-btn"
-            onClick={(e) => {
-              eventLogger.logTouch('AOI_cel', 'Zwiększ ilość [+]', e, currentScreen);
-              setQuantity((q) => q + 1);
-            }}
-            data-aoi="AOI_cel"
-            aria-label={isVersionB ? t('Zwiększ ilość') : undefined}
-            title={isVersionB ? t('Zwiększ ilość') : undefined}
-          >
-            {isVersionB ? (
-              <>
+              </button>
+              <span className="qty-number">{quantity}</span>
+              <button
+                type="button"
+                className="qty-btn qty-btn-plus"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', 'Zwiększ ilość [+]', e, currentScreen);
+                  setQuantity((q) => q + 1);
+                }}
+                data-aoi="AOI_cel"
+                aria-label={t('Zwiększ ilość')}
+                title={t('Zwiększ ilość')}
+              >
                 <span className="qty-symbol" aria-hidden="true">+</span>
                 <span className="qty-text-label">{t('Zwiększ')}</span>
-              </>
-            ) : (
-              '+'
+              </button>
+            </div>
+
+            {/* Najważniejsza akcja: Dodaj do zamówienia oraz Anuluj */}
+            <div className="detail-footer-actions">
+              <button
+                type="button"
+                className="btn-detail-cancel"
+                onClick={handleClose}
+                data-aoi="AOI_wstecz"
+              >
+                {t('Anuluj')}
+              </button>
+
+              <button
+                type="button"
+                className="btn-detail-add"
+                onClick={handleAddToCart}
+                data-aoi="AOI_cel"
+              >
+                {t('Dodaj do zamówienia')}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <button
+              type="button"
+              className="btn-nutrition-info"
+              onClick={handleNutritionClick}
+              data-aoi="AOI_cel"
+            >
+              {t('Wartości odżywcze i składniki')}
+            </button>
+
+            {selectedProduct.ingredients && selectedProduct.ingredients.length > 0 && (
+              <button
+                type="button"
+                className="btn-open-personalize"
+                onClick={handlePersonalize}
+                data-aoi="AOI_cel"
+              >
+                {t('Personalizuj')}
+              </button>
             )}
-          </button>
-        </div>
 
-        <div className="detail-footer-actions">
-          <button
-            type="button"
-            className="btn-detail-cancel"
-            onClick={handleClose}
-            data-aoi="AOI_wstecz"
-          >
-            {t('Anuluj')}
-          </button>
+            <div className="detail-quantity-bar">
+              <button
+                type="button"
+                className="qty-btn"
+                disabled={quantity <= 1}
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość [-]', e, currentScreen);
+                  setQuantity((q) => Math.max(1, q - 1));
+                }}
+                data-aoi="AOI_cel"
+              >
+                —
+              </button>
+              <span className="qty-number">{quantity}</span>
+              <button
+                type="button"
+                className="qty-btn"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', 'Zwiększ ilość [+]', e, currentScreen);
+                  setQuantity((q) => q + 1);
+                }}
+                data-aoi="AOI_cel"
+              >
+                +
+              </button>
+            </div>
 
-          <button
-            type="button"
-            className="btn-detail-add"
-            onClick={handleAddToCart}
-            data-aoi="AOI_cel"
-          >
-            {t('Dodaj do zamówienia')}
-          </button>
-        </div>
+            <div className="detail-footer-actions">
+              <button
+                type="button"
+                className="btn-detail-cancel"
+                onClick={handleClose}
+                data-aoi="AOI_wstecz"
+              >
+                {t('Anuluj')}
+              </button>
+
+              <button
+                type="button"
+                className="btn-detail-add"
+                onClick={handleAddToCart}
+                data-aoi="AOI_cel"
+              >
+                {t('Dodaj do zamówienia')}
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

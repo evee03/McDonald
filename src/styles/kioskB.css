@@ -74,7 +74,7 @@
 
 .kiosk-version-b .menu-b-search-row {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-direction: column;
 }
 
@@ -87,7 +87,7 @@
   padding: 10px 14px;
   border-top: 2px solid #dedede;
   background: #f9f9f9;
-  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.10);
+  ;
 }
 
 .kiosk-version-b .bottom-utilities-row {
@@ -103,7 +103,7 @@
 .kiosk-version-b .menu-b-sheet-toggle {
   min-height: 44px;
   padding: 8px 20px 8px 16px;
-  border-radius: 0px 6px 6px 0px;
+  border-radius: 0px 4px 4px 0px;
   background: #fff;
   border: 1px solid #cecece;
   border-left: none;
@@ -371,13 +371,13 @@
 .kiosk-version-b .menu-b-search {
   display: flex;
   width: 100%;
-  max-height: 44px;
+  min-height: 44px;
   padding: 10px 14px;
   border: 1px solid #cecece;
   border-radius: 4px 0px 0px 4px;
   background: #fff;
   color: #1f1f1f;
-  font-size: 18px;
+  font-size: 16px;
 
   &:active,
   &:focus,
@@ -423,12 +423,11 @@
   align-items: center;
   gap: 8px;
   border: 1px solid #c8c8c8;
-  border-radius: 8px;
+  border-radius: 4px;
   background: #ffffff;
   color: #1a1a1a;
   font-size: 15px;
   font-weight: 500;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
@@ -453,7 +452,6 @@
 .kiosk-version-b .menu-b-floating-back-btn:hover {
   background: #f7f7f7;
   border-color: #b5b5b5;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   transform: translateY(-1px);
 }
 
@@ -461,7 +459,6 @@
   background: #e5e5e5;
   border-color: #ffbc0d;
   transform: scale(0.97);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .kiosk-version-b .menu-b-back-icon {
@@ -666,7 +663,7 @@
 .kiosk-version-b .bb-b-font-size-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 0px;
   margin-left: auto;
 }
 
@@ -675,19 +672,38 @@
   font-size: 13px;
   font-weight: 600;
   color: #555;
+  margin-right: 8px;
 }
 
 .kiosk-version-b .bb-b-font-btn {
   min-width: 44px;
   min-height: 44px;
   padding: 4px 8px;
-  border-radius: 4px;
+  border: 1px solid #cbd5e1;
   background: #fff;
   color: #1f1f1f;
   font-weight: 600;
   cursor: pointer;
   line-height: 1;
+  border-radius: 0;
+  margin-left: -1px;
+  position: relative;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, stroke 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .bb-b-font-btn:first-of-type {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-left: 0;
+}
+
+.kiosk-version-b .bb-b-font-btn:last-of-type {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .kiosk-version-b .bb-b-font-btn:hover:not(.active) {
@@ -745,7 +761,7 @@
   padding: 0;
 }
 
-/* Customowy scrollbar w wersji B — zachowanie stałej szerokości kolumny i brak przeskakiwania ekranu */
+/* Customowy scrollbar w wersji B — gdy treść nie wymaga przewijania, nie zabiera miejsca w układzie */
 .kiosk-version-b .allergens-custom-scrollbar {
   flex: 0 0 44px;
   width: 44px;
@@ -754,9 +770,7 @@
 }
 
 .kiosk-version-b .allergens-custom-scrollbar.is-hidden {
-  display: flex !important;
-  visibility: hidden;
-  opacity: 0;
+  display: none !important;
   pointer-events: none;
 }
 
@@ -877,6 +891,7 @@
   from {
     opacity: 1;
   }
+
   to {
     opacity: 0;
   }
@@ -886,12 +901,14 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   ::view-transition-group(category-view-morph),
   ::view-transition-old(category-view-morph),
   ::view-transition-new(category-view-morph) {
@@ -912,9 +929,8 @@
   gap: 8px;
   min-height: 44px;
   height: 44px;
-  padding: 0 16px;
+  padding: 0px 12px 0px 16px;
   background: #ffffff;
-  border: 1px solid #c8c8c8;
   border-radius: 4px;
   cursor: pointer;
   font-family: inherit;
@@ -922,7 +938,6 @@
   font-weight: 700;
   color: #1f1f1f;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   user-select: none;
 }
 
@@ -983,7 +998,8 @@
   display: flex;
   gap: 14px;
   width: 100%;
-  margin: 0 0 36px 0; /* Wyraźny odstęp, aby przyciski Anuluj i Potwierdź były niżej */
+  margin: 0 0 36px 0;
+  /* Wyraźny odstęp, aby przyciski Anuluj i Potwierdź były niżej */
 }
 
 .dine-change-card {
@@ -1075,18 +1091,61 @@
   box-shadow: none;
 }
 
-.kiosk-restart-dialog.dine-change-dialog .restart-buttons-row {
+.kiosk-restart-dialog.dine-change-dialog .restart-buttons-row,
+.kiosk-version-b .restart-buttons-row {
   display: flex;
-  gap: 12px;
+  gap: 0px;
   width: 100%;
 }
 
 .kiosk-restart-dialog.dine-change-dialog .btn-restart-cancel,
-.kiosk-restart-dialog.dine-change-dialog .btn-restart-confirm {
-  padding: 13px 18px;
-  font-size: 14.5px;
+.kiosk-version-b .btn-restart-cancel {
+  flex: 1;
+  min-height: 44px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-restart-dialog.dine-change-dialog .btn-restart-cancel:hover,
+.kiosk-version-b .btn-restart-cancel:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.kiosk-restart-dialog.dine-change-dialog .btn-restart-confirm,
+.kiosk-version-b .btn-restart-confirm {
+  flex: 1;
+  min-height: 44px;
+  padding: 12px 16px;
+  background: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 14px;
   font-weight: 800;
-  border-radius: 6px;
+  color: #000000;
+  cursor: pointer;
+  margin-left: -1px;
+  transition: all 0.15s ease;
+}
+
+.kiosk-restart-dialog.dine-change-dialog .btn-restart-confirm:hover,
+.kiosk-version-b .btn-restart-confirm:hover {
+  background: #e5a707;
+  border-color: #e5a707;
 }
 
 
@@ -1225,7 +1284,6 @@
   padding: 24px 22px 20px;
   border-radius: 12px;
   box-shadow: none !important;
-  border: 1px solid #e2e8f0;
 }
 
 .kiosk-version-b .added-header-status-b {
@@ -1432,7 +1490,7 @@
 /* Przyciski akcji modala */
 .kiosk-version-b .added-actions-b {
   display: flex;
-  gap: 8px;
+  gap: 0px;
   width: 100%;
 }
 
@@ -1446,7 +1504,10 @@
   min-height: 44px;
   background: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   font-size: 13px;
   font-weight: 700;
   color: #334155;
@@ -1475,12 +1536,21 @@
   min-height: 44px;
   background: var(--primary-gold);
   border: 1px solid var(--primary-gold);
-  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   font-size: 13px;
   font-weight: 800;
   color: #000000;
   cursor: pointer;
+  margin-left: -1px;
   transition: all 0.15s ease;
+}
+
+.kiosk-version-b .added-actions-b>button:only-child {
+  border-radius: 4px !important;
+  margin-left: 0 !important;
 }
 
 .kiosk-version-b .btn-cart-badge {
@@ -1494,7 +1564,7 @@
 }
 
 /* Całkowite wyłączenie cieni w oknach dialogowych (Wersja B) */
-.kiosk-version-b .kiosk-modal-backdrop > div,
+.kiosk-version-b .kiosk-modal-backdrop>div,
 .kiosk-version-b .kiosk-modal-box,
 .kiosk-version-b .kiosk-product-added-box,
 .kiosk-version-b .kiosk-restart-dialog {
@@ -1596,7 +1666,7 @@
 
 .kiosk-version-b .remove-dialog-buttons {
   display: flex;
-  gap: 10px;
+  gap: 0px;
   width: 100%;
 }
 
@@ -1606,7 +1676,10 @@
   min-height: 44px;
   background: #ffffff;
   border: 1px solid #cbd5e1;
-  border-radius: 4px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   font-size: 13.5px;
   font-weight: 700;
   color: #334155;
@@ -1625,11 +1698,15 @@
   min-height: 44px;
   background: #dc2626;
   border: 1px solid #dc2626;
-  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   font-size: 13.5px;
   font-weight: 800;
   color: #ffffff;
   cursor: pointer;
+  margin-left: -1px;
   transition: all 0.15s ease;
 }
 
@@ -1639,21 +1716,207 @@
 }
 
 /* ==========================================================================
-   PODSUMOWANIE KOSZYKA - WIELKOŚĆ PRZYCISKÓW (>= 44px) I ODSTĘPY (Wersja B)
+   PODSUMOWANIE KOSZYKA (Wersja B) — CZYSTY UKŁAD KART, WIELKOŚĆ I CZYTELNOŚĆ
    ========================================================================== */
-.kiosk-version-b .cart-item-controls-column {
+
+.kiosk-version-b .cart-items-scroll-list {
+  padding: 16px 20px 24px;
+  display: flex;
+  flex-direction: column;
   gap: 14px;
 }
 
-.kiosk-version-b .cart-qty-picker {
-  height: 44px;
-  min-height: 44px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
+/* Karta pojedynczej pozycji w koszyku */
+.kiosk-version-b .cart-item-card-row-b {
   background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
-.kiosk-version-b .cart-qty-picker button {
+.kiosk-version-b .cart-item-card-row-b:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Górny wiersz pozycji: Zdjęcie + Informacje + Cena */
+.kiosk-version-b .cart-b-item-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+}
+
+.kiosk-version-b .cart-b-item-top .cart-item-visual {
+  flex-shrink: 0;
+  width: 68px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #f1f5f9;
+}
+
+.kiosk-version-b .cart-b-item-top .cart-item-visual .ingredient-visual {
+  width: 58px;
+  height: 58px;
+}
+
+.kiosk-version-b .cart-b-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kiosk-version-b .cart-b-item-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.kiosk-version-b .cart-b-item-title-row .cart-item-name-heading {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.3;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.kiosk-version-b .cart-b-combo-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+
+.kiosk-version-b .cart-b-item-title-row .cart-item-price-sum {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a1a1a;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.kiosk-version-b .cart-item-custom-note {
+  font-size: 12.5px;
+  color: #475569;
+  line-height: 1.4;
+  margin-top: 4px;
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border-left: 3px solid #ffbc0d;
+}
+
+.kiosk-version-b .cart-item-custom-note .custom-note-tag {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.kiosk-version-b .btn-reset-changes {
+  background: #fff;
+  border: 1px solid var(--kiosk-border);
+}
+
+.kiosk-version-b .personalize-bottom-actions {
+  display: flex;
+  gap: 0px;
+  width: 100%;
+}
+
+.kiosk-version-b .btn-personalize-cancel {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kiosk-version-b .btn-personalize-cancel:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.kiosk-version-b .btn-personalize-save {
+  flex: 1.5;
+  min-height: 48px;
+  padding: 12px 18px;
+  background: #ffbc0d;
+  color: #1a1a1a;
+  border: 1px solid #ffbc0d;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-left: -1px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .btn-personalize-save:hover {
+  background: #e5a707;
+  border-color: #e5a707;
+}
+
+/* Dolny wiersz akcji: Stepper (lewa) + Przyciski szczegółów i usunięcia (prawa) */
+.kiosk-version-b .cart-b-item-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+}
+
+/* Stepper ilości w koszyku (4px zaokrąglenie zewnętrzne, 0px wewnętrzne od licznika, 1px ramka) */
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  border-radius: 0;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-minus,
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-plus {
   height: 44px;
   min-height: 44px;
   width: auto;
@@ -1663,95 +1926,271 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #1e293b;
   background: #ffffff;
-  border-radius: 0;
+  border: 1px solid #cbd5e1;
   cursor: pointer;
-  transition: background 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.kiosk-version-b .cart-qty-picker button:hover:not(:disabled) {
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-minus:hover:not(:disabled),
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-plus:hover:not(:disabled) {
   background: #f1f5f9;
+  border-color: #94a3b8;
 }
 
-.kiosk-version-b .cart-qty-picker .qty-symbol {
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-minus:active:not(:disabled),
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-plus:active:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-minus:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-minus {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .cart-qty-number {
+  height: 44px;
+  min-height: 44px;
+  min-width: 38px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e293b;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  border-left: none;
+  border-right: none;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .btn-cart-qty-plus {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .qty-symbol {
   font-size: 16px;
   font-weight: 800;
   line-height: 1;
 }
 
-.kiosk-version-b .cart-qty-picker .qty-text-label {
-  font-size: 12.5px;
+.kiosk-version-b .cart-b-item-bottom .cart-qty-picker .qty-text-label {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: -0.2px;
+  white-space: nowrap;
 }
 
-.kiosk-version-b .cart-qty-number {
+/* Przycisk Usuń w wierszu ze stepperem po prawej stronie */
+.kiosk-version-b .cart-b-item-bottom .btn-cart-item-remove {
   height: 44px;
   min-height: 44px;
-  width: auto;
-  min-width: 32px;
-  padding: 0 8px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
-  font-weight: 800;
-  color: #1e293b;
-}
-
-.kiosk-version-b .btn-cart-item-remove {
-  min-height: 44px;
-  height: 44px;
-  min-width: 90px;
-  border-radius: 4px;
-  font-size: 13.5px;
+  gap: 6px;
+  font-size: 13px;
   font-weight: 700;
   color: #dc2626;
-  border: 1px solid #fecaca;
   background: #ffffff;
-  padding: 0 16px;
-  transition: all 0.15s ease;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 }
 
-.kiosk-version-b .btn-cart-item-remove:hover {
+.kiosk-version-b .cart-b-item-bottom .btn-cart-item-remove:hover {
   background: #fef2f2;
   border-color: #f87171;
 }
 
-.kiosk-version-b .btn-toggle-details {
-  min-height: 44px;
+.kiosk-version-b .cart-b-item-bottom .btn-cart-item-remove:active {
+  background: #fee2e2;
+  transform: scale(0.98);
+}
+
+.kiosk-version-b .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Osobny wiersz na przycisk Pokaż / Ukryj szczegóły pod spodem */
+.kiosk-version-b .cart-b-details-toggle-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.kiosk-version-b .cart-b-details-toggle-row .btn-toggle-details {
   height: 44px;
-  border-radius: 4px;
+  min-height: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   font-size: 13px;
   font-weight: 700;
-  padding: 0 16px;
-  border: 1px solid #cbd5e1;
   color: #334155;
   background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
-.kiosk-version-b .btn-toggle-details:hover {
+.kiosk-version-b .cart-b-details-toggle-row .btn-toggle-details:hover {
   background: #f8fafc;
   border-color: #94a3b8;
+  color: #0f172a;
 }
 
-.kiosk-version-b .btn-edit-meal-action {
+/* Rozwinięta szufladka szczegółów w Wersji B */
+.kiosk-version-b .cart-item-card-row-b .cart-combo-expanded-drawer {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 4px 0 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .cart-item-card-row-b .btn-edit-meal-action {
+  width: 100%;
   min-height: 44px;
-  height: 44px;
-  border-radius: 4px;
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1.5px solid #64748b;
+  border-radius: 6px;
   font-size: 13px;
   font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kiosk-version-b .cart-item-card-row-b .btn-edit-meal-action:hover {
+  background: #f1f5f9;
+  border-color: #334155;
+}
+
+/* Dolny panel podsumowania i płatności w Wersji B */
+.kiosk-version-b .cart-bottom-checkout-panel {
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 20px 20px;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.kiosk-version-b .cart-total-display-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.kiosk-version-b .total-label-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-left: 0 !important;
+}
+
+.kiosk-version-b .total-value-big {
+  font-size: 26px;
+  font-weight: 900;
+  color: #1a1a1a;
+}
+
+.kiosk-version-b .cart-main-action-buttons {
+  display: flex;
+  gap: 0px;
+  width: 100%;
 }
 
 .kiosk-version-b .btn-cart-add-more {
-  border-radius: 4px;
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kiosk-version-b .btn-cart-add-more:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #1e293b;
 }
 
 .kiosk-version-b .btn-cart-submit-order {
+  flex: 1.8;
+  min-height: 48px;
+  padding: 12px 20px;
+  background: #ffbc0d;
+  border: 1px solid #ffbc0d;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1a1a1a;
+  cursor: pointer;
+  margin-left: -1px;
+  box-shadow: none;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .btn-cart-submit-order:hover {
+  background: #e5a707;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.kiosk-version-b .btn-cart-submit-order:active {
+  background: #d49a06;
+  transform: scale(0.98);
+}
+
+.kiosk-version-b .btn-upsell-no {
   border-radius: 4px;
+  min-height: 44px;
 }
 
 /* ==========================================================================
@@ -1759,7 +2198,11 @@
    ========================================================================== */
 /* Personalizacja */
 .kiosk-version-b .ing-quantity-controls {
-  gap: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0px;
+  height: 44px;
+  min-height: 44px;
 }
 
 .kiosk-version-b .ing-qty-btn {
@@ -1772,18 +2215,52 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  border-radius: 4px;
   border: 1px solid #cbd5e1;
   background: #ffffff;
   font-size: 13px;
   font-weight: 700;
   color: #1e293b;
   cursor: pointer;
-  transition: background 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .kiosk-version-b .ing-qty-btn:hover:not(:disabled) {
   background: #f1f5f9;
+}
+
+.kiosk-version-b .ing-qty-btn.ing-minus {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.kiosk-version-b .ing-qty-display {
+  height: 44px;
+  min-height: 44px;
+  min-width: 36px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  border-left: none;
+  border-right: none;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .ing-qty-btn.ing-plus {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .kiosk-version-b .ing-qty-btn .qty-symbol {
@@ -1797,19 +2274,78 @@
   font-weight: 700;
 }
 
-.kiosk-version-b .ing-qty-display {
-  min-width: 28px;
-  font-size: 15px;
-  font-weight: 800;
-  text-align: center;
+/* Modal szczegółów produktu */
+/* Modal szczegółów produktu — hierarchia akcji i konfiguracji */
+.kiosk-version-b .kiosk-product-detail-card {
+  max-width: 380px;
+  padding: 56px 24px 22px;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
 }
 
-/* Modal szczegółów produktu */
+.kiosk-version-b .detail-product-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1f1f1f;
+  margin-bottom: 4px;
+}
+
+.kiosk-version-b .detail-product-price {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f1f1f;
+  margin-bottom: 14px;
+}
+
+/* 1. Ważniejsza personalizacja w hierarchii */
+.kiosk-version-b .btn-open-personalize {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  margin: 0 0 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .btn-open-personalize:hover {
+  background: #f1f5f9;
+  border-color: #334155;
+}
+
+.kiosk-version-b .btn-open-personalize:active {
+  background: #e2e8f0;
+  transform: scale(0.98);
+}
+
+.kiosk-version-b .btn-open-personalize .btn-personalize-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+}
+
+/* 2. Pasek ilości ze stepperem: 1px obramowanie, 4px zaokrąglenie zewnętrzne, brak od licznika */
 .kiosk-version-b .detail-quantity-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 44px;
   min-height: 44px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
+  margin: 4px 0 16px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .kiosk-version-b .detail-quantity-bar .qty-btn {
@@ -1817,23 +2353,72 @@
   min-height: 44px;
   width: auto;
   min-width: 44px;
-  padding: 0 12px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border-radius: 0;
   font-size: 13px;
   font-weight: 700;
   color: #1e293b;
   background: #ffffff;
-  border: none;
+  border: 1px solid #cbd5e1;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .kiosk-version-b .detail-quantity-bar .qty-btn:hover:not(:disabled) {
   background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-btn:active:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+/* Przycisk Zmniejsz (lewy): zaokrąglenie 4px po zewnętrznej (lewej) stronie, brak od licznika (prawej) */
+.kiosk-version-b .detail-quantity-bar .qty-btn:first-child,
+.kiosk-version-b .detail-quantity-bar .qty-btn-minus {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Licznik w środku: 1px obramowanie od góry i dołu, po bokach łączy się z ramkami przycisków */
+.kiosk-version-b .detail-quantity-bar .qty-number {
+  height: 44px;
+  min-height: 44px;
+  min-width: 48px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e293b;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  border-left: none;
+  border-right: none;
+  box-sizing: border-box;
+}
+
+/* Przycisk Zwiększ (prawy): brak zaokrąglenia od licznika (lewej), zaokrąglenie 4px po zewnętrznej (prawej) stronie */
+.kiosk-version-b .detail-quantity-bar .qty-btn:last-child,
+.kiosk-version-b .detail-quantity-bar .qty-btn-plus {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .kiosk-version-b .detail-quantity-bar .qty-symbol {
@@ -1847,24 +2432,90 @@
   font-weight: 700;
 }
 
-.kiosk-version-b .detail-quantity-bar .qty-number {
-  height: 44px;
+/* 3. Najważniejszy przycisk w widoku: Dodaj do zamówienia oraz Anuluj */
+.kiosk-version-b .detail-footer-actions {
+  display: flex;
+  gap: 0px;
+  width: 100%;
+}
+
+.kiosk-version-b .btn-prompt-cancel {
   min-height: 44px;
-  width: auto;
-  min-width: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.kiosk-version-b .utility-action-btn {
+  min-height: 44px;
+}
+
+.kiosk-version-b .btn-detail-cancel {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.kiosk-version-b .btn-detail-cancel:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.kiosk-version-b .btn-detail-cancel:active {
+  background: #f1f5f9;
+  transform: scale(0.98);
+}
+
+.kiosk-version-b .btn-detail-add {
+  flex: 2;
+  min-height: 50px;
+  padding: 12px 18px;
+  background: #ffbc0d;
+  color: #1a1a1a;
+  border: 1px solid #ffbc0d;
+  border-radius: 0 4px 4px 0;
+  margin-left: -1px;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.kiosk-version-b .btn-detail-add:active {
+  background: #d49a06;
+  transform: scale(0.98);
+}
+
+/* 4. Rozdzielone wartości odżywcze i składniki — najmniejsza ważność w interfejsie */
+.kiosk-version-b .detail-nutrition-divider {
+  width: 100%;
+  height: 1px;
+  background: #e2e8f0;
+  margin: 16px 0 10px;
+}
+
+.kiosk-version-b .btn-nutrition-info {
+  margin-top: 0;
+  margin-bottom: 48px;
+  min-height: 44px;
 }
 
 /* Konfigurator zestawu (ComboBuilder) */
 .kiosk-version-b .combo-quantity-stepper {
   height: 44px;
   min-height: 44px;
-  border-radius: 4px;
-  border: 1px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .kiosk-version-b .combo-quantity-button {
@@ -1879,6 +2530,9 @@
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   flex: initial;
   cursor: pointer;
   transition: background 0.15s ease;
@@ -1886,6 +2540,41 @@
 
 .kiosk-version-b .combo-quantity-button:hover:not(:disabled) {
   background: #f1f5f9;
+}
+
+.kiosk-version-b .combo-quantity-button:first-child,
+.kiosk-version-b .combo-quantity-button--minus {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.kiosk-version-b .combo-quantity-value {
+  height: 44px;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+  background: #ffffff;
+  border-top: 1px solid #cbd5e1;
+  border-bottom: 1px solid #cbd5e1;
+  border-left: none;
+  border-right: none;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .combo-quantity-button:last-child,
+.kiosk-version-b .combo-quantity-button--plus {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .kiosk-version-b .combo-quantity-button .qty-symbol {
@@ -1899,11 +2588,202 @@
   font-weight: 700;
 }
 
-.kiosk-version-b .combo-quantity-value {
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
+/* ==========================================================================
+   PRZYCISKI OBOK SIEBIE (WERJA B) — GAP: 0PX, ZEWNĘTRZNY RADIUS: 4PX, MIN-HEIGHT: 44PX
+   ========================================================================== */
+
+/* Kreator zestawu: Dolne przyciski kontrolne */
+.kiosk-version-b .combo-builder-bottom-controls {
+  display: flex;
+  gap: 0px;
+  width: 100%;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls>button,
+.kiosk-version-b .combo-builder-bottom-controls .btn-secondary-control,
+.kiosk-version-b .combo-builder-bottom-controls .btn-primary-control {
+  min-height: 48px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls>button:first-child:not(:last-child) {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls>button:last-child:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  margin-left: -1px;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls>button:only-child {
+  border-radius: 4px;
+  margin-left: 0;
+}
+
+/* Wprowadzanie NIP: Dolne przyciski */
+.kiosk-version-b .nip-bottom-row-btns {
+  display: flex;
+  gap: 0px;
+  width: 100%;
+}
+
+.kiosk-version-b .btn-nip-cancel {
+  flex: 1;
+  min-height: 44px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+}
+
+.kiosk-version-b .btn-nip-submit {
+  flex: 1.2;
+  min-height: 44px;
+  background: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 13.5px;
   font-weight: 800;
+  color: #000000;
+  cursor: pointer;
+  margin-left: -1px;
+}
+
+/* Skaner kodów: Przyciski Cofnij / Kontynuuj */
+.kiosk-version-b .scan-upper-action-row {
+  display: flex;
+  gap: 0px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.kiosk-version-b .btn-scan-upper-back {
+  flex: 1;
+  min-height: 44px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+}
+
+.kiosk-version-b .btn-scan-upper-next {
+  flex: 1.5;
+  min-height: 44px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-left: -1px;
+}
+
+/* Ekran powitalny: Przyciski Dostępność / Języki na dole */
+.kiosk-version-b .welcome-footer-row {
+  display: flex;
+  gap: 0px;
+  justify-content: center;
+  align-items: center;
+}
+
+.kiosk-version-b .welcome-a11y-btn {
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.kiosk-version-b .welcome-lang-btn {
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  margin-left: -1px;
+}
+
+/* Wybór formy zamówienia: Rząd pigułek języków */
+.kiosk-version-b .languages-pill-row {
+  display: flex;
+  gap: 0px;
+}
+
+.kiosk-version-b .languages-pill-row .lang-pill-btn {
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0;
+  margin-left: -1px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.kiosk-version-b .languages-pill-row .lang-pill-btn:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-left: 0;
+}
+
+.kiosk-version-b .languages-pill-row .lang-pill-btn:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* Ekran promptu zestawu: Narzędzia dolne */
+.kiosk-version-b .prompt-screen-utilities {
+  display: flex;
+  gap: 0px;
+}
+
+.kiosk-version-b .prompt-screen-utilities .accessibility-btn {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+}
+
+.kiosk-version-b .prompt-screen-utilities .prompt-language-btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  min-height: 44px;
+  border: 1px solid #cbd5e1;
+  margin-left: -1px;
 }

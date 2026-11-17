@@ -2636,6 +2636,7 @@ textarea {
 .payment-option-heading {
   font-size: 16px;
   font-weight: 800;
+  margin: 0px;
 }
 
 .payment-option-subtext {
@@ -3494,6 +3495,10 @@ textarea {
   cursor: pointer;
 }
 
+.kiosk-version-b .btn-allergens-back {
+  min-height: 44px;
+}
+
 .allergens-footer-bar {
   flex: 0 0 auto;
   padding: 8px 16px 12px;
@@ -3541,7 +3546,6 @@ textarea {
   width: 100%;
   max-width: 380px;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .scenario-instruction-dialog h2 {

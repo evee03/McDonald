@@ -97,6 +97,198 @@ export const CartScreen: React.FC = () => {
             const hasDetails = item.isCombo || displayedIngredients.length > 0;
             const canEdit = item.isCombo || Boolean(item.product.ingredients?.length || item.customIngredients?.length);
 
+            if (isVersionB) {
+              return (
+                <div key={item.id} className="cart-item-card-row cart-item-card-row-b">
+                  {/* Górny wiersz pozycji: Obrazek + Dane produktu + Cena */}
+                  <div className="cart-b-item-top">
+                    <div className="cart-item-visual">
+                      {item.product.id.startsWith('sauce-')
+                        ? <IngredientIcon id={item.product.id} label={item.product.name} />
+                        : <VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} />}
+                    </div>
+
+                    <div className="cart-b-item-info">
+                      <div className="cart-b-item-title-row">
+                        <h2 className="cart-item-name-heading">
+                          <span className="cart-item-title-text">{t(item.product.name)}</span>
+                          {item.isCombo && (
+                            <span className="cart-b-combo-badge">
+                              {t('Zestaw')} {item.comboConfig?.size === 'large' ? t('Powiększony') : t('Standardowy')}
+                            </span>
+                          )}
+                        </h2>
+                        <div className="cart-item-price-sum">{formatPrice(itemTotal)} zł</div>
+                      </div>
+
+                      {/* Notatka o personalizacji składników */}
+                      {item.customIngredients && item.customIngredients.length > 0 && (
+                        <div className="cart-item-custom-note">
+                          <span className="custom-note-tag">{t('Personalizacja')}:</span>{' '}
+                          {item.customIngredients.filter((i) => i.quantity !== 1).map((i) => `${t(i.name)}: ${i.quantity}`).join(', ') || t('Standardowy')}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Dolny wiersz: Stepper ilości (lewa) + Przyciski akcji (prawa) */}
+                  <div className="cart-b-item-bottom">
+                    <div className="cart-qty-picker">
+                      <button
+                        type="button"
+                        className="btn-cart-qty-minus"
+                        disabled={item.quantity <= 1}
+                        onClick={(e) => {
+                          eventLogger.logTouch('AOI_cel', 'Zmniejsz ilość pozycji w koszyku', e, 'cart');
+                          updateCartQuantity(item.id, -1);
+                        }}
+                        data-aoi="AOI_cel"
+                        aria-label={t('Zmniejsz ilość')}
+                        title={t('Zmniejsz ilość')}
+                      >
+                        <span className="qty-symbol" aria-hidden="true">—</span>
+                        <span className="qty-text-label">{t('Zmniejsz')}</span>
+                      </button>
+                      <span className="cart-qty-number">{item.quantity}</span>
+                      <button
+                        type="button"
+                        className="btn-cart-qty-plus"
+                        onClick={(e) => {
+                          eventLogger.logTouch('AOI_cel', 'Zwiększ ilość pozycji w koszyku', e, 'cart');
+                          updateCartQuantity(item.id, 1);
+                        }}
+                        data-aoi="AOI_cel"
+                        aria-label={t('Zwiększ ilość')}
+                        title={t('Zwiększ ilość')}
+                      >
+                        <span className="qty-symbol" aria-hidden="true">+</span>
+                        <span className="qty-text-label">{t('Zwiększ')}</span>
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="btn-cart-item-remove"
+                      onClick={(e) => {
+                        eventLogger.logTouch('AOI_cel', `Usuń pozycję z koszyka: ${item.product.name}`, e, 'cart');
+                        setItemToDelete(item);
+                      }}
+                      data-aoi="AOI_cel"
+                      title={t('Usuń pozycję')}
+                    >
+                      <span className="btn-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="3 6 5 6 21 6" />
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                        </svg>
+                      </span>
+                      <span>{t('Usuń')}</span>
+                    </button>
+                  </div>
+
+                  {/* Osobny wiersz na szczegóły pod spodem */}
+                  {hasDetails && (
+                    <div className="cart-b-details-toggle-row">
+                      <button
+                        type="button"
+                        className="btn-toggle-details"
+                        onClick={(e) => toggleDetails(item.id, e)}
+                        data-aoi="AOI_cel"
+                      >
+                        <span className="btn-icon" aria-hidden="true">
+                          {isExpanded ? (
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="18 15 12 9 6 15" />
+                            </svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="6 9 12 15 18 9" />
+                            </svg>
+                          )}
+                        </span>
+                        <span>{isExpanded ? t('Ukryj szczegóły') : t('Pokaż szczegóły')}</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Rozwinięty widok składników produktu lub zestawu */}
+                  {hasDetails && isExpanded && (
+                    <div className="cart-combo-expanded-drawer">
+                      {item.isCombo && item.comboConfig ? (
+                        <div className="combo-elements-preview-grid">
+                          <div className="preview-sub-box">
+                            <span className="preview-icon">
+                              {item.product.id.startsWith('sauce-')
+                                ? <IngredientIcon id={item.product.id} label={item.product.name} />
+                                : <VisualIcon kind={item.product.image} label={item.product.name} photoKey={item.product.id} />}
+                            </span>
+                            <span className="preview-label">{t(item.product.name)}</span>
+                          </div>
+                          <div className="preview-sub-box">
+                            <span className="preview-icon">
+                              {item.comboConfig.side === 'frytki'
+                                ? <VisualIcon kind="fries" label="Frytki" />
+                                : item.comboConfig.side === 'salatka'
+                                  ? <IngredientIcon id="salad" label="Sałatka" />
+                                  : <span>—</span>}
+                            </span>
+                            <span className="preview-label">
+                              {item.comboConfig.side
+                                ? t(item.comboConfig.side === 'frytki' ? 'Frytki i Dodatki' : 'Sałatka')
+                                : 'Nie wybrano'}
+                            </span>
+                          </div>
+                          <div className="preview-sub-box">
+                            <span className="preview-icon">
+                              {item.comboConfig.sauce
+                                ? <IngredientIcon id={item.comboConfig.sauce.id} label={item.comboConfig.sauce.name} />
+                                : <span>—</span>}
+                            </span>
+                            <span className="preview-label">{item.comboConfig.sauce ? t(item.comboConfig.sauce.name) : 'Nie wybrano'}</span>
+                          </div>
+                          <div className="preview-sub-box">
+                            <span className="preview-icon">
+                              {item.comboConfig.drink
+                                ? <VisualIcon kind={item.comboConfig.drink.image} label={item.comboConfig.drink.name} photoKey={item.comboConfig.drink.id} />
+                                : <span>—</span>}
+                            </span>
+                            <span className="preview-label">{item.comboConfig.drink ? t(item.comboConfig.drink.name) : 'Nie wybrano'}</span>
+                          </div>
+                          {item.comboConfig.extra && (
+                            <div className="preview-sub-box">
+                              <span className="preview-icon"><VisualIcon kind={item.comboConfig.extra.image} label={item.comboConfig.extra.name} /></span>
+                              <span className="preview-label">{t(item.comboConfig.extra.name)}</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="product-ingredients-preview-grid">
+                          {displayedIngredients.map((ingredient) => (
+                            <div key={ingredient.id} className="preview-sub-box">
+                              <span className="preview-icon"><IngredientIcon id={ingredient.id} label={ingredient.name} /></span>
+                              <span className="preview-label">{t(ingredient.name)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {canEdit && (
+                        <button
+                          type="button"
+                          className="btn-edit-meal-action"
+                          onClick={(e) => handleEditMeal(item, e)}
+                          data-aoi="AOI_cel"
+                        >
+                          {t('Edytuj posiłek')}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            }
+
+            /* WERSJA A — nienaruszona 1:1 */
             return (
               <div key={item.id} className="cart-item-card-row">
                 <div className="cart-item-main-bar">
