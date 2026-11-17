@@ -239,8 +239,10 @@ export const MenuScreen: React.FC = () => {
         <main className="menu-main-content">
           {isVersionB && <header className="menu-b-header">
             <div className="menu-b-header-brand">
-              <span className="menu-b-logo" aria-label="Logo"><span className="logo-letter">M</span></span>
-              <h1>{t('Menu Główne')}</h1>
+              <div className="menu-b-header-left">
+                <span className="menu-b-logo" aria-label="Logo"><span className="logo-letter">M</span></span>
+                <h1>{t('Menu Główne')}</h1>
+              </div>
               <button
                 type="button"
                 className={`dine-option-indicator ${(dineOption || 'na-miejscu') === 'na-miejscu' ? 'dine-in' : 'takeaway'}`}
@@ -253,13 +255,29 @@ export const MenuScreen: React.FC = () => {
                 aria-label={`Forma zamówienia: ${(dineOption || 'na-miejscu') === 'na-miejscu' ? t('Na Miejscu') : t('Na Wynos')}. ${t('Kliknij, aby zmienić.')}`}
               >
                 <span className="dine-indicator-icon" aria-hidden="true">
-                  {(dineOption || 'na-miejscu') === 'na-miejscu' ? '🍽️' : '🛍️'}
+                  {(dineOption || 'na-miejscu') === 'na-miejscu' ? (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 2v20" />
+                      <path d="M21 7V2h-6v5a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3Z" />
+                      <path d="M3 2v6a3 3 0 0 0 3 3v11" />
+                      <path d="M3 2v5" />
+                      <path d="M6 2v5" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                      <path d="M3 6h18" />
+                      <path d="M16 10a4 4 0 0 1-8 0" />
+                    </svg>
+                  )}
                 </span>
                 <span className="dine-indicator-label">
                   {(dineOption || 'na-miejscu') === 'na-miejscu' ? t('Na Miejscu') : t('Na Wynos')}
                 </span>
                 <span className="dine-indicator-change" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                  <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
                 </span>
               </button>
             </div>

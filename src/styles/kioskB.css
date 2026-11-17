@@ -32,18 +32,29 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 36px;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+}
+
+.kiosk-version-b .menu-b-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .kiosk-version-b .menu-b-header-brand h1 {
   margin: 0;
-  text-align: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: #1f1f1f;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .kiosk-version-b .menu-b-logo {
-  position: absolute;
-  left: 0;
+  position: static;
   flex: 0 0 auto;
   width: auto;
   height: auto;
@@ -893,20 +904,18 @@
    WSKAŹNIK I ZMIANA FORMY ZAMÓWIENIA (WERSJA B)
    ============================================================ */
 .kiosk-version-b .dine-option-indicator {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 14px;
+  padding: 7px 14px;
   background: #f7f7f8;
   border: 1.5px solid #dcdcdc;
   border-radius: 999px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #1f1f1f;
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -923,16 +932,15 @@
 }
 
 .kiosk-version-b .dine-option-indicator:active {
-  transform: translateY(-50%) scale(0.96);
+  transform: scale(0.97);
   background: #f0f0f0;
 }
 
 .kiosk-version-b .dine-indicator-icon {
-  font-size: 16px;
-  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #1f1f1f;
 }
 
 .kiosk-version-b .dine-indicator-label {
@@ -956,15 +964,23 @@
 
 /* Modal zmiany formy zamówienia */
 .kiosk-restart-dialog.dine-change-dialog {
-  max-width: 420px;
-  padding: 28px 24px 22px;
+  max-width: 440px;
+  padding: 32px 28px 26px;
+  border-radius: 16px;
+}
+
+.kiosk-restart-dialog.dine-change-dialog .restart-dialog-subtitle {
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  color: #555;
+  line-height: 1.4;
 }
 
 .dine-change-cards-row {
   display: flex;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  margin: 18px 0 22px;
+  margin: 0 0 36px 0; /* Wyraźny odstęp, aby przyciski Anuluj i Potwierdź były niżej */
 }
 
 .dine-change-card {
@@ -974,8 +990,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 12px;
+  gap: 10px;
+  min-height: 124px;
+  padding: 20px 14px;
   background: #fbfbfb;
   border: 2px solid #e2e4e8;
   border-radius: 12px;
@@ -999,8 +1016,15 @@
 }
 
 .dine-change-card-icon {
-  font-size: 32px;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4b5563;
+  transition: color 0.2s ease;
+}
+
+.dine-change-card.active .dine-change-card-icon {
+  color: #d97706;
 }
 
 .dine-change-card-info {
@@ -1011,39 +1035,53 @@
 }
 
 .dine-change-card-title {
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 800;
   color: #1f1f1f;
 }
 
 .dine-change-current-tag {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
-  color: #666;
-  background: #eaecef;
-  padding: 2px 7px;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
   border-radius: 999px;
   letter-spacing: 0.2px;
 }
 
 .dine-change-card.active .dine-change-current-tag {
-  background: #ffeaa7;
-  color: #8c6b00;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .dine-change-check {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 20px;
-  height: 20px;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: var(--primary-gold);
   color: #1f1f1f;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.kiosk-restart-dialog.dine-change-dialog .restart-buttons-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.kiosk-restart-dialog.dine-change-dialog .btn-restart-cancel,
+.kiosk-restart-dialog.dine-change-dialog .btn-restart-confirm {
+  padding: 13px 18px;
+  font-size: 14.5px;
+  font-weight: 800;
+  border-radius: 6px;
 }

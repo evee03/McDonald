@@ -58,7 +58,15 @@ export const DineOptionChangeModal: React.FC = () => {
             }}
             data-aoi="AOI_cel"
           >
-            <span className="dine-change-card-icon" aria-hidden="true">🍽️</span>
+            <span className="dine-change-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 2v20" />
+                <path d="M21 7V2h-6v5a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3Z" />
+                <path d="M3 2v6a3 3 0 0 0 3 3v11" />
+                <path d="M3 2v5" />
+                <path d="M6 2v5" />
+              </svg>
+            </span>
             <div className="dine-change-card-info">
               <span className="dine-change-card-title">{t('Na Miejscu')}</span>
               {currentOption === 'na-miejscu' && (
@@ -79,7 +87,13 @@ export const DineOptionChangeModal: React.FC = () => {
             }}
             data-aoi="AOI_cel"
           >
-            <span className="dine-change-card-icon" aria-hidden="true">🛍️</span>
+            <span className="dine-change-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+                <path d="M3 6h18" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+            </span>
             <div className="dine-change-card-info">
               <span className="dine-change-card-title">{t('Na Wynos')}</span>
               {currentOption === 'na-wynos' && (
