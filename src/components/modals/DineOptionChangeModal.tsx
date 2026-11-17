@@ -8,18 +8,19 @@ export const DineOptionChangeModal: React.FC = () => {
   const { activeModal, closeModal, dineOption, setDineOption, currentScreen } = useKioskStore();
 
   const currentOption = dineOption || 'na-miejscu';
-  // Domyślnie proponujemy drugą opcję przy otwarciu
-  const [selectedOption, setSelectedOption] = useState<'na-miejscu' | 'na-wynos'>('na-wynos');
+  // Domyślnie zaznaczona jest AKTUALNIE wybrana opcja, aby nie mylić użytkownika
+  const [selectedOption, setSelectedOption] = useState<'na-miejscu' | 'na-wynos'>(currentOption);
 
   useEffect(() => {
     if (activeModal === 'dine-option-change') {
-      setSelectedOption(currentOption === 'na-miejscu' ? 'na-wynos' : 'na-miejscu');
+      setSelectedOption(dineOption || 'na-miejscu');
     }
-  }, [activeModal, currentOption]);
+  }, [activeModal, dineOption]);
 
   if (activeModal !== 'dine-option-change') return null;
 
   const targetOptionLabel = selectedOption === 'na-miejscu' ? t('Na Miejscu') : t('Na Wynos');
+  const hasChanged = selectedOption !== currentOption;
 
   const handleCancel = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Anuluj zmianę formy zamówienia', e, currentScreen);
@@ -27,8 +28,12 @@ export const DineOptionChangeModal: React.FC = () => {
   };
 
   const handleConfirm = (e: React.MouseEvent) => {
-    eventLogger.logTouch('AOI_cel', `Potwierdź zmianę formy zamówienia na: ${targetOptionLabel}`, e, currentScreen);
-    setDineOption(selectedOption);
+    if (hasChanged) {
+      eventLogger.logTouch('AOI_cel', `Potwierdź zmianę formy zamówienia na: ${targetOptionLabel}`, e, currentScreen);
+      setDineOption(selectedOption);
+    } else {
+      eventLogger.logTouch('AOI_cel', 'Zamknięcie okna bez zmiany formy zamówienia', e, currentScreen);
+    }
     closeModal('AOI_cel');
   };
 
@@ -45,7 +50,9 @@ export const DineOptionChangeModal: React.FC = () => {
 
         <h2 className="restart-dialog-title">{t('Zmiana formy zamówienia')}</h2>
         <p className="restart-dialog-subtitle">
-          {t('Czy na pewno chcesz zmienić formę zamówienia? Wszystkie wybrane produkty zostaną zachowane.')}
+          {hasChanged
+            ? `${t('Czy na pewno chcesz zmienić formę zamówienia na')} ${targetOptionLabel}? ${t('Wszystkie wybrane produkty zostaną zachowane.')}`
+            : t('Wybierz formę zamówienia, na którą chcesz zmienić. Wszystkie wybrane produkty zostaną zachowane.')}
         </p>
 
         <div className="dine-change-cards-row">
@@ -122,7 +129,7 @@ export const DineOptionChangeModal: React.FC = () => {
             onClick={handleConfirm}
             data-aoi="AOI_cel"
           >
-            {t('Potwierdź')}
+            {hasChanged ? t('Potwierdź zmianę') : t('Potwierdź')}
           </button>
         </div>
       </div>
