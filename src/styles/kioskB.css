@@ -908,32 +908,35 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 7px 14px;
-  background: #f7f7f8;
-  border: 1.5px solid #dcdcdc;
-  border-radius: 999px;
+  min-height: 44px;
+  height: 44px;
+  padding: 0 16px;
+  background: #ffffff;
+  border: 1px solid #c8c8c8;
+  border-radius: 4px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   color: #1f1f1f;
-  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   user-select: none;
 }
 
 .kiosk-version-b .dine-option-indicator:hover,
 .kiosk-version-b .dine-option-indicator:focus-visible {
-  background: #ffffff;
-  border-color: var(--primary-gold);
-  box-shadow: 0 2px 8px rgba(255, 188, 13, 0.35);
+  background: #f7f7f7;
+  border-color: #1f1f1f;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   outline: none;
 }
 
 .kiosk-version-b .dine-option-indicator:active {
-  transform: scale(0.97);
-  background: #f0f0f0;
+  background: #ececec;
+  transform: scale(0.98);
 }
 
 .kiosk-version-b .dine-indicator-icon {
