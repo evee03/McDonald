@@ -1,9 +1,10 @@
 import React from 'react';
-import { useKioskStore } from '../../store/kioskStore';
-import { eventLogger } from '../../logger/eventLogger';
-import { VisualIcon } from './VisualIcon';
 import { useT } from '../../i18n';
+import { eventLogger } from '../../logger/eventLogger';
+import type { FontSizeLevel } from '../../store/kioskStore';
+import { useKioskStore } from '../../store/kioskStore';
 import { formatPrice } from '../../utils/formatPrice';
+import { VisualIcon } from './VisualIcon';
 
 export const BottomBar: React.FC = () => {
   const {
@@ -12,6 +13,8 @@ export const BottomBar: React.FC = () => {
     navigateTo,
     toggleAccessibility,
     isAccessibilityMode,
+    fontSizeLevel,
+    setFontSizeLevel,
     interfaceVersion,
     currentScreen,
   } = useKioskStore();
@@ -42,41 +45,117 @@ export const BottomBar: React.FC = () => {
     toggleAccessibility();
   };
 
-  return (
-    <div className="bottom-bar-container">
-      {/* Pasek podsumowania koszyka (jeśli nie jesteśmy na ekranie powitalnym) */}
-      <div className="bottom-cart-summary">
-          <div className="cart-total-badge">
+  const handleFontSizeClick = (level: FontSizeLevel, e: React.MouseEvent) => {
+    eventLogger.logTouch('AOI_dostepnosc', `Zmiana rozmiaru czcionki: poziom ${level}`, e, currentScreen);
+    setFontSizeLevel(level);
+  };
+
+  /* ---- WERSJA B ---- */
+  if (isVersionB) {
+    return (
+      <div className="bottom-bar-container bottom-bar-b">
+        {/* Sekcja transakcyjna – koszyk */}
+        <div className="bb-b-cart-section">
+          <div className="bb-b-cart-info">
             <div className="cart-icon-wrapper">
               <span className="cart-icon"><VisualIcon kind="bag" label="Koszyk" /></span>
               {count > 0 && <span className="cart-counter">{count}</span>}
             </div>
-            <span className="cart-price-text">{formatPrice(total)} zł</span>
+            <div className="bb-b-cart-text">
+              <span className="bb-b-cart-count">
+                {count === 0
+                  ? t('Koszyk pusty')
+                  : count === 1
+                    ? t('1 produkt')
+                    : `${count} ${t('produkty/produktów')}`}
+              </span>
+              <span className="bb-b-cart-price">{formatPrice(total)} zł</span>
+            </div>
           </div>
-
           <button
             type="button"
-            className={`btn-checkout ${count > 0 ? 'active' : 'disabled'}`}
+            className={`btn-checkout btn-checkout-b ${count > 0 ? 'active' : 'disabled'}`}
             disabled={count === 0}
             onClick={handleCheckoutClick}
             data-aoi="AOI_cel"
           >
             {t('Przejdź do podsumowania')}
           </button>
-      </div>
+        </div>
 
-      {/* Dolny pasek ekranowy */}
-      <div className="bottom-utilities-row">
-        <div className={isVersionB ? 'utility-buttons-left' : 'utility-buttons-right'}>
+        {/* Sekcja dostępności */}
+        <div className="bb-b-a11y-section">
           <button
             type="button"
             className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}
             onClick={handleAccessibilityClick}
             data-aoi="AOI_dostepnosc"
-            title={isVersionB ? t('Obniża położenie elementów ekranu') : 'Obniża interfejs dla osób na wózkach i niskiego wzrostu'}
+            title={t('Obniża położenie elementów ekranu')}
           >
             <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
-            <span>{isVersionB ? t('Obniż ekran') : t('Dostępność')}</span>
+            <span>{t('Obniż ekran')}</span>
+          </button>
+
+          <div className="bb-b-font-size-group" role="group" aria-label={t('Rozmiar czcionki')}>
+            <span className="bb-b-font-label">{t('Rozmiar czcionki:')}</span>
+            {([0, 1, 2] as FontSizeLevel[]).map((level) => {
+              const labels = ['A', 'A+', 'A++'];
+              return (
+                <button
+                  key={level}
+                  type="button"
+                  className={`bb-b-font-btn bb-b-font-btn--${level} ${fontSizeLevel === level ? 'active' : ''}`}
+                  onClick={(e) => handleFontSizeClick(level, e)}
+                  data-aoi="AOI_dostepnosc"
+                  aria-pressed={fontSizeLevel === level}
+                  title={`${t('Rozmiar czcionki')} ${labels[level]}`}
+                >
+                  {labels[level]}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ---- WERSJA A (oryginalna) ---- */
+  return (
+    <div className="bottom-bar-container">
+      {/* Pasek podsumowania koszyka */}
+      <div className="bottom-cart-summary">
+        <div className="cart-total-badge">
+          <div className="cart-icon-wrapper">
+            <span className="cart-icon"><VisualIcon kind="bag" label="Koszyk" /></span>
+            {count > 0 && <span className="cart-counter">{count}</span>}
+          </div>
+          <span className="cart-price-text">{formatPrice(total)} zł</span>
+        </div>
+
+        <button
+          type="button"
+          className={`btn-checkout ${count > 0 ? 'active' : 'disabled'}`}
+          disabled={count === 0}
+          onClick={handleCheckoutClick}
+          data-aoi="AOI_cel"
+        >
+          {t('Przejdź do podsumowania')}
+        </button>
+      </div>
+
+      {/* Dolny pasek ekranowy */}
+      <div className="bottom-utilities-row">
+        <div className="utility-buttons-right">
+          <button
+            type="button"
+            className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}
+            onClick={handleAccessibilityClick}
+            data-aoi="AOI_dostepnosc"
+            title="Obniża interfejs dla osób na wózkach i niskiego wzrostu"
+          >
+            <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
+            <span>{t('Dostępność')}</span>
           </button>
         </div>
       </div>

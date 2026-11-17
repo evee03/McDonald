@@ -201,6 +201,13 @@ const translations: Record<string, Partial<Record<KioskLanguage, string>>> = {
   'Sos BBQ': { en: 'BBQ Sauce', de: 'BBQ-Soße', ua: 'Соус BBQ' },
   'Sos musztardowo-miodowy': { en: 'Honey Mustard Sauce', de: 'Honig-Senf-Soße', ua: 'Медово-гірчичний соус' },
   'Musztarda': { en: 'Mustard', de: 'Senf', ua: 'Гірчиця' },
+  'Brak wyników dla': { en: 'No results for', de: 'Keine Ergebnisse für', ua: 'Немає результатів для' },
+  'Spróbuj wpisać inną nazwę lub wybierz coś z menu.': {
+    en: 'Try another name or browse the menu.',
+    de: 'Versuchen Sie einen anderen Namen oder stöbern Sie im Menü.',
+    ua: 'Спробуйте іншу назву або оберіть щось із меню.',
+  },
+  'Pokaż całe menu': { en: 'Show full menu', de: 'Ganzes Menü anzeigen', ua: 'Показати все меню' },
 };
 
 export const translate = (text: string, language: KioskLanguage): string =>

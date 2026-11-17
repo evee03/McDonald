@@ -1,9 +1,9 @@
 import React from 'react';
-import { useKioskStore } from '../../store/kioskStore';
-import { eventLogger } from '../../logger/eventLogger';
-import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { eventLogger } from '../../logger/eventLogger';
+import { useKioskStore } from '../../store/kioskStore';
 import { formatPrice } from '../../utils/formatPrice';
+import { VisualIcon } from '../common/VisualIcon';
 
 export const ProductAddedModal: React.FC = () => {
   const t = useT();

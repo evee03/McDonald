@@ -66,12 +66,15 @@ export interface CartItem {
   calculatedUnitPrice: number;
 }
 
+export type FontSizeLevel = 0 | 1 | 2; // 0=normal, 1=A+, 2=A++
+
 interface KioskState {
   // Nawigacja
   currentScreen: ScreenId;
   previousScreen: ScreenId | null;
   activeCategory: string;
   isAccessibilityMode: boolean;
+  fontSizeLevel: FontSizeLevel;
   interfaceVersion: InterfaceVersion;
 
   // Aktywny modal
@@ -114,6 +117,7 @@ interface KioskState {
   navigateTo: (screen: ScreenId, aoi?: StandardAOI, label?: string) => void;
   goBack: (aoi?: StandardAOI) => void;
   toggleAccessibility: () => void;
+  setFontSizeLevel: (level: FontSizeLevel) => void;
   setInterfaceVersion: (version: InterfaceVersion) => void;
   setScenario: (scen: 'S1' | 'S2' | 'S3' | 'FREE') => void;
   setParticipant: (id: string) => void;
@@ -172,6 +176,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   previousScreen: null,
   activeCategory: 'menu-glowne',
   isAccessibilityMode: false,
+  fontSizeLevel: 0,
   interfaceVersion: 'A',
 
   activeModal: 'none',
@@ -223,6 +228,8 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const nextState = !get().isAccessibilityMode;
     set({ isAccessibilityMode: nextState });
   },
+
+  setFontSizeLevel: (level) => set({ fontSizeLevel: level }),
 
   setInterfaceVersion: (version) => set({ interfaceVersion: version }),
 
@@ -585,6 +592,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       donationAdded: 0,
       paymentTerminalStep: 1,
       isAccessibilityMode: false,
+      fontSizeLevel: 0,
     });
   },
 

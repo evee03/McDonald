@@ -28,7 +28,7 @@ import './styles/kiosk.css';
 import './styles/kioskB.css';
 
 export const App: React.FC = () => {
-  const { currentScreen, isAccessibilityMode, interfaceVersion } = useKioskStore();
+  const { currentScreen, isAccessibilityMode, interfaceVersion, fontSizeLevel } = useKioskStore();
 
   useEffect(() => {
     const viewport = document.querySelector<HTMLElement>('.kiosk-screen-viewport');
@@ -94,16 +94,16 @@ export const App: React.FC = () => {
     <div className={`kiosk-app-environment kiosk-version-${interfaceVersion.toLowerCase()}`} onClick={handleViewportBackgroundClick}>
       {/* Widok obejmuje wyłącznie pionowy ekran kiosku. */}
       <div className="kiosk-screen-shell">
-        <div className={`kiosk-screen-viewport ${isAccessibilityMode ? 'a11y-mode' : ''}`} data-screen={currentScreen}>
+        <div className={`kiosk-screen-viewport ${isAccessibilityMode ? 'a11y-mode' : ''} ${fontSizeLevel > 0 ? `font-size-level-${fontSizeLevel}` : ''}`} data-screen={currentScreen}>
           <div className="kiosk-screen-content">
             {renderActiveScreen()}
 
-        {/* Globalne modale i okna dialogowe */}
-        <ProductDetailModal />
-        <RestartModal />
-        <ErrorModal />
-        <ProductAddedModal />
-        <UpsellModal />
+            {/* Globalne modale i okna dialogowe */}
+            <ProductDetailModal />
+            <RestartModal />
+            <ErrorModal />
+            <ProductAddedModal />
+            <UpsellModal />
           </div>
         </div>
       </div>

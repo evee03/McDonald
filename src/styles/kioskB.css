@@ -1,12 +1,8 @@
-/* Wersja B: centralny wybór kategorii, bez bocznego panelu. */
-.kiosk-version-b button {
-  border-style: solid;
-  border-width: 1px;
-  border-color: #555;
-}
-
 .kiosk-version-b .menu-layout-container {
+  flex: 1 1 0;
   display: block;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .kiosk-version-b .menu-main-content {
@@ -67,19 +63,20 @@
 
 .kiosk-version-b .menu-b-search-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px 10px;
-  align-items: end;
+  gap: 6px;
+  flex-direction: column;
 }
 
 .kiosk-version-b .menu-b-search-sheet {
   position: relative;
-  z-index: 5;
+  anchor-name: --menu-b-search-sheet;
+  z-index: 60;
+  overflow: visible !important;
   flex: 0 0 auto;
-  padding: 8px; 
+  padding: 10px 14px;
   border-top: 2px solid #dedede;
-  background: #fff;
-  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.12);
+  background: #f9f9f9;
+  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.10);
 }
 
 .kiosk-version-b .bottom-utilities-row {
@@ -92,38 +89,40 @@
   justify-content: flex-start;
 }
 
-.kiosk-version-b .accessibility-btn {
-  min-width: 44px;
-  min-height: 44px;
-  padding: 6px 14px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background: #fff;
-  color: #1f1f1f;
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.kiosk-version-b .accessibility-btn.active {
-  border-color: #1f1f1f;
-  background: #ffbc0d;
-  color: #1f1f1f;
-}
-
 .kiosk-version-b .menu-b-sheet-toggle {
-  flex: 0 0 auto;
-  min-width: 92px;
-  min-height: 52px;
-  padding: 8px 14px;
-  border: 1px solid #333;
-  border-radius: 4px;
-  background: #ffbc0d;
+  min-height: 44px;
+  padding: 8px 20px 8px 16px;
+  border-radius: 0px 6px 6px 0px;
+  background: #fff;
+  border: 1px solid #cecece;
+  border-left: none;
   color: #1f1f1f;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 15px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.kiosk-version-b .menu-b-sheet-toggle:hover {
+  background: #eaeaea;
+  border-color: #bebebe;
+  color: #1f1f1f;
+}
+
+.kiosk-version-b .menu-b-sheet-toggle.open {
+  background: #ffbc0d;
+  border-color: #ffbc0d;
+  color: #1a1a1a;
+}
+
+.kiosk-version-b .menu-b-sheet-toggle.open:hover {
+  background: #f0b008;
+  border-color: #f0b008;
+  color: #1a1a1a;
 }
 
 .kiosk-version-b .menu-b-search-icon {
@@ -137,18 +136,22 @@
 }
 
 .kiosk-version-b .menu-b-search-label {
-  flex: 0 0 100%;
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  color: #1f1f1f;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
-.kiosk-version-b .menu-b-search {
-  flex: 1 1 auto;
-  width: auto;
+.kiosk-version-b .menu-b-search-input-group {
+  display: flex;
+  width: 100%;
 }
 
 .kiosk-version-b .menu-b-search-input-wrap {
+  flex: 1 1 auto;
   position: relative;
-  flex: 1 1 220px;
-  min-width: 0;
 }
 
 .kiosk-version-b .menu-b-search-input-wrap .menu-b-search {
@@ -157,80 +160,185 @@
 
 .kiosk-version-b .menu-b-search-clear {
   position: absolute;
-  top: 50%;
+  top: 45%;
   right: 6px;
-  width: 44px;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: 45px;
+  min-height: 45px;
   padding: 0;
   transform: translateY(-50%);
-  border: 0;
+  border: 1px solid transparent;
   background: transparent;
   color: #333;
   font-size: 28px;
-  line-height: 1;
 }
 
-.kiosk-version-b .menu-b-keyboard {
-  position: static;
+/* Kontener animacji wyjeżdżania i chowania klawiatury */
+.kiosk-version-b .menu-b-keyboard-anim-wrap {
   display: grid;
-  width: 100%;
-  box-sizing: border-box;
-  gap: 6px;
-  max-height: none;
-  overflow: visible;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+  opacity: 0;
+  overflow: hidden;
 }
 
-.kiosk-version-b .menu-b-keyboard-dock {
-  position: relative;
-  z-index: 6;
-  flex: 0 0 auto;
-  padding: 8px 4px max(8px, env(safe-area-inset-bottom));
-  border-top: 1px solid #555;
-  background: #fff;
-  box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.16);
+.kiosk-version-b .menu-b-keyboard-anim-wrap.open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 10px;
+}
+
+.kiosk-version-b .menu-b-keyboard-anim-wrap>.menu-b-keyboard {
+  min-height: 0;
+  transform: translateY(22px);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kiosk-version-b .menu-b-keyboard-anim-wrap.open>.menu-b-keyboard {
+  transform: translateY(0);
+}
+
+/* Płynne chowanie i wyjeżdżanie paska dolnego (BottomBar) */
+.kiosk-version-b .menu-b-bottom-bar-anim-wrap {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease;
+  opacity: 1;
+}
+
+.kiosk-version-b .menu-b-bottom-bar-anim-wrap.hidden {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kiosk-version-b .menu-b-bottom-bar-anim-wrap>* {
+  min-height: 0;
 }
 
 .kiosk-version-b .menu-b-search-sheet.expanded {
-  padding: 16px 16px max(16px, env(safe-area-inset-bottom));
-  border-top: 0;
-  box-shadow: none;
+  background: #ffffff;
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Układ klawiatury ekranowej */
+.kiosk-version-b .menu-b-keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 0 2px;
 }
 
 .kiosk-version-b .menu-b-keyboard-row {
   display: flex;
   width: 100%;
-  justify-content: stretch;
-  gap: 4px;
+  gap: 5px;
 }
 
-.kiosk-version-b .menu-b-keyboard-row button {
+/* Ujednolicone style przycisków klawiatury */
+.kiosk-version-b .menu-b-key {
   flex: 1 1 0;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 2px;
-  border: 1px solid #777;
-  border-radius: 4px;
-  background: #f2f2f2;
-  color: #1f1f1f;
-  font-size: 20px;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 4px;
+  border: 1px solid #d4d6d9;
+  border-bottom: 2px solid #b8bcc2;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 19px;
   font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+  transition: background-color 0.1s ease, transform 0.1s ease, border-color 0.1s ease;
+  user-select: none;
 }
 
-.kiosk-version-b .menu-b-keyboard-bottom button {
-  flex: 1 1 auto;
-  padding: 6px 14px;
-  font-size: 16px;
+.kiosk-version-b .menu-b-key:hover {
+  background: #f8f9fa;
+  border-color: #c4c7cc;
 }
 
-.kiosk-version-b .menu-b-keyboard-letter-row .menu-b-backspace {
-  flex: 0 0 54px;
-  background: #e5e5e5;
+.kiosk-version-b .menu-b-key:active {
+  background: #e9ecef;
+  border-bottom-width: 1px;
+  transform: translateY(1px);
+}
+
+.kiosk-version-b .menu-b-key-spacer {
+  flex: 1 1 0;
+  min-width: 0;
+  pointer-events: none;
+}
+
+.kiosk-version-b .menu-b-key-spacer.half {
+  flex: 0.5 1 0;
+}
+
+.kiosk-version-b .menu-b-key-backspace {
+  flex: 1.5 1 0;
+  background: #e9ecef;
+  border-color: #ced4da;
+  border-bottom-color: #adb5bd;
+  color: #343a40;
+}
+
+.kiosk-version-b .menu-b-key-backspace:hover {
+  background: #dee2e6;
+}
+
+.kiosk-version-b .menu-b-key-backspace:active {
+  background: #ced4da;
+}
+
+.kiosk-version-b .menu-b-key-clear {
+  flex: 1.3 1 0;
+  background: #f1f3f5;
+  border-color: #ced4da;
+  border-bottom-color: #adb5bd;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 700;
+  gap: 6px;
+}
+
+.kiosk-version-b .menu-b-key-clear:hover {
+  background: #e9ecef;
+}
+
+.kiosk-version-b .menu-b-key-space {
+  flex: 3.5 1 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6c757d;
+  letter-spacing: 0.5px;
+}
+
+.kiosk-version-b .menu-b-key-done {
+  flex: 1.5 1 0;
+  background: #ffbc0d;
+  border: 1px solid #e0a307;
+  border-bottom: 2px solid #c78f00;
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 800;
+  gap: 6px;
+}
+
+.kiosk-version-b .menu-b-key-done:hover {
+  background: #f5b307;
+}
+
+.kiosk-version-b .menu-b-key-done:active {
+  background: #e5a707;
+  border-bottom-width: 1px;
+  transform: translateY(1px);
 }
 
 .kiosk-version-b .btn-checkout.disabled,
@@ -244,23 +352,27 @@
 
 .kiosk-version-b .menu-b-search-label {
   display: block;
-  margin-bottom: 6px;
   color: #1f1f1f;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .kiosk-version-b .menu-b-search {
-  display: block;
+  display: flex;
   width: 100%;
-  min-height: 52px;
+  max-height: 44px;
   padding: 10px 14px;
-  border: 2px solid #555;
-  border-radius: 4px;
+  border: 1px solid #cecece;
+  border-radius: 4px 0px 0px 4px;
   background: #fff;
   color: #1f1f1f;
-  font: inherit;
   font-size: 18px;
+
+  &:active,
+  &:focus,
+  &:focus-within {
+    border-color: #1f1f1f;
+  }
 }
 
 .kiosk-version-b .menu-scroll-shell {
@@ -274,38 +386,10 @@
   margin: 0;
 }
 
-.kiosk-version-b .menu-b-category-tile {
-  width: 100%;
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #dedede;
-  border-radius: 4px;
-  background: #fff;
-  color: #1f1f1f;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.kiosk-version-b .menu-b-category-tile .hub-tile-visual {
-  width: 76px;
-  height: 76px;
-}
-
 .kiosk-version-b .menu-b-category-tile .hub-tile-title {
   color: #1f1f1f;
   text-align: center;
   font-size: 18px;
-}
-
-.kiosk-version-b .menu-b-category-tile:hover,
-.kiosk-version-b .menu-b-category-tile:focus-visible {
-  border-color: #1f1f1f;
-  background: #fff5d6;
 }
 
 .kiosk-version-b .menu-b-categories-back {
@@ -314,6 +398,74 @@
   border: 2px solid #1f1f1f;
   background: #fff;
   color: #1f1f1f;
+}
+
+.kiosk-version-b .menu-b-floating-back-btn {
+  position: absolute;
+  position-anchor: --menu-b-search-sheet;
+  bottom: calc(100% + 18px);
+  left: 16px;
+  min-height: 44px;
+  padding: 8px 16px;
+  z-index: 70;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #c8c8c8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: auto;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease, bottom 0.25s ease;
+  animation: menuBFloatingBackSlideIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+
+@keyframes menuBFloatingBackSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.kiosk-version-b .menu-b-floating-back-btn:hover {
+  background: #f7f7f7;
+  border-color: #b5b5b5;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.kiosk-version-b .menu-b-floating-back-btn:active {
+  background: #e5e5e5;
+  border-color: #ffbc0d;
+  transform: scale(0.97);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.kiosk-version-b .menu-b-back-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.kiosk-version-b .menu-b-floating-back-btn:hover .menu-b-back-icon {
+  transform: translateX(-3px);
+}
+
+.kiosk-version-b .category-products-view {
+  padding-bottom: 68px;
 }
 
 .kiosk-version-b .menu-b-group {
@@ -354,6 +506,384 @@
   font-size: 22px;
 }
 
+/* ============================================================
+   WERSJA B — DOLNY PASEK (BottomBar B)
+   ============================================================ */
+
+/* Kontener nadrzędny — zastępuje .bottom-bar-container w wersji B */
+.kiosk-version-b .bottom-bar-b {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background: #fff;
+  z-index: 50;
+  border-top: none;
+}
+
+/* ---- Sekcja koszyka ---- */
+.kiosk-version-b .bb-b-cart-section {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 14px 20px 14px;
+  background: #fafafa;
+  border-bottom: 1px solid #ececec;
+}
+
+.kiosk-version-b .bb-b-cart-section .cart-icon-wrapper {
+  font-size: 18px;
+}
+
+.kiosk-version-b .bb-b-cart-section .visual-icon-svg {
+  width: 28px;
+  height: 21px;
+  flex-shrink: 0;
+}
+
+.kiosk-version-b .bb-b-cart-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.kiosk-version-b .bb-b-cart-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.kiosk-version-b .bb-b-cart-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.kiosk-version-b .bb-b-cart-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1f1f1f;
+}
+
+/* Przycisk do płatności w wersji B */
+.kiosk-version-b .btn-checkout-b {
+  flex: 0 0 auto;
+  min-height: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.kiosk-version-b .btn-checkout-b.active {
+  background: #ffbc0d;
+  color: #1a1a1a;
+}
+
+.kiosk-version-b .btn-checkout-b.active:active {
+  background: #e5a707;
+}
+
+.kiosk-version-b .btn-checkout-b.disabled,
+.kiosk-version-b .btn-checkout-b:disabled {
+  background: #e5e5e5;
+  color: #4a4a4a;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* ---- Sekcja dostępności ---- */
+.kiosk-version-b .bb-b-a11y-section {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-shrink: 0 !important;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: #fff;
+  flex-wrap: wrap;
+}
+
+/* Przycisk „Obniż ekran" */
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn {
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: #fff;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  stroke: #1f1f1f;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, stroke 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn:hover:not(.active) {
+  background: #f7f7f7;
+  border-color: #b5b5b5;
+}
+
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn:not(.active):active {
+  background: #e5e5e5;
+}
+
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn:active {
+  transform: scale(0.97);
+}
+
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn.active {
+  background: #1f1f1f;
+  border-color: #1f1f1f;
+  stroke: #ffbc0d;
+  color: #ffbc0d;
+}
+
+.kiosk-version-b .bb-b-a11y-section .accessibility-btn.active:hover {
+  background: #2b2b2b;
+  border-color: #2b2b2b;
+}
+
+/* Grupa przycisków rozmiaru czcionki */
+.kiosk-version-b .bb-b-font-size-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.kiosk-version-b .bb-b-font-label {
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.kiosk-version-b .bb-b-font-btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: #fff;
+  color: #1f1f1f;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, stroke 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .bb-b-font-btn:hover:not(.active) {
+  background: #f7f7f7;
+  border-color: #b5b5b5;
+}
+
+.kiosk-version-b .bb-b-font-btn:not(.active):active {
+  background: #e5e5e5;
+}
+
+.kiosk-version-b .bb-b-font-btn:active {
+  transform: scale(0.97);
+}
+
+.kiosk-version-b .bb-b-font-btn--0 {
+  font-size: 14px;
+}
+
+.kiosk-version-b .bb-b-font-btn--1 {
+  font-size: 16px;
+}
+
+.kiosk-version-b .bb-b-font-btn--2 {
+  font-size: 18px;
+}
+
+.kiosk-version-b .bb-b-font-btn.active {
+  background: #1f1f1f;
+  border-color: #1f1f1f;
+  color: #ffbc0d;
+}
+
+.kiosk-version-b .bb-b-font-btn.active:hover {
+  background: #2b2b2b;
+  border-color: #2b2b2b;
+}
+
+/* ============================================================
+   WERSJA B — SKALA CZCIONKI (font-size-level)
+   Klasa nakładana na .kiosk-screen-viewport.
+   Używamy zoom zamiast font-size, bo elementy mają px-owe rozmiary.
+   ============================================================ */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 {
+  zoom: 1.12;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 {
+  zoom: 1.28;
+}
+
 .kiosk-version-b .menu-b-search-results {
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* Customowy scrollbar w wersji B — zachowanie stałej szerokości kolumny i brak przeskakiwania ekranu */
+.kiosk-version-b .allergens-custom-scrollbar {
+  flex: 0 0 44px;
+  width: 44px;
+  box-sizing: border-box;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.kiosk-version-b .allergens-custom-scrollbar.is-hidden {
+  display: flex !important;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Stan braku wyników wyszukiwania (Empty State UX) */
+.kiosk-version-b .menu-b-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 36px 20px 32px;
+  background: #fdfdfd;
+  border: 1.5px dashed #cfcfcf;
+  border-radius: 12px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.kiosk-version-b .menu-b-no-results-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f2f2f2;
+  border-radius: 50%;
+  color: #666;
+  margin-bottom: 14px;
+}
+
+.kiosk-version-b .menu-b-no-results-title {
+  margin: 0 0 10px;
+  font-size: 19px;
+  font-weight: 800;
+  color: #1f1f1f;
+  line-height: 1.3;
+}
+
+.kiosk-version-b .menu-b-no-results-query {
+  color: #c9302c;
+  word-break: break-word;
+}
+
+.kiosk-version-b .menu-b-no-results-desc {
+  margin: 0 0 22px;
+  font-size: 14px;
+  color: #666;
+  max-width: 360px;
+  line-height: 1.45;
+}
+
+.kiosk-version-b .menu-b-no-results-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  background: #ffbc0d;
+  border: none;
+  border-radius: 6px;
+  color: #1a1a1a;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.kiosk-version-b .menu-b-no-results-clear-btn:hover {
+  background: #e5a707;
+}
+
+.kiosk-version-b .menu-b-no-results-clear-btn:active {
+  background: #d49a06;
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   WERSJA B — VIEW TRANSITIONS API (Morfing z kafelka w stronę)
+   ============================================================ */
+
+/* Strona wybranej kategorii — powiązana z menu-scroll-shell.
+   Dzięki ograniczeniu do obszaru menu-scroll-shell animacja jest ściśle
+   ucięta powyżej wyszukiwarki i NIE nakłada się na wyszukiwarkę ani dolny pasek (bottom bar) */
+.kiosk-version-b .menu-scroll-shell.category-view-active {
+  view-transition-name: category-view-morph;
+}
+
+/* Przycisk powrotu — wyłączony z drzewa View Transitions, posiada własną animację pojawiania */
+.kiosk-version-b .menu-b-floating-back-btn {
+  view-transition-name: none !important;
+}
+
+/* Morfing: rozszerzanie kafelka do pełnego widoku kategorii i zwijanie z powrotem */
+::view-transition-group(category-view-morph) {
+  animation-duration: 0.24s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+::view-transition-old(category-view-morph),
+::view-transition-new(category-view-morph) {
+  mix-blend-mode: normal;
+  height: 100%;
+  width: 100%;
+}
+
+::view-transition-old(category-view-morph) {
+  animation: 0.12s ease-out both morphTileFadeOut;
+}
+
+::view-transition-new(category-view-morph) {
+  animation: 0.24s cubic-bezier(0.16, 1, 0.3, 1) both morphPageFadeIn;
+}
+
+@keyframes morphTileFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes morphPageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(category-view-morph),
+  ::view-transition-old(category-view-morph),
+  ::view-transition-new(category-view-morph) {
+    animation-duration: 0.01ms !important;
+  }
 }

@@ -8,7 +8,8 @@
   --text-h: #292929;
   --text: #555555;
   --bg: #ffffff;
-  --primary-gold: #ffbc0d;       /* neutralny złoty/żółty charakterystyczny dla kiosku */
+  --primary-gold: #ffbc0d;
+  /* neutralny złoty/żółty charakterystyczny dla kiosku */
   --primary-gold-hover: #e5a707;
   --primary-gold-light: #fff5d6;
   --dark-text: #292929;
@@ -34,7 +35,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body, html, #root {
+body,
+html,
+#root {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -42,6 +45,19 @@ body, html, #root {
   background-color: #121316;
   color: var(--dark-text);
   user-select: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
 /* Otoczenie monitora (neutralne tło wokół pionowego totemu) */
@@ -176,7 +192,7 @@ body, html, #root {
   font-size: 11px;
   font-weight: 700;
   color: #495057;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .kiosk-screen-content {
@@ -268,8 +284,13 @@ body, html, #root {
 }
 
 @keyframes laserSweep {
-  from { top: 10%; }
-  to { top: 90%; }
+  from {
+    top: 10%;
+  }
+
+  to {
+    top: 90%;
+  }
 }
 
 /* Terminal PIN */
@@ -317,8 +338,13 @@ body, html, #root {
   border-radius: 1px;
 }
 
-.pin-cancel { color: #ff4444 !important; }
-.pin-ok { color: #00cc66 !important; }
+.pin-cancel {
+  color: #ff4444 !important;
+}
+
+.pin-ok {
+  color: #00cc66 !important;
+}
 
 .card-slot {
   width: 100%;
@@ -346,13 +372,18 @@ body, html, #root {
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   animation: insertCardPulse 1s infinite alternate;
 }
 
 @keyframes insertCardPulse {
-  from { transform: translateY(0); }
-  to { transform: translateY(-3px); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-3px);
+  }
 }
 
 /* Drukarka paragonów */
@@ -381,7 +412,7 @@ body, html, #root {
   font-size: 5.5px;
   color: #000;
   font-family: monospace;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   margin-top: 1px;
   border-radius: 1px;
   text-align: center;
@@ -395,8 +426,15 @@ body, html, #root {
 }
 
 @keyframes paperSlideOut {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .receipt-take-hint {
@@ -424,7 +462,7 @@ body, html, #root {
   line-height: 1;
   letter-spacing: -2px;
   text-align: center;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .kiosk-header {
@@ -653,7 +691,7 @@ body, html, #root {
 
 .hero-food-icon {
   font-size: 96px;
-  filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
 }
 
 .hero-promo-badge {
@@ -663,7 +701,7 @@ body, html, #root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .hero-promo-price {
@@ -689,8 +727,15 @@ body, html, #root {
 }
 
 @keyframes pulseHint {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .welcome-bottom-controls {
@@ -776,7 +821,8 @@ body, html, #root {
   padding-top: 6px;
 }
 
-.welcome-lang-btn, .welcome-a11y-btn {
+.welcome-lang-btn,
+.welcome-a11y-btn {
   background: #ffffff;
   border: 1px solid var(--kiosk-border);
   border-radius: 4px;
@@ -839,7 +885,7 @@ body, html, #root {
   justify-content: center;
   gap: 16px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
   min-height: 180px;
 }
@@ -1088,7 +1134,7 @@ body, html, #root {
   gap: 8px;
   cursor: pointer;
   min-height: 100px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
 .hub-big-tile:active {
@@ -1139,7 +1185,7 @@ body, html, #root {
   grid-column: 1 / -1;
   padding: 28px 12px;
   color: var(--secondary-text);
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -1361,7 +1407,7 @@ body, html, #root {
   background: #fbfbfb;
 }
 
-.combo-step-content-area > .step-view-block {
+.combo-step-content-area>.step-view-block {
   min-height: 0;
   display: flex;
   flex: 1 1 auto;
@@ -1436,7 +1482,8 @@ body, html, #root {
 }
 
 /* Sosy i napoje siatki */
-.sauces-grid-layout, .drinks-grid-layout {
+.sauces-grid-layout,
+.drinks-grid-layout {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
@@ -1459,7 +1506,8 @@ body, html, #root {
   padding: 4px 2px;
 }
 
-.sauce-tile-box, .drink-tile-box {
+.sauce-tile-box,
+.drink-tile-box {
   background: #ffffff;
   border: 1px solid var(--kiosk-border);
   border-radius: 6px;
@@ -1473,28 +1521,33 @@ body, html, #root {
   justify-content: space-between;
 }
 
-.sauce-tile-box.selected, .drink-tile-box.selected {
+.sauce-tile-box.selected,
+.drink-tile-box.selected {
   border: 2px solid var(--primary-gold);
   background: var(--primary-gold-light);
 }
 
-.sauce-icon-wrap, .drink-icon-wrap {
+.sauce-icon-wrap,
+.drink-icon-wrap {
   font-size: 26px;
 }
 
-.sauce-name-text, .drink-name-text {
+.sauce-name-text,
+.drink-name-text {
   font-size: 10px;
   font-weight: 700;
   line-height: 1.1;
 }
 
-.sauce-price-text, .drink-price-add {
+.sauce-price-text,
+.drink-price-add {
   font-size: 10px;
   font-weight: 700;
   color: var(--price-green);
 }
 
-.sauce-price-free, .drink-price-free {
+.sauce-price-free,
+.drink-price-free {
   font-size: 9px;
   color: #888;
 }
@@ -1595,7 +1648,8 @@ body, html, #root {
   overflow-wrap: anywhere;
 }
 
-.btn-summary-personalize, .btn-summary-change {
+.btn-summary-personalize,
+.btn-summary-change {
   background: #f0f0f0;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -2368,7 +2422,8 @@ body, html, #root {
   background: var(--primary-gold-light);
 }
 
-.numpad-backspace-btn, .numpad-clear-btn {
+.numpad-backspace-btn,
+.numpad-clear-btn {
   font-size: 18px;
   color: #555;
 }
@@ -2503,7 +2558,8 @@ body, html, #root {
   color: #888;
 }
 
-.btn-donation-fixed, .btn-donation-skip {
+.btn-donation-fixed,
+.btn-donation-skip {
   background: #ffffff;
   border: 1px solid var(--kiosk-border);
   border-radius: 4px;
@@ -2592,7 +2648,8 @@ body, html, #root {
   color: #888;
 }
 
-.btn-pay-at-cashier, .btn-payment-back {
+.btn-pay-at-cashier,
+.btn-payment-back {
   background: #ffffff;
   border: 1px solid var(--kiosk-border);
   border-radius: 4px;
@@ -2657,8 +2714,15 @@ body, html, #root {
 }
 
 @keyframes bounceDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(12px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(12px);
+  }
 }
 
 .processing-spinner-circle {
@@ -2671,7 +2735,9 @@ body, html, #root {
 }
 
 @keyframes spinLoader {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .card-swipe-animation-visual {
@@ -3072,7 +3138,8 @@ body, html, #root {
   flex: 0 0 84px;
 }
 
-.combo-icon-big, .single-icon-big {
+.combo-icon-big,
+.single-icon-big {
   font-size: 48px;
 }
 
@@ -3184,6 +3251,11 @@ body, html, #root {
   cursor: pointer;
 }
 
+.kiosk-version-b .allergens-scroll-arrow {
+  flex: 0 0 44px;
+  width: 44px;
+}
+
 .allergens-scroll-arrow::before {
   content: '';
   position: absolute;
@@ -3194,14 +3266,28 @@ body, html, #root {
   border-left: 1.5px solid #686868;
 }
 
+.kiosk-version-b .allergens-scroll-arrow::before {
+  left: 16px;
+  width: 8px;
+  height: 8px;
+}
+
 .allergens-scroll-arrow-up::before {
   top: 11px;
   transform: rotate(45deg);
 }
 
+.kiosk-version-b .allergens-scroll-arrow-up::before {
+  top: 18px;
+}
+
 .allergens-scroll-arrow-down::before {
   top: 8px;
   transform: rotate(225deg);
+}
+
+.kiosk-version-b .allergens-scroll-arrow-down::before {
+  top: 15px;
 }
 
 .allergens-scroll-arrow:hover:not(:disabled) {
@@ -3227,6 +3313,13 @@ body, html, #root {
   background: #b7b7b7;
 }
 
+.kiosk-version-b .allergens-scroll-track {
+  width: 12px;
+  min-height: 24px;
+  border-radius: 4px;
+  background: #b7b7b7;
+}
+
 .allergens-scroll-thumb {
   position: absolute;
   inset: 0 auto auto -6px;
@@ -3240,8 +3333,20 @@ body, html, #root {
   cursor: grab;
 }
 
+.kiosk-version-b .allergens-scroll-thumb {
+  inset: 0 auto auto -6px;
+  width: 25px;
+  min-height: 44px;
+  border-radius: 12px;
+  background: #fff;
+}
+
 .allergens-scroll-thumb:active {
   cursor: grabbing;
+}
+
+.kiosk-version-b .allergens-scroll-thumb:active {
+  background: #f0f0f0;
 }
 
 .allergens-scroll-thumb::after {
@@ -3287,7 +3392,8 @@ body, html, #root {
   font-size: 11px;
 }
 
-.nutrition-table th, .nutrition-table td {
+.nutrition-table th,
+.nutrition-table td {
   padding: 9px 6px;
   vertical-align: middle;
   text-align: left;
@@ -3414,7 +3520,8 @@ body, html, #root {
 }
 
 /* Modal błędu i restartu (żółty dymek z !) */
-.kiosk-error-dialog, .kiosk-restart-dialog {
+.kiosk-error-dialog,
+.kiosk-restart-dialog {
   background: #ffffff;
   border-radius: 12px;
   padding: 24px 20px;
@@ -3424,7 +3531,7 @@ body, html, #root {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .scenario-instruction-dialog {
@@ -3434,7 +3541,7 @@ body, html, #root {
   width: 100%;
   max-width: 380px;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .scenario-instruction-dialog h2 {
@@ -3495,13 +3602,15 @@ body, html, #root {
   color: #fff;
 }
 
-.error-dialog-title, .restart-dialog-title {
+.error-dialog-title,
+.restart-dialog-title {
   font-size: 18px;
   font-weight: 800;
   margin-bottom: 8px;
 }
 
-.error-dialog-message, .restart-dialog-subtitle {
+.error-dialog-message,
+.restart-dialog-subtitle {
   font-size: 13px;
   color: #555;
   margin-bottom: 20px;
@@ -3598,7 +3707,8 @@ body, html, #root {
   margin-bottom: 12px;
 }
 
-.btn-nutrition-info, .btn-open-personalize {
+.btn-nutrition-info,
+.btn-open-personalize {
   width: 100%;
   background: #ffffff;
   border: 1px solid var(--kiosk-border);
@@ -3833,7 +3943,8 @@ body, html, #root {
 }
 
 /* Modale symulacji urządzeń fizycznych */
-.kiosk-scanner-sim-box, .kiosk-terminal-sim-box {
+.kiosk-scanner-sim-box,
+.kiosk-terminal-sim-box {
   background: #ffffff;
   border-radius: 12px;
   padding: 20px;
@@ -4029,7 +4140,7 @@ body, html, #root {
   border-radius: 12px;
   padding: 14px;
   margin-top: 8px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -4049,7 +4160,8 @@ body, html, #root {
   font-size: 11.5px;
 }
 
-.dev-input-field, .dev-select-field {
+.dev-input-field,
+.dev-select-field {
   background: #1e293b;
   border: 1px solid #475569;
   color: #fff;
@@ -4264,7 +4376,7 @@ body,
   height: 25px;
 }
 
-.hero-graphic-center > .visual-icon-svg {
+.hero-graphic-center>.visual-icon-svg {
   width: 190px;
   height: 142px;
 }
@@ -4414,7 +4526,7 @@ body,
   margin: 20px 0;
 }
 
-.hero-graphic-center > .product-photo {
+.hero-graphic-center>.product-photo {
   width: min(100%, 440px);
   height: 320px;
   object-fit: contain;
