@@ -107,6 +107,7 @@ interface KioskState {
 
   // Koszyk
   cart: CartItem[];
+  lastAddedItem: CartItem | null;
 
   // Płatność i faktura
   nipInput: string;
@@ -202,6 +203,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   tempIngredients: [],
 
   cart: [],
+  lastAddedItem: null,
 
   nipInput: '',
   donationAdded: 0,
@@ -418,6 +420,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
       set((state) => ({
         cart: [...state.cart, cartItem],
+        lastAddedItem: cartItem,
         tempCombo: null,
         selectedCartItemId: null,
         currentScreen: 'menu',
@@ -528,6 +531,11 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const existing = get().cart.find((i) => !i.isCombo && i.product.id === product.id);
 
     if (existing) {
+      const updatedAddition: CartItem = {
+        ...existing,
+        quantity,
+        customIngredients: pendingIngredients ? [...pendingIngredients] : existing.customIngredients,
+      };
       set((state) => ({
         cart: state.cart.map((item) =>
           item.id === existing.id
@@ -538,6 +546,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
               }
             : item
         ),
+        lastAddedItem: updatedAddition,
         activeModal: 'product-added',
         pendingProductIngredients: null,
       }));
@@ -552,6 +561,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       };
       set((state) => ({
         cart: [...state.cart, cartItem],
+        lastAddedItem: cartItem,
         activeModal: 'product-added',
         pendingProductIngredients: null,
       }));
@@ -593,6 +603,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       previousScreen: null,
       activeModal: 'none',
       cart: [],
+      lastAddedItem: null,
       selectedProduct: null,
       pendingProductIngredients: null,
       personalizeReturnModal: 'none',
@@ -653,6 +664,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       orderNumber: randomOrder,
       currentScreen: 'payment-success',
       cart: [],
+      lastAddedItem: null,
       donationAdded: 0,
       nipInput: '',
     });

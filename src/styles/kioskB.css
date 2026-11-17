@@ -1215,3 +1215,279 @@
   text-align: center;
   margin-bottom: 6px;
 }
+
+/* ==========================================================================
+   MODAL POTWIERDZENIA DODANIA PRODUKTU (Wersja B)
+   ========================================================================== */
+.kiosk-version-b .kiosk-product-added-box.product-added-box-b {
+  max-width: 440px;
+  width: 92%;
+  padding: 24px 22px 20px;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+}
+
+.kiosk-version-b .added-header-status-b {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.kiosk-version-b .added-check-circle-b {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+}
+
+.kiosk-version-b .added-heading-b {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* Karta dodanego produktu */
+.kiosk-version-b .added-product-card-b {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.kiosk-version-b .added-card-top-row-b {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.kiosk-version-b .added-card-name-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.kiosk-version-b .added-card-qty-badge {
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.kiosk-version-b .added-card-product-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.kiosk-version-b .added-card-mod-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #15803d;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.kiosk-version-b .added-card-item-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: #16a34a;
+  white-space: nowrap;
+}
+
+/* Siatka elementów zestawu */
+.kiosk-version-b .added-combo-elements-grid-b {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.kiosk-version-b .added-combo-elements-grid-b::-webkit-scrollbar {
+  display: none;
+}
+
+.kiosk-version-b .added-element-chip-b {
+  flex: 1 1 0;
+  min-width: 62px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 6px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.kiosk-version-b .added-chip-icon {
+  width: 32px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .added-chip-icon svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.kiosk-version-b .added-chip-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #334155;
+  line-height: 1.15;
+  max-width: 64px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Pojedynczy element (nie zestaw) */
+.kiosk-version-b .added-single-element-row-b {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kiosk-version-b .added-single-visual {
+  width: 44px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .added-single-visual svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.kiosk-version-b .added-single-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kiosk-version-b .added-single-desc {
+  font-size: 11.5px;
+  color: #64748b;
+  line-height: 1.25;
+}
+
+/* Belka łącznej kwoty w koszyku */
+.kiosk-version-b .added-cart-total-bar-b {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.kiosk-version-b .added-total-label-b {
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.kiosk-version-b .added-total-count-b {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.kiosk-version-b .added-total-price-b {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+/* Przyciski akcji modala */
+.kiosk-version-b .added-actions-b {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.kiosk-version-b .btn-added-secondary-b {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  min-height: 44px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .btn-added-secondary-b:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.kiosk-version-b .btn-icon-plus {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kiosk-version-b .btn-added-primary-b {
+  flex: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  min-height: 44px;
+  background: var(--primary-gold);
+  border: 1px solid var(--primary-gold);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #000000;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .btn-cart-badge {
+  background: #000000;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  line-height: 1.3;
+}
