@@ -434,10 +434,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       ? state.cart.find((item) => item.id === cartItemId)
       : undefined;
 
-    const existingComboIngredients =
-      state.previousScreen === 'combo-builder'
-        ? state.tempCombo?.customIngredients
-        : undefined;
+    const existingComboIngredients = state.tempCombo?.customIngredients;
 
     const savedIngredients =
       existingCartItem?.customIngredients || existingComboIngredients;
@@ -486,7 +483,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const { selectedCartItemId, selectedProduct, tempIngredients, cart, previousScreen, tempCombo } = get();
 
     // Personalizacja burgera podczas konfiguracji zestawu
-    if (previousScreen === 'combo-builder' && tempCombo) {
+    if (tempCombo) {
       set({
         tempCombo: {
           ...tempCombo,
@@ -496,7 +493,10 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         previousScreen: 'personalize',
         personalizeReturnModal: 'none',
       });
-    } else if (selectedCartItemId) {
+      return;
+    }
+
+    if (selectedCartItemId) {
       // Edycja burgera w istniejącym zestawie lub produktu w koszyku
       set({
         cart: cart.map((item) =>

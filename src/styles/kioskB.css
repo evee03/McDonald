@@ -1194,38 +1194,17 @@
   box-shadow: none !important;
 }
 
-/* Wskaźnik rozmiaru w podsumowaniu zestawu (Wersja B) */
-.kiosk-version-b .combo-summary-title-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.kiosk-version-b .combo-summary-size-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  padding: 3px 8px;
-  font-size: 12px;
+/* Oznaczenie zmodyfikowanego burgera w podsumowaniu */
+.kiosk-version-b .summary-card-custom-badge {
+  display: inline-block;
+  font-size: 11.5px;
   font-weight: 700;
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.kiosk-version-b .combo-summary-size-tag:hover {
-  background: #e2e8f0;
-  border-color: #94a3b8;
-}
-
-.kiosk-version-b .combo-summary-size-edit {
-  color: #2563eb;
-  text-decoration: underline;
-  font-size: 11px;
+  color: #15803d;
+  background: #dcfce7;
+  border: 1px solid #bbf7d0;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-bottom: 6px;
 }
 
 .kiosk-version-b .combo-incomplete-hint {

@@ -114,27 +114,29 @@ export const ComboBuilderScreen: React.FC = () => {
         <div className="combo-header-brand">
           <span className="brand-letter-m">M</span>
           {isVersionB ? (
-            <div className="combo-title-stack">
-              <h1 className="combo-name-heading">{comboTitle}</h1>
-              <div className="combo-price-and-info">
-                <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
-                <span className="combo-info-divider" aria-hidden="true">·</span>
-                <button
-                  type="button"
-                  className="combo-nutrition-link-inline"
-                  onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
-                  data-aoi="AOI_cel"
-                  title={t('Wartości odżywcze i składniki')}
-                >
-                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
-                  </svg>
-                  <span>{t('Składniki i alergeny')}</span>
-                </button>
+            comboStep !== 6 && (
+              <div className="combo-title-stack">
+                <h1 className="combo-name-heading">{comboTitle}</h1>
+                <div className="combo-price-and-info">
+                  <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
+                  <span className="combo-info-divider" aria-hidden="true">·</span>
+                  <button
+                    type="button"
+                    className="combo-nutrition-link-inline"
+                    onClick={() => navigateTo('allergens', 'AOI_cel', 'Wartości odżywcze')}
+                    data-aoi="AOI_cel"
+                    title={t('Wartości odżywcze i składniki')}
+                  >
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="16" x2="12" y2="12" />
+                      <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </svg>
+                    <span>{t('Składniki i alergeny')}</span>
+                  </button>
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <>
               {comboStep !== 6 && (
@@ -470,21 +472,7 @@ export const ComboBuilderScreen: React.FC = () => {
           {comboStep === 6 && (
             <div className="step-view-block combo-summary-view">
               <div className="combo-summary-heading">
-                <div className="combo-summary-title-row">
-                  <h1 className="combo-name-heading">{comboTitle}</h1>
-                  {isVersionB && (
-                    <button
-                      type="button"
-                      className="combo-summary-size-tag"
-                      onClick={(e) => handleStepClick(1, 'Zmień rozmiar zestawu', e)}
-                      data-aoi="AOI_cel"
-                      title={t('Zmień rozmiar zestawu')}
-                    >
-                      <span>{currentSize === 'large' ? t('Zestaw Powiększony') : t('Zestaw Standardowy')}</span>
-                      <span className="combo-summary-size-edit">{t('Zmień')}</span>
-                    </button>
-                  )}
-                </div>
+                <h1 className="combo-name-heading">{comboTitle}</h1>
                 <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
               </div>
               <div className="summary-hero-visual" aria-hidden="true">
@@ -500,6 +488,14 @@ export const ComboBuilderScreen: React.FC = () => {
                 <div className="summary-item-card">
                   <div className="summary-card-visual"><VisualIcon kind={tempCombo.baseProduct.image} label={tempCombo.baseProduct.name} photoKey={tempCombo.baseProduct.id} /></div>
                   <div className="summary-card-name">{t(tempCombo.baseProduct.name)}</div>
+                  {tempCombo.customIngredients && tempCombo.customIngredients.some((i) => {
+                    const defaultQty = tempCombo.baseProduct.ingredients?.find((d) => d.id === i.id)?.quantity ?? 1;
+                    return i.quantity !== defaultQty;
+                  }) && (
+                    <div className="summary-card-custom-badge">
+                      {t('Zmodyfikowano')}
+                    </div>
+                  )}
                   <button
                     type="button"
                     className="btn-summary-personalize"
