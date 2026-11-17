@@ -18,6 +18,8 @@ export const MenuScreen: React.FC = () => {
   const {
     activeCategory,
     interfaceVersion,
+    dineOption,
+    openModal,
     setActiveCategory,
     openProductDetail,
     startComboBuilder,
@@ -239,6 +241,27 @@ export const MenuScreen: React.FC = () => {
             <div className="menu-b-header-brand">
               <span className="menu-b-logo" aria-label="Logo"><span className="logo-letter">M</span></span>
               <h1>{t('Menu Główne')}</h1>
+              <button
+                type="button"
+                className={`dine-option-indicator ${(dineOption || 'na-miejscu') === 'na-miejscu' ? 'dine-in' : 'takeaway'}`}
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', `Kliknięcie wskaźnika formy zamówienia: ${dineOption || 'na-miejscu'}`, e, 'menu');
+                  openModal('dine-option-change');
+                }}
+                data-aoi="AOI_cel"
+                title={t('Zmień formę zamówienia')}
+                aria-label={`Forma zamówienia: ${(dineOption || 'na-miejscu') === 'na-miejscu' ? t('Na Miejscu') : t('Na Wynos')}. ${t('Kliknij, aby zmienić.')}`}
+              >
+                <span className="dine-indicator-icon" aria-hidden="true">
+                  {(dineOption || 'na-miejscu') === 'na-miejscu' ? '🍽️' : '🛍️'}
+                </span>
+                <span className="dine-indicator-label">
+                  {(dineOption || 'na-miejscu') === 'na-miejscu' ? t('Na Miejscu') : t('Na Wynos')}
+                </span>
+                <span className="dine-indicator-change" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
+                </span>
+              </button>
             </div>
           </header>}
           <AllergensScrollbar

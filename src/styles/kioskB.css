@@ -887,3 +887,163 @@
     animation-duration: 0.01ms !important;
   }
 }
+
+
+/* ============================================================
+   WSKAŹNIK I ZMIANA FORMY ZAMÓWIENIA (WERSJA B)
+   ============================================================ */
+.kiosk-version-b .dine-option-indicator {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #f7f7f8;
+  border: 1.5px solid #dcdcdc;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f1f1f;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  user-select: none;
+}
+
+.kiosk-version-b .dine-option-indicator:hover,
+.kiosk-version-b .dine-option-indicator:focus-visible {
+  background: #ffffff;
+  border-color: var(--primary-gold);
+  box-shadow: 0 2px 8px rgba(255, 188, 13, 0.35);
+  outline: none;
+}
+
+.kiosk-version-b .dine-option-indicator:active {
+  transform: translateY(-50%) scale(0.96);
+  background: #f0f0f0;
+}
+
+.kiosk-version-b .dine-indicator-icon {
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .dine-indicator-label {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1f1f1f;
+}
+
+.kiosk-version-b .dine-indicator-change {
+  display: flex;
+  align-items: center;
+  color: #888;
+  margin-left: 2px;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.kiosk-version-b .dine-option-indicator:hover .dine-indicator-change {
+  color: #1f1f1f;
+  transform: translateY(1px);
+}
+
+/* Modal zmiany formy zamówienia */
+.kiosk-restart-dialog.dine-change-dialog {
+  max-width: 420px;
+  padding: 28px 24px 22px;
+}
+
+.dine-change-cards-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin: 18px 0 22px;
+}
+
+.dine-change-card {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: #fbfbfb;
+  border: 2px solid #e2e4e8;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  outline: none;
+}
+
+.dine-change-card:hover {
+  background: #fff;
+  border-color: #cbd0d8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.dine-change-card.active {
+  background: #fffdf5;
+  border-color: var(--primary-gold);
+  box-shadow: 0 4px 14px rgba(255, 188, 13, 0.3);
+}
+
+.dine-change-card-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.dine-change-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.dine-change-card-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1f1f1f;
+}
+
+.dine-change-current-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #666;
+  background: #eaecef;
+  padding: 2px 7px;
+  border-radius: 999px;
+  letter-spacing: 0.2px;
+}
+
+.dine-change-card.active .dine-change-current-tag {
+  background: #ffeaa7;
+  color: #8c6b00;
+}
+
+.dine-change-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-gold);
+  color: #1f1f1f;
+  font-size: 12px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}

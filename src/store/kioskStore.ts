@@ -38,6 +38,7 @@ export type ModalType =
   | 'none'
   | 'product-detail'
   | 'restart-confirm'
+  | 'dine-option-change'
   | 'error'
   | 'product-added'
   | 'upsell'

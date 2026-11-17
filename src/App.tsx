@@ -22,6 +22,7 @@ import { ErrorModal } from './components/modals/ErrorModal';
 import { ProductAddedModal } from './components/modals/ProductAddedModal';
 import { ProductDetailModal } from './components/modals/ProductDetailModal';
 import { RestartModal } from './components/modals/RestartModal';
+import { DineOptionChangeModal } from './components/modals/DineOptionChangeModal';
 import { UpsellModal } from './components/modals/UpsellModal';
 
 import './styles/kiosk.css';
@@ -103,6 +104,7 @@ export const App: React.FC = () => {
             <RestartModal />
             <ErrorModal />
             <ProductAddedModal />
+            <DineOptionChangeModal />
             <UpsellModal />
           </div>
         </div>
