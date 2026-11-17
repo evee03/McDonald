@@ -1,33 +1,34 @@
 import React, { useEffect } from 'react';
-import { useKioskStore } from './store/kioskStore';
 import { eventLogger } from './logger/eventLogger';
+import { useKioskStore } from './store/kioskStore';
 
 // Ekrany
-import { WelcomeScreen } from './components/screens/WelcomeScreen';
-import { LanguageScreen } from './components/screens/LanguageScreen';
-import { DineChoiceScreen } from './components/screens/DineChoiceScreen';
-import { MenuScreen } from './components/screens/MenuScreen';
-import { ComboPromptScreen } from './components/screens/ComboPromptScreen';
-import { ComboBuilderScreen } from './components/screens/ComboBuilderScreen';
-import { PersonalizeScreen } from './components/screens/PersonalizeScreen';
+import { AllergensScreen } from './components/screens/AllergensScreen';
 import { CartScreen } from './components/screens/CartScreen';
+import { ComboBuilderScreen } from './components/screens/ComboBuilderScreen';
+import { ComboPromptScreen } from './components/screens/ComboPromptScreen';
+import { DineChoiceScreen } from './components/screens/DineChoiceScreen';
+import { LanguageScreen } from './components/screens/LanguageScreen';
+import { MenuScreen } from './components/screens/MenuScreen';
 import { PaymentMethodScreen } from './components/screens/PaymentMethodScreen';
 import { PaymentProcessingScreen } from './components/screens/PaymentProcessingScreen';
 import { PaymentSuccessScreen } from './components/screens/PaymentSuccessScreen';
-import { AllergensScreen } from './components/screens/AllergensScreen';
+import { PersonalizeScreen } from './components/screens/PersonalizeScreen';
+import { WelcomeScreen } from './components/screens/WelcomeScreen';
 
 // Modale
 import { DevPanel } from './components/common/DevPanel';
-import { ProductDetailModal } from './components/modals/ProductDetailModal';
-import { RestartModal } from './components/modals/RestartModal';
 import { ErrorModal } from './components/modals/ErrorModal';
 import { ProductAddedModal } from './components/modals/ProductAddedModal';
+import { ProductDetailModal } from './components/modals/ProductDetailModal';
+import { RestartModal } from './components/modals/RestartModal';
 import { UpsellModal } from './components/modals/UpsellModal';
 
 import './styles/kiosk.css';
+import './styles/kioskB.css';
 
 export const App: React.FC = () => {
-  const { currentScreen, isAccessibilityMode } = useKioskStore();
+  const { currentScreen, isAccessibilityMode, interfaceVersion } = useKioskStore();
 
   useEffect(() => {
     const viewport = document.querySelector<HTMLElement>('.kiosk-screen-viewport');
@@ -90,7 +91,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="kiosk-app-environment" onClick={handleViewportBackgroundClick}>
+    <div className={`kiosk-app-environment kiosk-version-${interfaceVersion.toLowerCase()}`} onClick={handleViewportBackgroundClick}>
       {/* Widok obejmuje wyłącznie pionowy ekran kiosku. */}
       <div className="kiosk-screen-shell">
         <div className={`kiosk-screen-viewport ${isAccessibilityMode ? 'a11y-mode' : ''}`} data-screen={currentScreen}>

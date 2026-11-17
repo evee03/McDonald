@@ -11,6 +11,7 @@ export const DevPanel: React.FC = () => {
     currentScreen,
     navigateTo,
     resetAll,
+    setInterfaceVersion,
   } = useKioskStore();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,7 @@ export const DevPanel: React.FC = () => {
       participantId: next.participantId ?? participantId,
     };
     eventLogger.configure(config);
+    if (next.version) setInterfaceVersion(next.version);
     setVersion(config.version);
     setOrder(config.order);
     setMetrics(eventLogger.getMetrics());

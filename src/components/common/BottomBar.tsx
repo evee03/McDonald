@@ -12,12 +12,14 @@ export const BottomBar: React.FC = () => {
     navigateTo,
     toggleAccessibility,
     isAccessibilityMode,
+    interfaceVersion,
     currentScreen,
   } = useKioskStore();
   const t = useT();
 
   const total = getCartTotal();
   const count = getCartItemsCount();
+  const isVersionB = interfaceVersion === 'B';
 
   if (currentScreen !== 'menu') return null;
 
@@ -65,16 +67,16 @@ export const BottomBar: React.FC = () => {
 
       {/* Dolny pasek ekranowy */}
       <div className="bottom-utilities-row">
-        <div className="utility-buttons-right" style={{ marginLeft: 'auto' }}>
+        <div className={isVersionB ? 'utility-buttons-left' : 'utility-buttons-right'}>
           <button
             type="button"
             className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}
             onClick={handleAccessibilityClick}
             data-aoi="AOI_dostepnosc"
-            title="Obniża interfejs dla osób na wózkach i niskiego wzrostu"
+            title={isVersionB ? t('Obniża położenie elementów ekranu') : 'Obniża interfejs dla osób na wózkach i niskiego wzrostu'}
           >
             <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
-            <span>{t('Dostępność')}</span>
+            <span>{isVersionB ? t('Obniż ekran') : t('Dostępność')}</span>
           </button>
         </div>
       </div>

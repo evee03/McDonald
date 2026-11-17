@@ -44,6 +44,8 @@ export type ModalType =
   | 'physical-terminal'
   | 'physical-scanner';
 
+export type InterfaceVersion = 'A' | 'B';
+
 export interface ConfiguredCombo {
   baseProduct: Product;
   size?: 'standard' | 'large';
@@ -70,6 +72,7 @@ interface KioskState {
   previousScreen: ScreenId | null;
   activeCategory: string;
   isAccessibilityMode: boolean;
+  interfaceVersion: InterfaceVersion;
 
   // Aktywny modal
   activeModal: ModalType;
@@ -111,6 +114,7 @@ interface KioskState {
   navigateTo: (screen: ScreenId, aoi?: StandardAOI, label?: string) => void;
   goBack: (aoi?: StandardAOI) => void;
   toggleAccessibility: () => void;
+  setInterfaceVersion: (version: InterfaceVersion) => void;
   setScenario: (scen: 'S1' | 'S2' | 'S3' | 'FREE') => void;
   setParticipant: (id: string) => void;
 
@@ -168,6 +172,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   previousScreen: null,
   activeCategory: 'menu-glowne',
   isAccessibilityMode: false,
+  interfaceVersion: 'A',
 
   activeModal: 'none',
   errorMessage: '',
@@ -218,6 +223,8 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const nextState = !get().isAccessibilityMode;
     set({ isAccessibilityMode: nextState });
   },
+
+  setInterfaceVersion: (version) => set({ interfaceVersion: version }),
 
   setScenario: (scen) => {
     eventLogger.setScenario(scen);
