@@ -9,6 +9,8 @@ import { formatPrice } from '../../utils/formatPrice';
 import { getDisplayedIngredients } from '../../utils/productIngredients';
 import { AllergensScrollbar } from '../common/AllergensScrollbar';
 import { DineOptionButton } from '../common/DineOptionButton';
+import { getComboProductLabel } from '../../data/products';
+import type { CartItem } from '../../store/kioskStore';
 
 export const CartScreen: React.FC = () => {
   const t = useT();
@@ -21,9 +23,12 @@ export const CartScreen: React.FC = () => {
     openModal,
     openPersonalize,
     startComboBuilder,
+    interfaceVersion,
   } = useKioskStore();
 
+  const isVersionB = interfaceVersion === 'B';
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [itemToDelete, setItemToDelete] = useState<CartItem | null>(null);
 
   const total = getCartTotal();
 
@@ -164,7 +169,11 @@ export const CartScreen: React.FC = () => {
                       className="btn-cart-item-remove"
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', `Usuń pozycję z koszyka: ${item.product.name}`, e, 'cart');
-                        removeCartItem(item.id);
+                        if (isVersionB) {
+                          setItemToDelete(item);
+                        } else {
+                          removeCartItem(item.id);
+                        }
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -279,6 +288,86 @@ export const CartScreen: React.FC = () => {
             >
               {t('Złóż zamówienie')}
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal potwierdzenia usunięcia pozycji (Wersja B) */}
+      {isVersionB && itemToDelete && (
+        <div
+          className="kiosk-modal-backdrop"
+          onClick={(e) => {
+            eventLogger.logTouch('AOI_wstecz', 'Anuluj usunięcie pozycji z koszyka (kliknięcie tła)', e, 'cart');
+            setItemToDelete(null);
+          }}
+        >
+          <div
+            className="kiosk-remove-item-dialog animated-pop"
+            onClick={(e) => e.stopPropagation()}
+            data-aoi="AOI_cel"
+          >
+            <div className="remove-item-icon-bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#dc2626" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
+              </svg>
+            </div>
+
+            <h2 className="remove-dialog-title">{t('Usunąć tę pozycję?')}</h2>
+            <p className="remove-dialog-subtitle">
+              {t('Czy na pewno chcesz usunąć tę pozycję ze swojego zamówienia?')}
+            </p>
+
+            <div className="remove-dialog-item-preview">
+              <div className="remove-item-visual">
+                {itemToDelete.product.id.startsWith('sauce-') ? (
+                  <IngredientIcon id={itemToDelete.product.id} label={itemToDelete.product.name} />
+                ) : (
+                  <VisualIcon
+                    kind={itemToDelete.product.image}
+                    label={itemToDelete.product.name}
+                    photoKey={itemToDelete.product.id}
+                  />
+                )}
+              </div>
+              <div className="remove-item-info">
+                <span className="remove-item-name">
+                  {itemToDelete.quantity}× {t(itemToDelete.isCombo ? getComboProductLabel(itemToDelete.product.name) : itemToDelete.product.name)}
+                </span>
+                <span className="remove-item-price">
+                  {formatPrice(itemToDelete.calculatedUnitPrice * itemToDelete.quantity)} zł
+                </span>
+              </div>
+            </div>
+
+            <div className="remove-dialog-buttons">
+              <button
+                type="button"
+                className="btn-remove-cancel"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_wstecz', 'Anuluj usunięcie pozycji z koszyka', e, 'cart');
+                  setItemToDelete(null);
+                }}
+                data-aoi="AOI_wstecz"
+              >
+                {t('Anuluj')}
+              </button>
+
+              <button
+                type="button"
+                className="btn-remove-confirm"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', `Potwierdź usunięcie pozycji: ${itemToDelete.product.name}`, e, 'cart');
+                  removeCartItem(itemToDelete.id);
+                  setItemToDelete(null);
+                }}
+                data-aoi="AOI_cel"
+              >
+                {t('Usuń')}
+              </button>
+            </div>
           </div>
         </div>
       )}

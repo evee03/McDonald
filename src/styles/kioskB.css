@@ -1500,3 +1500,140 @@
 .kiosk-version-b .kiosk-restart-dialog {
   box-shadow: none !important;
 }
+
+/* ==========================================================================
+   MODAL POTWIERDZENIA USUNIĘCIA POZYCJI Z KOSZYKA (Wersja B)
+   ========================================================================== */
+.kiosk-version-b .kiosk-remove-item-dialog {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px 20px 20px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: none !important;
+}
+
+.kiosk-version-b .remove-item-icon-bubble {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.kiosk-version-b .remove-dialog-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 6px;
+}
+
+.kiosk-version-b .remove-dialog-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+  margin: 0 0 16px;
+}
+
+.kiosk-version-b .remove-dialog-item-preview {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.kiosk-version-b .remove-item-visual {
+  width: 44px;
+  height: 38px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .remove-item-visual svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.kiosk-version-b .remove-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.kiosk-version-b .remove-item-name {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #1e293b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kiosk-version-b .remove-item-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.kiosk-version-b .remove-dialog-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.kiosk-version-b .btn-remove-cancel {
+  flex: 1;
+  height: 44px;
+  min-height: 44px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .btn-remove-cancel:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.kiosk-version-b .btn-remove-confirm {
+  flex: 1;
+  height: 44px;
+  min-height: 44px;
+  background: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .btn-remove-confirm:hover {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
