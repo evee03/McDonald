@@ -201,11 +201,13 @@ export const ProductAddedModal: React.FC = () => {
                 <div className="added-single-visual">
                   <VisualIcon kind={addedItem.product.image} label={addedItem.product.name} photoKey={addedItem.product.id} />
                 </div>
-                <div className="added-single-info">
-                  <span className="added-single-desc">
-                    {addedItem.product.description ? t(addedItem.product.description) : t(addedItem.product.category)}
-                  </span>
-                </div>
+                {addedItem.product.description && (
+                  <div className="added-single-info">
+                    <span className="added-single-desc">
+                      {t(addedItem.product.description)}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -229,8 +231,7 @@ export const ProductAddedModal: React.FC = () => {
           ) : (
             <>
               <button type="button" className="btn-added-secondary-b" onClick={handleContinue} data-aoi="AOI_cel">
-                <span className="btn-icon-plus">+</span>
-                <span>{t('Dalej')}</span>
+                {t('Wróć')}
               </button>
               <button type="button" className="btn-added-primary-b" onClick={handleGoToSummary} data-aoi="AOI_cel">
                 <span>{t('Do koszyka')}</span>
