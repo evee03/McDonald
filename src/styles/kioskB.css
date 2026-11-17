@@ -1183,3 +1183,56 @@
   color: #1f1f1f;
   outline: none;
 }
+
+
+/* Styl zablokowanego przycisku głównego w Wersji B */
+.kiosk-version-b .btn-primary-control:disabled {
+  background: #e2e4e8 !important;
+  color: #94a3b8 !important;
+  border-color: #cbd5e1 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+/* Wskaźnik rozmiaru w podsumowaniu zestawu (Wersja B) */
+.kiosk-version-b .combo-summary-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.kiosk-version-b .combo-summary-size-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .combo-summary-size-tag:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.kiosk-version-b .combo-summary-size-edit {
+  color: #2563eb;
+  text-decoration: underline;
+  font-size: 11px;
+}
+
+.kiosk-version-b .combo-incomplete-hint {
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc2626;
+  text-align: center;
+  margin-bottom: 6px;
+}

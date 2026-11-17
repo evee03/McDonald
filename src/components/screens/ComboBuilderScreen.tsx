@@ -29,6 +29,7 @@ export const ComboBuilderScreen: React.FC = () => {
     cancelComboBuilder,
     openPersonalize,
     interfaceVersion,
+    currentScreen,
   } = useKioskStore();
 
   const [drinkCategory, setDrinkCategory] = useState<'all' | 'cold' | 'water' | 'hot'>('all');
@@ -44,18 +45,24 @@ export const ComboBuilderScreen: React.FC = () => {
     setComboQuantity(existingItem?.quantity ?? pendingComboQuantity);
   }, [cart, pendingComboQuantity, selectedCartItemId]);
 
+  useEffect(() => {
+    if (!tempCombo && currentScreen === 'combo-builder') {
+      navigateTo('menu');
+    }
+  }, [tempCombo, currentScreen, navigateTo]);
+
   if (!tempCombo) {
-    navigateTo('menu');
     return null;
   }
 
-  // Obliczenie bieżącej ceny zestawu
+  // Obliczenie bieżącej ceny zestawu (rozmiar standardowy jako domyślny)
+  const currentSize = tempCombo.size || 'standard';
   let currentPrice = tempCombo.baseProduct.price + 12.80;
-  if (tempCombo.size === 'large') currentPrice += 3.00;
+  if (currentSize === 'large') currentPrice += 3.00;
   if (tempCombo.sauce?.priceAdd) currentPrice += tempCombo.sauce.priceAdd;
   if (tempCombo.drink?.priceAdd) currentPrice += tempCombo.drink.priceAdd;
   if (tempCombo.extra?.priceAdd) currentPrice += tempCombo.extra.priceAdd;
-  const isComboComplete = Boolean(tempCombo.size && tempCombo.side && tempCombo.sauce && tempCombo.drink && tempCombo.extra);
+  const isComboComplete = Boolean(currentSize && tempCombo.side && tempCombo.sauce && tempCombo.drink && tempCombo.extra);
 
   const handleStepClick = (stepIndex: number, label: string, e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Przejście do kroku zestawu: ${label}`, e, 'combo-builder');
@@ -463,7 +470,21 @@ export const ComboBuilderScreen: React.FC = () => {
           {comboStep === 6 && (
             <div className="step-view-block combo-summary-view">
               <div className="combo-summary-heading">
-                <h1 className="combo-name-heading">{comboTitle}</h1>
+                <div className="combo-summary-title-row">
+                  <h1 className="combo-name-heading">{comboTitle}</h1>
+                  {isVersionB && (
+                    <button
+                      type="button"
+                      className="combo-summary-size-tag"
+                      onClick={(e) => handleStepClick(1, 'Zmień rozmiar zestawu', e)}
+                      data-aoi="AOI_cel"
+                      title={t('Zmień rozmiar zestawu')}
+                    >
+                      <span>{currentSize === 'large' ? t('Zestaw Powiększony') : t('Zestaw Standardowy')}</span>
+                      <span className="combo-summary-size-edit">{t('Zmień')}</span>
+                    </button>
+                  )}
+                </div>
                 <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
               </div>
               <div className="summary-hero-visual" aria-hidden="true">
@@ -499,7 +520,7 @@ export const ComboBuilderScreen: React.FC = () => {
                         : <span>—</span>}
                   </div>
                   <div className="summary-card-name">
-                    {tempCombo.side ? t(tempCombo.side === 'frytki' ? 'Frytki' : 'Sałatka') : 'Nie wybrano'}
+                    {tempCombo.side ? t(tempCombo.side === 'frytki' ? 'Frytki' : 'Sałatka') : t('Nie wybrano')}
                   </div>
                   <button
                     type="button"
@@ -507,7 +528,7 @@ export const ComboBuilderScreen: React.FC = () => {
                     onClick={(e) => handleStepClick(2, 'Zmień dodatek', e)}
                     data-aoi="AOI_cel"
                   >
-                    {t('Zmień')}
+                    {tempCombo.side ? t('Zmień') : t('Wybierz')}
                   </button>
                 </div>
 
@@ -516,14 +537,14 @@ export const ComboBuilderScreen: React.FC = () => {
                   <div className="summary-card-visual">
                     {tempCombo.sauce ? <IngredientIcon id={tempCombo.sauce.id} label={tempCombo.sauce.name} /> : <span>—</span>}
                   </div>
-                  <div className="summary-card-name">{tempCombo.sauce ? t(tempCombo.sauce.name) : 'Nie wybrano'}</div>
+                  <div className="summary-card-name">{tempCombo.sauce ? t(tempCombo.sauce.name) : t('Nie wybrano')}</div>
                   <button
                     type="button"
                     className="btn-summary-change"
                     onClick={(e) => handleStepClick(3, 'Zmień sos', e)}
                     data-aoi="AOI_cel"
                   >
-                    {t('Zmień')}
+                    {tempCombo.sauce ? t('Zmień') : t('Wybierz')}
                   </button>
                 </div>
 
@@ -534,14 +555,14 @@ export const ComboBuilderScreen: React.FC = () => {
                       ? <VisualIcon kind={tempCombo.drink.image} label={tempCombo.drink.name} photoKey={tempCombo.drink.id} />
                       : <span>—</span>}
                   </div>
-                  <div className="summary-card-name">{tempCombo.drink ? t(tempCombo.drink.name) : 'Nie wybrano'}</div>
+                  <div className="summary-card-name">{tempCombo.drink ? t(tempCombo.drink.name) : t('Nie wybrano')}</div>
                   <button
                     type="button"
                     className="btn-summary-change"
                     onClick={(e) => handleStepClick(4, 'Zmień napój', e)}
                     data-aoi="AOI_cel"
                   >
-                    {t('Zmień')}
+                    {tempCombo.drink ? t('Zmień') : t('Wybierz')}
                   </button>
                 </div>
 
@@ -555,7 +576,7 @@ export const ComboBuilderScreen: React.FC = () => {
                   <div className="summary-card-name">
                     {tempCombo.extra
                       ? t(tempCombo.extra.id === 'no-thanks' ? 'Nie, dziękuję' : tempCombo.extra.name)
-                      : 'Nie wybrano'}
+                      : t('Nie wybrano')}
                   </div>
                   <button
                     type="button"
@@ -563,7 +584,7 @@ export const ComboBuilderScreen: React.FC = () => {
                     onClick={(e) => handleStepClick(5, 'Zmień extra dodatek', e)}
                     data-aoi="AOI_cel"
                   >
-                    {t('Zmień')}
+                    {tempCombo.extra ? t('Zmień') : t('Wybierz')}
                   </button>
                 </div>
               </div>
@@ -572,6 +593,11 @@ export const ComboBuilderScreen: React.FC = () => {
 
           {/* Przyciski kontrolne na dole kroku */}
           <div className="combo-builder-actions">
+            {isVersionB && comboStep === 6 && !isComboComplete && (
+              <div className="combo-incomplete-hint" role="status">
+                {t('Wybierz wszystkie składniki zestawu, aby dodać do zamówienia')}
+              </div>
+            )}
             {comboStep === 6 && (
               <div className="combo-quantity-control" aria-label={t('Liczba zestawów')}>
                 <div className="combo-quantity-stepper">

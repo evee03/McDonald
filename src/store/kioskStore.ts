@@ -285,13 +285,14 @@ export const useKioskStore = create<KioskState>((set, get) => ({
     const initialCombo: ConfiguredCombo = existingItem?.comboConfig ?
     {
       ...existingItem.comboConfig,
+      size: existingItem.comboConfig.size || 'standard',
       customIngredients: existingItem.customIngredients
         ? [...existingItem.customIngredients]
         : undefined,
     }
     :{
       baseProduct: product,
-      size: undefined,
+      size: 'standard',
       side: undefined,
       sauce: undefined,
       drink: undefined,
@@ -359,18 +360,25 @@ export const useKioskStore = create<KioskState>((set, get) => ({
 
   finishComboBuilder: (quantity = 1) => {
     const { tempCombo, selectedCartItemId } = get();
-    if (!tempCombo || !tempCombo.size || !tempCombo.side || !tempCombo.sauce || !tempCombo.drink || !tempCombo.extra) return;
+    if (!tempCombo) return;
+    const size = tempCombo.size || 'standard';
+    if (!tempCombo.side || !tempCombo.sauce || !tempCombo.drink || !tempCombo.extra) return;
     const normalizedQuantity = Math.max(1, Math.min(9, Math.round(quantity)));
 
     // Obliczenie ceny zestawu
     // Zestaw bazowo kosztuje bazowy produkt + 12.80 zł, duży + 3.00 zł
     let price = tempCombo.baseProduct.price + 12.80;
-    if (tempCombo.size === 'large') price += 3.00;
+    if (size === 'large') price += 3.00;
     if (tempCombo.sauce.priceAdd) price += tempCombo.sauce.priceAdd;
     if (tempCombo.drink.priceAdd) price += tempCombo.drink.priceAdd;
     if (tempCombo.extra?.priceAdd) price += tempCombo.extra.priceAdd;
 
     const calculatedUnitPrice = Math.round(price * 100) / 100;
+
+    const completedCombo: ConfiguredCombo = {
+      ...tempCombo,
+      size,
+    };
 
     if (selectedCartItemId) {
       // Aktualizacja istniejącego zestawu
@@ -379,10 +387,10 @@ export const useKioskStore = create<KioskState>((set, get) => ({
           item.id === selectedCartItemId
             ? {
                 ...item,
-                product: tempCombo.baseProduct,
-                comboConfig: tempCombo,
-                customIngredients: tempCombo.customIngredients
-                  ? [...tempCombo.customIngredients]
+                product: completedCombo.baseProduct,
+                comboConfig: completedCombo,
+                customIngredients: completedCombo.customIngredients
+                  ? [...completedCombo.customIngredients]
                   : item.customIngredients,
                 quantity: normalizedQuantity,
                 calculatedUnitPrice,
@@ -399,11 +407,11 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       const cartItem: CartItem = {
         id: `ITEM_${Date.now()}`,
         isCombo: true,
-        product: tempCombo.baseProduct,
+        product: completedCombo.baseProduct,
         quantity: normalizedQuantity,
-        comboConfig: tempCombo,
-        customIngredients: tempCombo.customIngredients
-          ? [...tempCombo.customIngredients]
+        comboConfig: completedCombo,
+        customIngredients: completedCombo.customIngredients
+          ? [...completedCombo.customIngredients]
           : undefined,
         calculatedUnitPrice,
       };
@@ -412,6 +420,7 @@ export const useKioskStore = create<KioskState>((set, get) => ({
         cart: [...state.cart, cartItem],
         tempCombo: null,
         selectedCartItemId: null,
+        currentScreen: 'menu',
         activeModal: 'product-added',
       }));
     }
