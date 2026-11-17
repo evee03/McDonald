@@ -146,8 +146,17 @@ export const CartScreen: React.FC = () => {
                             updateCartQuantity(item.id, -1);
                           }}
                           data-aoi="AOI_cel"
+                          aria-label={isVersionB ? t('Zmniejsz ilość') : undefined}
+                          title={isVersionB ? t('Zmniejsz ilość') : undefined}
                         >
-                          —
+                          {isVersionB ? (
+                            <>
+                              <span className="qty-symbol" aria-hidden="true">—</span>
+                              <span className="qty-text-label">{t('Zmniejsz')}</span>
+                            </>
+                          ) : (
+                            '—'
+                          )}
                         </button>
                         <span className="cart-qty-number">{item.quantity}</span>
                         <button
@@ -158,8 +167,17 @@ export const CartScreen: React.FC = () => {
                             updateCartQuantity(item.id, 1);
                           }}
                           data-aoi="AOI_cel"
+                          aria-label={isVersionB ? t('Zwiększ ilość') : undefined}
+                          title={isVersionB ? t('Zwiększ ilość') : undefined}
                         >
-                          +
+                          {isVersionB ? (
+                            <>
+                              <span className="qty-symbol" aria-hidden="true">+</span>
+                              <span className="qty-text-label">{t('Zwiększ')}</span>
+                            </>
+                          ) : (
+                            '+'
+                          )}
                         </button>
                       </div>
                       <div className="cart-item-price-sum">{formatPrice(itemTotal)} zł</div>

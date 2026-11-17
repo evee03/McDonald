@@ -603,8 +603,16 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={() => setComboQuantity((quantity) => Math.max(1, quantity - 1))}
                   disabled={comboQuantity === 1}
                   aria-label={t('Zmniejsz liczbę zestawów')}
+                  title={isVersionB ? t('Zmniejsz liczbę zestawów') : undefined}
                 >
-                  −
+                  {isVersionB ? (
+                    <>
+                      <span className="qty-symbol" aria-hidden="true">−</span>
+                      <span className="qty-text-label">{t('Zmniejsz')}</span>
+                    </>
+                  ) : (
+                    '−'
+                  )}
                 </button>
                 <span className="combo-quantity-value" aria-live="polite">{comboQuantity}</span>
                 <button
@@ -613,8 +621,16 @@ export const ComboBuilderScreen: React.FC = () => {
                   onClick={() => setComboQuantity((quantity) => Math.min(9, quantity + 1))}
                   disabled={comboQuantity === 9}
                   aria-label={t('Zwiększ liczbę zestawów')}
+                  title={isVersionB ? t('Zwiększ liczbę zestawów') : undefined}
                 >
-                  +
+                  {isVersionB ? (
+                    <>
+                      <span className="qty-symbol" aria-hidden="true">+</span>
+                      <span className="qty-text-label">{t('Zwiększ')}</span>
+                    </>
+                  ) : (
+                    '+'
+                  )}
                 </button>
                 </div>
               </div>

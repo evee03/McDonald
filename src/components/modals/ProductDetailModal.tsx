@@ -19,7 +19,10 @@ export const ProductDetailModal: React.FC = () => {
     activeCategory,
     startComboBuilder,
     setPendingComboQuantity,
+    interfaceVersion,
   } = useKioskStore();
+
+  const isVersionB = interfaceVersion === 'B';
 
   const [quantity, setQuantity] = useState(1);
 
@@ -122,8 +125,17 @@ export const ProductDetailModal: React.FC = () => {
               setQuantity((q) => Math.max(1, q - 1));
             }}
             data-aoi="AOI_cel"
+            aria-label={isVersionB ? t('Zmniejsz ilość') : undefined}
+            title={isVersionB ? t('Zmniejsz ilość') : undefined}
           >
-            —
+            {isVersionB ? (
+              <>
+                <span className="qty-symbol" aria-hidden="true">—</span>
+                <span className="qty-text-label">{t('Zmniejsz')}</span>
+              </>
+            ) : (
+              '—'
+            )}
           </button>
           <span className="qty-number">{quantity}</span>
           <button
@@ -134,8 +146,17 @@ export const ProductDetailModal: React.FC = () => {
               setQuantity((q) => q + 1);
             }}
             data-aoi="AOI_cel"
+            aria-label={isVersionB ? t('Zwiększ ilość') : undefined}
+            title={isVersionB ? t('Zwiększ ilość') : undefined}
           >
-            +
+            {isVersionB ? (
+              <>
+                <span className="qty-symbol" aria-hidden="true">+</span>
+                <span className="qty-text-label">{t('Zwiększ')}</span>
+              </>
+            ) : (
+              '+'
+            )}
           </button>
         </div>
 

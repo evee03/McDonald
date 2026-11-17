@@ -1637,3 +1637,273 @@
   background: #b91c1c;
   border-color: #b91c1c;
 }
+
+/* ==========================================================================
+   PODSUMOWANIE KOSZYKA - WIELKOŚĆ PRZYCISKÓW (>= 44px) I ODSTĘPY (Wersja B)
+   ========================================================================== */
+.kiosk-version-b .cart-item-controls-column {
+  gap: 14px;
+}
+
+.kiosk-version-b .cart-qty-picker {
+  height: 44px;
+  min-height: 44px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+.kiosk-version-b .cart-qty-picker button {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1e293b;
+  background: #ffffff;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.kiosk-version-b .cart-qty-picker button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.kiosk-version-b .cart-qty-picker .qty-symbol {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kiosk-version-b .cart-qty-picker .qty-text-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.kiosk-version-b .cart-qty-number {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 32px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.kiosk-version-b .btn-cart-item-remove {
+  min-height: 44px;
+  height: 44px;
+  min-width: 90px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  background: #ffffff;
+  padding: 0 16px;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .btn-cart-item-remove:hover {
+  background: #fef2f2;
+  border-color: #f87171;
+}
+
+.kiosk-version-b .btn-toggle-details {
+  min-height: 44px;
+  height: 44px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  background: #ffffff;
+}
+
+.kiosk-version-b .btn-toggle-details:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.kiosk-version-b .btn-edit-meal-action {
+  min-height: 44px;
+  height: 44px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.kiosk-version-b .btn-cart-add-more {
+  border-radius: 4px;
+}
+
+.kiosk-version-b .btn-cart-submit-order {
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   ETYKIETY PRZYCISKÓW + I - (Wersja B)
+   ========================================================================== */
+/* Personalizacja */
+.kiosk-version-b .ing-quantity-controls {
+  gap: 8px;
+}
+
+.kiosk-version-b .ing-qty-btn {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 44px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.kiosk-version-b .ing-qty-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.kiosk-version-b .ing-qty-btn .qty-symbol {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kiosk-version-b .ing-qty-btn .qty-text-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.kiosk-version-b .ing-qty-display {
+  min-width: 28px;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+/* Modal szczegółów produktu */
+.kiosk-version-b .detail-quantity-bar {
+  height: 44px;
+  min-height: 44px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-btn {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  background: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-symbol {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-text-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.kiosk-version-b .detail-quantity-bar .qty-number {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* Konfigurator zestawu (ComboBuilder) */
+.kiosk-version-b .combo-quantity-stepper {
+  height: 44px;
+  min-height: 44px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+
+.kiosk-version-b .combo-quantity-button {
+  height: 44px;
+  min-height: 44px;
+  width: auto;
+  min-width: 44px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  flex: initial;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.kiosk-version-b .combo-quantity-button:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.kiosk-version-b .combo-quantity-button .qty-symbol {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kiosk-version-b .combo-quantity-button .qty-text-label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.kiosk-version-b .combo-quantity-value {
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+}

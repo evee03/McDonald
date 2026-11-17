@@ -17,7 +17,10 @@ export const PersonalizeScreen: React.FC = () => {
     resetIngredients,
     savePersonalization,
     goBack,
+    interfaceVersion,
   } = useKioskStore();
+
+  const isVersionB = interfaceVersion === 'B';
 
   if (!selectedProduct) {
     goBack();
@@ -94,8 +97,17 @@ export const PersonalizeScreen: React.FC = () => {
                       disabled={ing.quantity <= ing.minQuantity}
                       onClick={(e) => handleQtyChange(ing.id, ing.name, -1, e)}
                       data-aoi="AOI_cel"
+                      aria-label={isVersionB ? `${t('Zmniejsz')}: ${t(ing.name)}` : undefined}
+                      title={isVersionB ? t('Zmniejsz') : undefined}
                     >
-                      —
+                      {isVersionB ? (
+                        <>
+                          <span className="qty-symbol" aria-hidden="true">—</span>
+                          <span className="qty-text-label">{t('Zmniejsz')}</span>
+                        </>
+                      ) : (
+                        '—'
+                      )}
                     </button>
 
                     <span className="ing-qty-display">{ing.quantity}</span>
@@ -106,8 +118,17 @@ export const PersonalizeScreen: React.FC = () => {
                       disabled={ing.quantity >= ing.maxQuantity}
                       onClick={(e) => handleQtyChange(ing.id, ing.name, 1, e)}
                       data-aoi="AOI_cel"
+                      aria-label={isVersionB ? `${t('Zwiększ')}: ${t(ing.name)}` : undefined}
+                      title={isVersionB ? t('Zwiększ') : undefined}
                     >
-                      +
+                      {isVersionB ? (
+                        <>
+                          <span className="qty-symbol" aria-hidden="true">+</span>
+                          <span className="qty-text-label">{t('Zwiększ')}</span>
+                        </>
+                      ) : (
+                        '+'
+                      )}
                     </button>
                   </div>
                 </div>
