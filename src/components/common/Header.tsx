@@ -9,9 +9,10 @@ interface HeaderProps {
   showBack?: boolean;
   onBack?: () => void;
   rightAction?: React.ReactNode;
+  showDineOption?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack, rightAction }) => {
+export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack, rightAction, showDineOption = true }) => {
   const { goBack, interfaceVersion } = useKioskStore();
   const t = useT();
 
@@ -45,11 +46,11 @@ export const Header: React.FC<HeaderProps> = ({ title, showBack, onBack, rightAc
       <div className="header-right">
         {rightAction ? (
           <div className="header-actions-group">
-            {interfaceVersion === 'B' && <DineOptionButton sourceScreen="header" />}
+            {interfaceVersion === 'B' && showDineOption && <DineOptionButton sourceScreen="header" />}
             {rightAction}
           </div>
         ) : (
-          interfaceVersion === 'B' ? <DineOptionButton sourceScreen="header" /> : null
+          interfaceVersion === 'B' && showDineOption ? <DineOptionButton sourceScreen="header" /> : null
         )}
       </div>
     </header>

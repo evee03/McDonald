@@ -46,7 +46,7 @@ export const PersonalizeScreen: React.FC = () => {
 
   return (
     <div className="kiosk-page-view personalize-page">
-      <Header />
+      <Header showDineOption={false} />
 
       <main className="personalize-body-content">
         {/* Karta produktu na górze */}
