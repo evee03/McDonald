@@ -214,7 +214,7 @@ export const ComboBuilderScreen: React.FC = () => {
             <span className="step-circle">{comboStep > 2 ? '✓' : '2'}</span>
             <div className="step-text-wrap">
               <strong>{t('Wybierz dodatek')}</strong>
-              <span>{tempCombo.side ? t(tempCombo.side === 'frytki' ? 'Frytki' : 'Sałatka') : 'Nie wybrano'}</span>
+              <span>{tempCombo.side ? t(tempCombo.side === 'frytki' ? 'Frytki' : 'Sałatka') : t('Nie wybrano')}</span>
             </div>
           </button>
 
@@ -227,7 +227,7 @@ export const ComboBuilderScreen: React.FC = () => {
             <span className="step-circle">{comboStep > 3 ? '✓' : '3'}</span>
             <div className="step-text-wrap">
               <strong>{t('Dodatek do frytek')}</strong>
-              <span>{tempCombo.sauce ? t(tempCombo.sauce.name) : 'Nie wybrano'}</span>
+              <span>{tempCombo.sauce ? t(tempCombo.sauce.name) : t('Nie wybrano')}</span>
             </div>
           </button>
 
@@ -240,7 +240,7 @@ export const ComboBuilderScreen: React.FC = () => {
             <span className="step-circle">{comboStep > 4 ? '✓' : '4'}</span>
             <div className="step-text-wrap">
               <strong>{t('Wybierz napój')}</strong>
-              <span>{tempCombo.drink ? t(tempCombo.drink.name) : 'Nie wybrano'}</span>
+              <span>{tempCombo.drink ? t(tempCombo.drink.name) : t('Nie wybrano')}</span>
             </div>
           </button>
 

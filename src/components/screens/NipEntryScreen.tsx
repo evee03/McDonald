@@ -2,8 +2,10 @@ import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
+import { useT } from '../../i18n';
 
 export const NipEntryScreen: React.FC = () => {
+  const t = useT();
   const {
     nipInput,
     appendNipDigit,
@@ -42,8 +44,8 @@ export const NipEntryScreen: React.FC = () => {
   return (
     <div className="kiosk-page-view nip-entry-page">
       <main className="nip-entry-body">
-        <h1 className="nip-page-title">Chcesz fakturę?</h1>
-        <p className="nip-page-subtitle">Podaj numer NIP</p>
+        <h1 className="nip-page-title">{t('Chcesz fakturę?')}</h1>
+        <p className="nip-page-subtitle">{t('Podaj numer NIP')}</p>
 
         {/* Wyświetlacz wprowadzonego NIP */}
         <div className="nip-display-box" data-aoi="AOI_cel">
@@ -70,7 +72,7 @@ export const NipEntryScreen: React.FC = () => {
             className="numpad-key-btn numpad-backspace-btn"
             onClick={handleBackspace}
             data-aoi="AOI_cel"
-            title="Usuń ostatnią cyfrę"
+            title={t('Usuń ostatnią cyfrę')}
           >
             ⌫
           </button>
@@ -89,7 +91,7 @@ export const NipEntryScreen: React.FC = () => {
             className="numpad-key-btn numpad-clear-btn"
             onClick={handleClear}
             data-aoi="AOI_wstecz"
-            title="Wyczyść całe pole"
+            title={t('Wyczyść całe pole')}
           >
             C
           </button>
@@ -103,7 +105,7 @@ export const NipEntryScreen: React.FC = () => {
             onClick={handleClear}
             data-aoi="AOI_wstecz"
           >
-            Wyczyść
+            {t('Wyczyść')}
           </button>
 
           <div className="nip-bottom-row-btns">
@@ -113,7 +115,7 @@ export const NipEntryScreen: React.FC = () => {
               onClick={handleCancelInvoice}
               data-aoi="AOI_wstecz"
             >
-              Anuluj
+              {t('Anuluj')}
             </button>
 
             <button
@@ -122,7 +124,7 @@ export const NipEntryScreen: React.FC = () => {
               onClick={handleSubmit}
               data-aoi="AOI_cel"
             >
-              Dodaj
+              {t('Dodaj')}
             </button>
           </div>
         </div>

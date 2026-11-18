@@ -3,8 +3,10 @@ import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
 import { formatPrice } from '../../utils/formatPrice';
+import { useT } from '../../i18n';
 
 export const DonationScreen: React.FC = () => {
+  const t = useT();
   const { getCartTotal, setDonation } = useKioskStore();
 
   const currentTotal = getCartTotal();
@@ -36,14 +38,14 @@ export const DonationScreen: React.FC = () => {
           <div className="foundation-house-box">
             <span className="heart-icon-center">❤️</span>
           </div>
-          <div className="foundation-brand-title">Dom Fundacji Dzieciom</div>
+          <div className="foundation-brand-title">{t('Dom Fundacji Dzieciom')}</div>
         </div>
 
         <h1 className="donation-headline">
-          Czy chcesz przekazać darowiznę na rzecz Domu Fundacji?
+          {t('Czy chcesz przekazać darowiznę na rzecz Domu Fundacji?')}
         </h1>
         <p className="donation-subtext">
-          Fundacja pomaga, aby cała rodzina mogła być razem w czasie leczenia szpitalnego dziecka.
+          {t('Fundacja pomaga, aby cała rodzina mogła być razem w czasie leczenia szpitalnego dziecka.')}
         </p>
 
         <div className="donation-options-stack">
@@ -53,10 +55,10 @@ export const DonationScreen: React.FC = () => {
             onClick={handleRoundDonation}
             data-aoi="AOI_cel"
           >
-            Zaokrąglij {formatPrice(roundAmount)} zł
+            {t('Zaokrąglij')} {formatPrice(roundAmount)} zł
           </button>
 
-          <span className="donation-or-separator">lub</span>
+          <span className="donation-or-separator">{t('lub')}</span>
 
           <button
             type="button"
@@ -64,7 +66,7 @@ export const DonationScreen: React.FC = () => {
             onClick={handleFixedDonation}
             data-aoi="AOI_cel"
           >
-            Przekaż darowiznę 0,10 zł
+            {t('Przekaż darowiznę')} 0,10 zł
           </button>
 
           <button
@@ -73,7 +75,7 @@ export const DonationScreen: React.FC = () => {
             onClick={handleSkipDonation}
             data-aoi="AOI_wstecz"
           >
-            Nie dziś
+            {t('Nie dziś')}
           </button>
         </div>
       </main>

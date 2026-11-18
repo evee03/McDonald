@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { BottomBar } from '../common/BottomBar';
+import { useT } from '../../i18n';
 
 export const ScanCodeScreen: React.FC = () => {
+  const t = useT();
   const { goBack, triggerError, openModal, currentScreen } = useKioskStore();
   const [enteredCode, setEnteredCode] = useState('');
 
@@ -30,10 +32,10 @@ export const ScanCodeScreen: React.FC = () => {
   const handleContinue = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Weryfikacja kodu z klawiatury: ${enteredCode}`, e, currentScreen);
     if (enteredCode.trim().toUpperCase() === 'RABAT10') {
-      alert('Kod rabatowy zaakceptowany!');
+      alert(t('Kod rabatowy zaakceptowany!'));
       goBack();
     } else {
-      triggerError('Coś poszło nie tak. Upewnij się, że kod kuponu lub karty jest poprawny. Kliknij „OK”, by kontynuować.', 'AOI_blad');
+      triggerError(t('Coś poszło nie tak. Upewnij się, że kod kuponu lub karty jest poprawny. Kliknij „OK”, by kontynuować.'), 'AOI_blad');
     }
   };
 
@@ -58,14 +60,14 @@ export const ScanCodeScreen: React.FC = () => {
     <div className="kiosk-page-view scan-code-page">
       {/* Górna połowa: Ręczne wprowadzanie kodu na klawiaturze */}
       <div className="scan-upper-white-area">
-        <h1 className="scan-upper-title">Wprowadź kod</h1>
+        <h1 className="scan-upper-title">{t('Wprowadź kod')}</h1>
         <p className="scan-upper-subtitle">
-          Znajdziesz go w aplikacji przy kodzie kreskowym/QR
+          {t('Znajdziesz go w aplikacji przy kodzie kreskowym/QR')}
         </p>
 
         {/* Pole tekstowe */}
         <div className="scan-code-input-display" data-aoi="AOI_cel">
-          {enteredCode || <span className="placeholder-text">Wpisz kod...</span>}
+          {enteredCode || <span className="placeholder-text">{t('Wpisz kod...')}</span>}
         </div>
 
         {/* Pełna klawiatura ekranowa */}
@@ -89,7 +91,7 @@ export const ScanCodeScreen: React.FC = () => {
                   className="key-button key-backspace"
                   onClick={handleBackspace}
                   data-aoi="AOI_cel"
-                  title="Usuń znak"
+                  title={t('Usuń znak')}
                 >
                   ⌫
                 </button>
@@ -104,7 +106,7 @@ export const ScanCodeScreen: React.FC = () => {
               onClick={handleSpace}
               data-aoi="AOI_cel"
             >
-              Spacja
+              {t('Spacja')}
             </button>
             <button
               type="button"
@@ -112,7 +114,7 @@ export const ScanCodeScreen: React.FC = () => {
               onClick={handleClear}
               data-aoi="AOI_wstecz"
             >
-              Wyczyść
+              {t('Wyczyść')}
             </button>
           </div>
         </div>
@@ -124,7 +126,7 @@ export const ScanCodeScreen: React.FC = () => {
             onClick={handleBack}
             data-aoi="AOI_wstecz"
           >
-            Cofnij
+            {t('Cofnij')}
           </button>
 
           <button
@@ -133,7 +135,7 @@ export const ScanCodeScreen: React.FC = () => {
             onClick={handleContinue}
             data-aoi="AOI_cel"
           >
-            Kontynuuj
+            {t('Kontynuuj')}
           </button>
         </div>
       </div>
@@ -141,11 +143,11 @@ export const ScanCodeScreen: React.FC = () => {
       {/* Dolna połowa: Żółty panel skanera fizycznego */}
       <div className="scan-lower-yellow-area" onClick={handleOpenScannerSim} data-aoi="AOI_cel">
         <div className="yellow-scanner-left">
-          <h2 className="yellow-scanner-heading">Zeskanuj kod</h2>
+          <h2 className="yellow-scanner-heading">{t('Zeskanuj kod')}</h2>
           <p className="yellow-scanner-promo">
-            Punkty, nagrody, okazje? <strong>Użyj skanera poniżej!</strong>
+            {t('Punkty, nagrody, okazje?')} <strong>{t('Użyj skanera poniżej!')}</strong>
           </p>
-          <span className="yellow-scanner-hint">Kod QR / kreskowy</span>
+          <span className="yellow-scanner-hint">{t('Kod QR / kreskowy')}</span>
         </div>
 
         <div className="yellow-scanner-right">

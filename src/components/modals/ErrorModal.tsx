@@ -1,8 +1,10 @@
 import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
+import { useT } from '../../i18n';
 
 export const ErrorModal: React.FC = () => {
+  const t = useT();
   const { activeModal, errorMessage, closeModal, currentScreen } = useKioskStore();
 
   if (activeModal !== 'error') return null;
@@ -23,8 +25,8 @@ export const ErrorModal: React.FC = () => {
           <span className="exclamation-symbol">!</span>
         </div>
 
-        <h3 className="error-dialog-title">Komunikat</h3>
-        <p className="error-dialog-message">{errorMessage || 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie.'}</p>
+        <h3 className="error-dialog-title">{t('Komunikat')}</h3>
+        <p className="error-dialog-message">{errorMessage ? t(errorMessage) : t('Wystąpił nieoczekiwany błąd. Spróbuj ponownie.')}</p>
 
         <button
           type="button"

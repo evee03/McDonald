@@ -31,7 +31,7 @@ export const AllergensScreen: React.FC = () => {
           <span className="allergens-prod-emoji"><VisualIcon kind={prod.image} label={prod.name} photoKey={prod.id} /></span>
           <div className="allergens-prod-meta">
             <h2 className="allergens-prod-name">{t(prod.name)}</h2>
-            <p className="allergens-prod-warning">{prod.allergens || (isWater ? t('Nie zawiera alergenów.') : 'Zawiera gluten, mleko, jaja.')}</p>
+            <p className="allergens-prod-warning">{t(prod.allergens || (isWater ? 'Nie zawiera alergenów.' : 'Zawiera gluten, mleko, jaja.'))}</p>
           </div>
         </div>
 
@@ -98,17 +98,17 @@ export const AllergensScreen: React.FC = () => {
             </tbody>
           </table>
           <p className="nutrition-footnote">
-            RI – Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal).
+            {t('RI – Referencyjna wartość spożycia dla przeciętnej osoby dorosłej (8400 kJ / 2000 kcal).')}
           </p>
         </div>
 
         {/* Informacje o alergenach */}
         <div className="allergens-legal-disclaimer">
           <p>
-            Przedstawione informacje o substancjach alergennych w naszych produktach zostały przygotowane na podstawie deklaracji naszych dostawców. W trakcie przygotowywania i wydawania produktów może dojść do niezamierzonego przeniesienia składników alergennych.
+            {t('Przedstawione informacje o substancjach alergennych w naszych produktach zostały przygotowane na podstawie deklaracji naszych dostawców. W trakcie przygotowywania i wydawania produktów może dojść do niezamierzonego przeniesienia składników alergennych.')}
           </p>
           <p>
-            Wartości odżywcze nie uwzględniają ewentualnej zmiany składników dokonywanej na życzenie gościa w ramach personalizacji produktu.
+            {t('Wartości odżywcze nie uwzględniają ewentualnej zmiany składników dokonywanej na życzenie gościa w ramach personalizacji produktu.')}
           </p>
         </div>
 

@@ -30,7 +30,7 @@ export const DineOptionButton: React.FC<DineOptionButtonProps> = ({
       }}
       data-aoi="AOI_cel"
       title={t('Zmień formę zamówienia')}
-      aria-label={`Forma zamówienia: ${isDineIn ? t('Na Miejscu') : t('Na Wynos')}. ${t('Kliknij, aby zmienić.')}`}
+      aria-label={`${t('Forma zamówienia')}: ${isDineIn ? t('Na Miejscu') : t('Na Wynos')}. ${t('Kliknij, aby zmienić.')}`}
     >
       <span className="dine-indicator-icon" aria-hidden="true">
         {isDineIn ? (

@@ -234,8 +234,8 @@ export const CartScreen: React.FC = () => {
                             </span>
                             <span className="preview-label">
                               {item.comboConfig.side
-                                ? t(item.comboConfig.side === 'frytki' ? 'Frytki i Dodatki' : 'Sałatka')
-                                : 'Nie wybrano'}
+                                ? t(item.comboConfig.side === 'frytki' ? 'Frytki' : 'Sałatka')
+                                : t('Nie wybrano')}
                             </span>
                           </div>
                           <div className="preview-sub-box">
@@ -244,7 +244,7 @@ export const CartScreen: React.FC = () => {
                                 ? <IngredientIcon id={item.comboConfig.sauce.id} label={item.comboConfig.sauce.name} />
                                 : <span>—</span>}
                             </span>
-                            <span className="preview-label">{item.comboConfig.sauce ? t(item.comboConfig.sauce.name) : 'Nie wybrano'}</span>
+                            <span className="preview-label">{item.comboConfig.sauce ? t(item.comboConfig.sauce.name) : t('Nie wybrano')}</span>
                           </div>
                           <div className="preview-sub-box">
                             <span className="preview-icon">
@@ -252,7 +252,7 @@ export const CartScreen: React.FC = () => {
                                 ? <VisualIcon kind={item.comboConfig.drink.image} label={item.comboConfig.drink.name} photoKey={item.comboConfig.drink.id} />
                                 : <span>—</span>}
                             </span>
-                            <span className="preview-label">{item.comboConfig.drink ? t(item.comboConfig.drink.name) : 'Nie wybrano'}</span>
+                            <span className="preview-label">{item.comboConfig.drink ? t(item.comboConfig.drink.name) : t('Nie wybrano')}</span>
                           </div>
                           {item.comboConfig.extra && (
                             <div className="preview-sub-box">

@@ -47,8 +47,8 @@ export const PaymentSuccessScreen: React.FC = () => {
             aria-modal="true"
             aria-labelledby="scenario-thanks-title"
           >
-            <h2 id="scenario-thanks-title">Dziękujemy</h2>
-            <p>Wszystkie scenariusze zostały zakończone.</p>
+            <h2 id="scenario-thanks-title">{t('Dziękujemy')}</h2>
+            <p>{t('Wszystkie scenariusze zostały zakończone.')}</p>
           </div>
         </div>
       )}

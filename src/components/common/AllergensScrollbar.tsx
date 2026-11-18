@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useT } from '../../i18n';
 
 type ScrollThumb = {
   height: number;
@@ -19,6 +20,7 @@ export const AllergensScrollbar: React.FC<AllergensScrollbarProps> = ({
   contentClassName = '',
   contentElement = 'main',
 }) => {
+  const t = useT();
   const contentRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const hideTimerRef = useRef<number | null>(null);
@@ -144,12 +146,12 @@ export const AllergensScrollbar: React.FC<AllergensScrollbarProps> = ({
       </ContentElement>
       <aside
         className={`allergens-custom-scrollbar${thumb.canScroll ? '' : ' is-hidden'}`}
-        aria-label="Przewijanie treści"
+        aria-label={t('Przewijanie treści')}
       >
         <button
           type="button"
           className="allergens-scroll-arrow allergens-scroll-arrow-up"
-          aria-label="Przewiń w górę"
+          aria-label={t('Przewiń w górę')}
           onClick={() => scrollBy(-1)}
         />
         <div ref={trackRef} className="allergens-scroll-track">
@@ -162,7 +164,7 @@ export const AllergensScrollbar: React.FC<AllergensScrollbarProps> = ({
         <button
           type="button"
           className="allergens-scroll-arrow allergens-scroll-arrow-down"
-          aria-label="Przewiń w dół"
+          aria-label={t('Przewiń w dół')}
           onClick={() => scrollBy(1)}
         />
       </aside>
