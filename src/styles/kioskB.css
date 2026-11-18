@@ -2289,64 +2289,116 @@
   color: #1e293b;
 }
 
-/* Ekran personalizacji w wersji B */
+/* Ekran personalizacji w wersji B — wyrównanie nagłówka do lewej (jak w innych ekranach) */
+.kiosk-version-b .personalize-page .kiosk-header {
+  position: static !important;
+}
+
+.kiosk-version-b .personalize-page .header-left {
+  position: static !important;
+  left: auto !important;
+  transform: none !important;
+}
+
+/* Ekran personalizacji w wersji B — karta produktu i przycisk Zresetuj zmiany */
 .kiosk-version-b .personalize-product-summary-card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  gap: 12px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 16px !important;
+  gap: 14px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 8px !important;
+  box-sizing: border-box !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .summary-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  flex: 1;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-product-emoji {
+  width: 60px !important;
+  height: 48px !important;
+  flex: 0 0 60px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-product-emoji .visual-icon-svg {
+  width: 56px !important;
+  height: 44px !important;
+  object-fit: contain !important;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  min-width: 0 !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .summary-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: #1e293b;
-  line-height: 1.2;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  color: #1e293b !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .summary-price {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #15803d;
-  margin-top: 2px;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #15803d !important;
+  margin-top: 3px !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .btn-reset-changes {
-  min-height: 44px;
-  padding: 8px 14px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #475569;
-  background: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.15s ease;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  max-height: 44px !important;
+  margin: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #475569 !important;
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex: 0 0 auto !important;
+  align-self: center !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  transition: all 0.15s ease !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .btn-reset-changes:hover {
-  background: #f1f5f9;
-  border-color: #94a3b8;
-  color: #1e293b;
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #1e293b !important;
 }
 
 .kiosk-version-b .personalize-product-summary-card .btn-reset-changes:active {
-  background: #e2e8f0;
+  background: #e2e8f0 !important;
+  transform: scale(0.98) !important;
 }
 
 .kiosk-version-b .personalize-bottom-actions {
