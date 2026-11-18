@@ -3342,6 +3342,28 @@
   background: #e2e8f0;
 }
 
+.kiosk-version-b .combo-builder-bottom-controls .btn-combo-summary {
+  flex: 1.1;
+  color: #0369a1;
+  background: #f0f9ff;
+  border: 1px solid #bae6fd;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls .btn-combo-summary:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+.kiosk-version-b .combo-builder-bottom-controls .btn-combo-summary:active {
+  background: #bae6fd;
+}
+
+.kiosk-version-b .combo-stepper-btn.ready-summary .step-circle {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
 .kiosk-version-b .combo-builder-bottom-controls .btn-combo-finish {
   flex: 1.6;
 }

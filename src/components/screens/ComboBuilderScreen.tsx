@@ -88,14 +88,24 @@ export const ComboBuilderScreen: React.FC = () => {
     eventLogger.logTouch(
       'AOI_wstecz',
       isEditingCombo
-        ? 'Anuluj edycję zestawu'
+        ? `Anuluj krok edycji zestawu (${comboStep})`
         : comboStep > 1
           ? `Anuluj krok zestawu (${comboStep} -> ${comboStep - 1})`
           : 'Anuluj konfigurację zestawu',
       e,
       'combo-builder'
     );
-    if (isEditingCombo) {
+    if (isVersionB && isEditingCombo) {
+      if (comboStep < 6) {
+        if (comboStep > 1) {
+          setComboStep(comboStep - 1);
+        } else {
+          setComboStep(6);
+        }
+      } else {
+        cancelComboBuilder(false);
+      }
+    } else if (isEditingCombo) {
       cancelComboBuilder(false);
     } else if (comboStep > 1) {
       setComboStep(comboStep - 1);
@@ -249,11 +259,11 @@ export const ComboBuilderScreen: React.FC = () => {
 
           <button
             type="button"
-            className={`combo-stepper-btn ${comboStep === 6 ? 'active' : ''}`}
+            className={`combo-stepper-btn ${comboStep === 6 ? 'active' : ''} ${isComboComplete && comboStep !== 6 ? 'done ready-summary' : ''}`}
             onClick={(e) => handleStepClick(6, 'Twój wybór', e)}
             data-aoi="AOI_cel"
           >
-            <span className="step-circle">6</span>
+            <span className="step-circle">{isComboComplete && comboStep !== 6 ? '✓' : '6'}</span>
             <div className="step-text-wrap">
               <strong>{t('Twój wybór')}</strong>
               <span>{t('Podsumowanie')}</span>
@@ -280,7 +290,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Wybór: Zestaw Standardowy', e, 'combo-builder');
                         setComboSize('standard');
-                        setComboStep(2);
+                        if (!isEditingCombo) setComboStep(2);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -295,7 +305,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Wybór: Zestaw Powiększony (+3,00 zł)', e, 'combo-builder');
                         setComboSize('large');
-                        setComboStep(2);
+                        if (!isEditingCombo) setComboStep(2);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -318,7 +328,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Wybór dodatku: Frytki', e, 'combo-builder');
                         setComboSide('frytki');
-                        setComboStep(3);
+                        if (!isEditingCombo) setComboStep(3);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -332,7 +342,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Wybór dodatku: Sałatka', e, 'combo-builder');
                         setComboSide('salatka');
-                        setComboStep(3);
+                        if (!isEditingCombo) setComboStep(3);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -356,7 +366,7 @@ export const ComboBuilderScreen: React.FC = () => {
                         onClick={(e) => {
                           eventLogger.logTouch('AOI_cel', `Wybór sosu: ${sauce.name}`, e, 'combo-builder');
                           setComboSauce(sauce);
-                          setComboStep(4);
+                          if (!isEditingCombo) setComboStep(4);
                         }}
                         data-aoi="AOI_cel"
                       >
@@ -422,7 +432,7 @@ export const ComboBuilderScreen: React.FC = () => {
                         onClick={(e) => {
                           eventLogger.logTouch('AOI_cel', `Wybór napoju: ${drink.name}`, e, 'combo-builder');
                           setComboDrink(drink);
-                          setComboStep(5);
+                          if (!isEditingCombo) setComboStep(5);
                         }}
                         data-aoi="AOI_cel"
                       >
@@ -449,7 +459,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Wybór extra dodatku: Lody', e, 'combo-builder');
                         setComboExtra(comboExtras[0]);
-                        setComboStep(6);
+                        if (!isEditingCombo) setComboStep(6);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -464,7 +474,7 @@ export const ComboBuilderScreen: React.FC = () => {
                       onClick={(e) => {
                         eventLogger.logTouch('AOI_cel', 'Brak extra dodatku (Nie, dziękuję)', e, 'combo-builder');
                         setComboExtra(comboExtras[1]);
-                        setComboStep(6);
+                        if (!isEditingCombo) setComboStep(6);
                       }}
                       data-aoi="AOI_cel"
                     >
@@ -663,7 +673,21 @@ export const ComboBuilderScreen: React.FC = () => {
                   {t('Cofnij')}
                 </button>
 
-                {comboStep === 6 && (
+                {comboStep < 6 && (isEditingCombo || isComboComplete) && (
+                  <button
+                    type="button"
+                    className="btn-secondary-control btn-combo-summary"
+                    onClick={(e) => {
+                      eventLogger.logTouch('AOI_cel', 'Przejdź do podsumowania zestawu', e, 'combo-builder');
+                      setComboStep(6);
+                    }}
+                    data-aoi="AOI_cel"
+                  >
+                    {t('Podsumowanie')}
+                  </button>
+                )}
+
+                {(comboStep === 6 || (isEditingCombo && isComboComplete)) && (
                   <button
                     type="button"
                     className="btn-primary-control btn-combo-finish"
