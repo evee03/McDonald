@@ -55,14 +55,14 @@ export const ComboBuilderScreen: React.FC = () => {
     return null;
   }
 
-  // Obliczenie bieżącej ceny zestawu (rozmiar standardowy jako domyślny)
-  const currentSize = tempCombo.size || 'standard';
+  // Obliczenie bieżącej ceny zestawu
+  const currentSize = tempCombo.size || (isVersionB ? undefined : 'standard');
   let currentPrice = tempCombo.baseProduct.price + 12.80;
   if (currentSize === 'large') currentPrice += 3.00;
   if (tempCombo.sauce?.priceAdd) currentPrice += tempCombo.sauce.priceAdd;
   if (tempCombo.drink?.priceAdd) currentPrice += tempCombo.drink.priceAdd;
   if (tempCombo.extra?.priceAdd) currentPrice += tempCombo.extra.priceAdd;
-  const isComboComplete = Boolean(currentSize && tempCombo.side && tempCombo.sauce && tempCombo.drink && tempCombo.extra);
+  const isComboComplete = Boolean((!isVersionB || tempCombo.size) && tempCombo.side && tempCombo.sauce && tempCombo.drink && tempCombo.extra);
 
   const handleStepClick = (stepIndex: number, label: string, e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_cel', `Przejście do kroku zestawu: ${label}`, e, 'combo-builder');
@@ -179,14 +179,14 @@ export const ComboBuilderScreen: React.FC = () => {
         <aside className="combo-stepper-nav" aria-label="Kroki konfiguratora zestawu">
           <button
             type="button"
-            className={`combo-stepper-btn ${comboStep === 1 ? 'active' : ''} ${comboStep > 1 ? 'done' : ''}`}
+            className={`combo-stepper-btn ${comboStep === 1 ? 'active' : ''} ${comboStep > 1 && (!isVersionB || tempCombo.size) ? 'done' : ''}`}
             onClick={(e) => handleStepClick(1, 'Rozmiar zestawu', e)}
             data-aoi="AOI_cel"
           >
-            <span className="step-circle">{comboStep > 1 ? '✓' : '1'}</span>
+            <span className="step-circle">{comboStep > 1 && (!isVersionB || tempCombo.size) ? '✓' : '1'}</span>
             <div className="step-text-wrap">
               <strong>{t('Zestaw')}</strong>
-              <span>{tempCombo.size ? t(tempCombo.size === 'large' ? 'Powiększony' : 'Standardowy') : 'Wybierz rozmiar'}</span>
+              <span>{tempCombo.size ? t(tempCombo.size === 'large' ? 'Powiększony' : 'Standardowy') : t('Wybierz rozmiar')}</span>
             </div>
           </button>
 

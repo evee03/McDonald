@@ -282,19 +282,20 @@ export const useKioskStore = create<KioskState>((set, get) => ({
       ? get().cart.find((item) => item.id === cartItemId)
       : undefined;
     const pendingIngredients = get().pendingProductIngredients;
+    const isVersionB = get().interfaceVersion === 'B';
 
-    // Inicjalizacja domyślnego zestawu
+    // Inicjalizacja domyślnego zestawu (w wersji B żaden rozmiar nie jest domyślnie zaznaczony)
     const initialCombo: ConfiguredCombo = existingItem?.comboConfig ?
     {
       ...existingItem.comboConfig,
-      size: existingItem.comboConfig.size || 'standard',
+      size: existingItem.comboConfig.size || (isVersionB ? undefined : 'standard'),
       customIngredients: existingItem.customIngredients
         ? [...existingItem.customIngredients]
         : undefined,
     }
     :{
       baseProduct: product,
-      size: 'standard',
+      size: isVersionB ? undefined : 'standard',
       side: undefined,
       sauce: undefined,
       drink: undefined,
@@ -361,8 +362,9 @@ export const useKioskStore = create<KioskState>((set, get) => ({
   },
 
   finishComboBuilder: (quantity = 1) => {
-    const { tempCombo, selectedCartItemId } = get();
+    const { tempCombo, selectedCartItemId, interfaceVersion } = get();
     if (!tempCombo) return;
+    if (interfaceVersion === 'B' && !tempCombo.size) return;
     const size = tempCombo.size || 'standard';
     if (!tempCombo.side || !tempCombo.sauce || !tempCombo.drink || !tempCombo.extra) return;
     const normalizedQuantity = Math.max(1, Math.min(9, Math.round(quantity)));

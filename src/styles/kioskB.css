@@ -1189,34 +1189,44 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 18px;
-  min-height: 52px;
+  padding: 6px 14px;
+  min-height: 48px;
   background: #ffffff;
   border-bottom: 1px solid #dedede;
+  gap: 8px;
 }
 
 .kiosk-version-b .combo-header-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.kiosk-version-b .combo-title-stack {
   min-width: 0;
   flex: 1;
 }
 
 .kiosk-version-b .combo-name-heading {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 800;
   color: #1f1f1f;
-  line-height: 1.25;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .kiosk-version-b .combo-price-and-info {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 6px;
+  font-size: 12px;
   line-height: 1;
   margin-top: 1px;
+  flex-wrap: wrap;
 }
 
 .kiosk-version-b .combo-info-divider {
@@ -1234,11 +1244,12 @@
   padding: 0;
   color: #4b5563;
   font-family: inherit;
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+  white-space: nowrap;
   transition: color 0.15s ease;
 }
 
@@ -1248,6 +1259,444 @@
   outline: none;
 }
 
+/* Układ główny konfiguratora */
+.kiosk-version-b .combo-builder-main-split {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Lewy stepper kroków */
+.kiosk-version-b .combo-stepper-nav {
+  width: 125px;
+  flex-shrink: 0;
+  padding: 6px 3px;
+  gap: 3px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.kiosk-version-b .combo-stepper-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.kiosk-version-b .combo-stepper-btn {
+  padding: 6px 4px;
+  gap: 6px;
+  min-height: 44px;
+  border-radius: 4px;
+}
+
+.kiosk-version-b .combo-stepper-btn .step-circle {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.kiosk-version-b .combo-stepper-btn .step-text-wrap {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.kiosk-version-b .combo-stepper-btn .step-text-wrap strong {
+  font-size: 11px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kiosk-version-b .combo-stepper-btn .step-text-wrap span {
+  font-size: 9.5px;
+  line-height: 1.15;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Prawa zawartość kroku */
+.kiosk-version-b .combo-step-content-area {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #f8fafc;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.kiosk-version-b .combo-step-content-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-button {
+  display: none;
+}
+
+.kiosk-version-b .combo-step-content-area > .step-view-block {
+  min-height: 0;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.kiosk-version-b .step-heading-text {
+  font-size: 14.5px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+/* Krok 1 i Krok 2: Karty wyboru */
+.kiosk-version-b .combo-cards-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.kiosk-version-b .combo-choice-box {
+  padding: 10px 6px;
+  gap: 4px;
+  border-radius: 8px;
+  min-height: 110px;
+  justify-content: center;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.kiosk-version-b .combo-choice-box.selected {
+  border: 2px solid #ffbc0d;
+  background: #fffdf5;
+}
+
+.kiosk-version-b .combo-choice-box .choice-visual {
+  font-size: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .combo-choice-box .choice-visual .visual-icon-svg,
+.kiosk-version-b .combo-choice-box .choice-visual .ingredient-visual {
+  width: 48px;
+  height: 48px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.kiosk-version-b .combo-choice-box .choice-name {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  word-break: break-word;
+  text-align: center;
+}
+
+.kiosk-version-b .combo-choice-box .choice-price {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #15803d;
+}
+
+.kiosk-version-b .combo-choice-box .choice-subtext {
+  font-size: 9.5px;
+  color: #64748b;
+  line-height: 1.15;
+}
+
+/* Krok 3 i 4: Siatka sosów i napojów */
+.kiosk-version-b .sauces-grid-layout,
+.kiosk-version-b .drinks-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.kiosk-version-b .sauce-tile-box,
+.kiosk-version-b .drink-tile-box {
+  padding: 6px 3px;
+  min-height: 78px;
+  border-radius: 6px;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+}
+
+.kiosk-version-b .sauce-tile-box.selected,
+.kiosk-version-b .drink-tile-box.selected {
+  border: 2px solid #ffbc0d;
+  background: #fffdf5;
+}
+
+.kiosk-version-b .sauce-icon-wrap,
+.kiosk-version-b .drink-icon-wrap {
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .sauce-icon-wrap .ingredient-visual,
+.kiosk-version-b .drink-icon-wrap .visual-icon-svg {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.kiosk-version-b .sauce-name-text,
+.kiosk-version-b .drink-name-text {
+  font-size: 10px;
+  line-height: 1.15;
+  word-break: break-word;
+  text-align: center;
+}
+
+.kiosk-version-b .sauce-price-text,
+.kiosk-version-b .drink-price-add {
+  font-size: 10px;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.kiosk-version-b .sauce-price-free,
+.kiosk-version-b .drink-price-free {
+  font-size: 9px;
+  color: #64748b;
+}
+
+/* Filtry napojów */
+.kiosk-version-b .drinks-filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.kiosk-version-b .drinks-filter-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.kiosk-version-b .drink-filter-btn {
+  min-height: 34px;
+  padding: 4px 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+/* Krok 6: Podsumowanie zestawu */
+.kiosk-version-b .combo-summary-view {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.kiosk-version-b .combo-summary-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.kiosk-version-b .summary-hero-visual {
+  min-height: 60px;
+  max-height: 90px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
+  margin: 2px 0 8px;
+  flex-shrink: 0;
+}
+
+.kiosk-version-b .summary-hero-visual .visual-icon-svg {
+  width: 54px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.kiosk-version-b .summary-hero-visual .visual-icon-svg:nth-child(2) {
+  width: 78px;
+  height: 58px;
+  margin-bottom: 2px;
+}
+
+.kiosk-version-b .combo-elements-horizontal-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.kiosk-version-b .summary-item-card {
+  padding: 6px 4px;
+  gap: 3px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  min-width: 0;
+}
+
+.kiosk-version-b .summary-card-visual {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kiosk-version-b .summary-card-visual .visual-icon-svg,
+.kiosk-version-b .summary-card-visual .ingredient-visual {
+  width: 38px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.kiosk-version-b .summary-card-name {
+  font-size: 10px;
+  line-height: 1.15;
+  min-height: 20px;
+  word-break: break-word;
+  text-align: center;
+}
+
+.kiosk-version-b .btn-summary-personalize,
+.kiosk-version-b .btn-summary-change {
+  min-height: 32px;
+  padding: 4px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.kiosk-version-b .combo-builder-actions {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-top: 8px;
+  width: 100%;
+}
+
+.kiosk-version-b .combo-quantity-control {
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   RESPONSYWNOŚĆ PRZY DUŻEJ CZCIONCE (font-size-level-1 i font-size-level-2)
+   ========================================================================== */
+
+/* Zwężenie steppera przy powiększonej czcionce, by dać miejsce zawartości */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-nav,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-nav {
+  width: 110px;
+  padding: 4px 2px;
+  gap: 2px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn {
+  padding: 4px 2px;
+  gap: 4px;
+  min-height: 38px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-circle,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-circle {
+  width: 18px;
+  height: 18px;
+  font-size: 9px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-text-wrap strong,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-text-wrap strong {
+  font-size: 10px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-text-wrap span,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-text-wrap span {
+  font-size: 8.5px;
+}
+
+/* 2 kolumny dla sosów i napojów przy dużej czcionce, by kafelki nie były zbyt wąskie i nie rozjeżdżały się */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .sauces-grid-layout,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .drinks-grid-layout,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .sauces-grid-layout,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .drinks-grid-layout {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .sauce-tile-box,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .drink-tile-box,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .sauce-tile-box,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .drink-tile-box {
+  min-height: 72px;
+  padding: 6px 4px;
+}
+
+/* Schowanie dekoracyjnego podglądu zestawu w podsumowaniu przy dużej czcionce, by zmieścić elementy */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .summary-hero-visual,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .summary-hero-visual {
+  display: none;
+}
+
+/* 2 kolumny w podsumowaniu przy dużej czcionce */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-elements-horizontal-row,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-elements-horizontal-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* Przyciski kontrolne przy dużej czcionce układają się pionowo, gdy jest za wąsko */
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-builder-bottom-controls,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-builder-bottom-controls {
+  flex-direction: column;
+  gap: 6px;
+}
+
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-builder-bottom-controls > button,
+.kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-builder-bottom-controls > button {
+  width: 100%;
+  border-radius: 4px !important;
+  margin-left: 0 !important;
+  min-height: 44px;
+}
 
 /* Styl zablokowanego przycisku głównego w Wersji B */
 .kiosk-version-b .btn-primary-control:disabled {
@@ -2608,10 +3057,16 @@
 .kiosk-version-b .combo-builder-bottom-controls .btn-secondary-control,
 .kiosk-version-b .combo-builder-bottom-controls .btn-primary-control {
   min-height: 48px;
-  padding: 12px 18px;
-  font-size: 14px;
+  padding: 10px 12px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.15s ease;
 }
 
