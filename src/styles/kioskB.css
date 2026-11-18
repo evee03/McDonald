@@ -3266,22 +3266,25 @@
   display: flex;
   gap: 0px;
   width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .kiosk-version-b .combo-builder-bottom-controls>button,
 .kiosk-version-b .combo-builder-bottom-controls .btn-secondary-control,
 .kiosk-version-b .combo-builder-bottom-controls .btn-primary-control {
-  min-height: 48px;
-  padding: 10px 14px;
-  font-size: 14.5px;
+  min-height: 46px;
+  padding: 8px 10px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  white-space: normal;
+  white-space: nowrap;
   text-align: center;
   line-height: 1.2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
   transition: all 0.15s ease;
 }
 
@@ -3327,7 +3330,7 @@
 }
 
 .kiosk-version-b .combo-builder-bottom-controls .btn-combo-cancel {
-  flex: 1;
+  flex: 0.9;
   color: #1e293b;
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -3343,7 +3346,7 @@
 }
 
 .kiosk-version-b .combo-builder-bottom-controls .btn-combo-summary {
-  flex: 1.1;
+  flex: 1.15;
   color: #0369a1;
   background: #f0f9ff;
   border: 1px solid #bae6fd;
@@ -3365,7 +3368,7 @@
 }
 
 .kiosk-version-b .combo-builder-bottom-controls .btn-combo-finish {
-  flex: 1.6;
+  flex: 1.4;
 }
 
 /* Wprowadzanie NIP: Dolne przyciski */

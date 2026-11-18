@@ -655,14 +655,16 @@ export const ComboBuilderScreen: React.FC = () => {
                 </div>
               )}
               <div className="combo-builder-bottom-controls">
-                <button
-                  type="button"
-                  className="btn-secondary-control btn-combo-remove"
-                  onClick={handleRemoveProduct}
-                  data-aoi="AOI_wstecz"
-                >
-                  {t('Usuń produkt')}
-                </button>
+                {(comboStep === 6 || !isEditingCombo) && (
+                  <button
+                    type="button"
+                    className="btn-secondary-control btn-combo-remove"
+                    onClick={handleRemoveProduct}
+                    data-aoi="AOI_wstecz"
+                  >
+                    {t('Usuń produkt')}
+                  </button>
+                )}
 
                 <button
                   type="button"
