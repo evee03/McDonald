@@ -1210,10 +1210,10 @@
 }
 
 .kiosk-version-b .combo-name-heading {
-  font-size: 14.5px;
+  font-size: 17px;
   font-weight: 800;
   color: #1f1f1f;
-  line-height: 1.2;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1222,10 +1222,10 @@
 .kiosk-version-b .combo-price-and-info {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 13.5px;
   line-height: 1;
-  margin-top: 1px;
+  margin-top: 2px;
   flex-wrap: wrap;
 }
 
@@ -1244,7 +1244,7 @@
   padding: 0;
   color: #4b5563;
   font-family: inherit;
-  font-size: 11.5px;
+  font-size: 12.5px;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -1270,10 +1270,10 @@
 
 /* Lewy stepper kroków */
 .kiosk-version-b .combo-stepper-nav {
-  width: 125px;
+  width: 140px;
   flex-shrink: 0;
-  padding: 6px 3px;
-  gap: 3px;
+  padding: 8px 4px;
+  gap: 4px;
   background: #ffffff;
   border-right: 1px solid #e2e8f0;
   overflow-y: auto;
@@ -1286,16 +1286,17 @@
 }
 
 .kiosk-version-b .combo-stepper-btn {
-  padding: 6px 4px;
-  gap: 6px;
-  min-height: 44px;
-  border-radius: 4px;
+  padding: 8px 6px;
+  gap: 8px;
+  min-height: 48px;
+  border-radius: 6px;
 }
 
 .kiosk-version-b .combo-stepper-btn .step-circle {
-  width: 20px;
-  height: 20px;
-  font-size: 10px;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  font-weight: 800;
   flex-shrink: 0;
 }
 
@@ -1305,16 +1306,17 @@
 }
 
 .kiosk-version-b .combo-stepper-btn .step-text-wrap strong {
-  font-size: 11px;
-  line-height: 1.15;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .kiosk-version-b .combo-stepper-btn .step-text-wrap span {
-  font-size: 9.5px;
-  line-height: 1.15;
+  font-size: 11px;
+  line-height: 1.2;
   display: block;
   white-space: nowrap;
   overflow: hidden;
@@ -1387,26 +1389,26 @@
 }
 
 .kiosk-version-b .step-heading-text {
-  font-size: 14.5px;
+  font-size: 17px;
   font-weight: 800;
   color: #1e293b;
-  margin-bottom: 8px;
-  line-height: 1.25;
+  margin-bottom: 12px;
+  line-height: 1.3;
 }
 
 /* Krok 1 i Krok 2: Karty wyboru */
 .kiosk-version-b .combo-cards-2col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .kiosk-version-b .combo-choice-box {
-  padding: 10px 6px;
-  gap: 4px;
+  padding: 12px 8px;
+  gap: 6px;
   border-radius: 8px;
-  min-height: 110px;
+  min-height: 120px;
   justify-content: center;
   min-width: 0;
   border: 1px solid #cbd5e1;
@@ -1420,7 +1422,7 @@
 }
 
 .kiosk-version-b .combo-choice-box .choice-visual {
-  font-size: 34px;
+  font-size: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1428,30 +1430,30 @@
 
 .kiosk-version-b .combo-choice-box .choice-visual .visual-icon-svg,
 .kiosk-version-b .combo-choice-box .choice-visual .ingredient-visual {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   max-width: 100%;
   object-fit: contain;
 }
 
 .kiosk-version-b .combo-choice-box .choice-name {
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.2;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.25;
   word-break: break-word;
   text-align: center;
 }
 
 .kiosk-version-b .combo-choice-box .choice-price {
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 800;
   color: #15803d;
 }
 
 .kiosk-version-b .combo-choice-box .choice-subtext {
-  font-size: 9.5px;
+  font-size: 11.5px;
   color: #64748b;
-  line-height: 1.15;
+  line-height: 1.2;
 }
 
 /* Krok 3 i 4: Siatka sosów i napojów */
@@ -1459,15 +1461,15 @@
 .kiosk-version-b .drinks-grid-layout {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  gap: 8px;
 }
 
 .kiosk-version-b .sauce-tile-box,
 .kiosk-version-b .drink-tile-box {
-  padding: 6px 3px;
-  min-height: 78px;
+  padding: 8px 4px;
+  min-height: 88px;
   border-radius: 6px;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
   border: 1px solid #cbd5e1;
   background: #ffffff;
@@ -1481,7 +1483,7 @@
 
 .kiosk-version-b .sauce-icon-wrap,
 .kiosk-version-b .drink-icon-wrap {
-  font-size: 22px;
+  font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1489,37 +1491,39 @@
 
 .kiosk-version-b .sauce-icon-wrap .ingredient-visual,
 .kiosk-version-b .drink-icon-wrap .visual-icon-svg {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   object-fit: contain;
 }
 
 .kiosk-version-b .sauce-name-text,
 .kiosk-version-b .drink-name-text {
-  font-size: 10px;
-  line-height: 1.15;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
   word-break: break-word;
   text-align: center;
 }
 
 .kiosk-version-b .sauce-price-text,
 .kiosk-version-b .drink-price-add {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   color: #15803d;
 }
 
 .kiosk-version-b .sauce-price-free,
 .kiosk-version-b .drink-price-free {
-  font-size: 9px;
+  font-size: 11px;
   color: #64748b;
+  font-weight: 600;
 }
 
 /* Filtry napojów */
 .kiosk-version-b .drinks-filter-tabs {
   display: flex;
-  gap: 4px;
-  margin-bottom: 6px;
+  gap: 6px;
+  margin-bottom: 8px;
   overflow-x: auto;
   flex-shrink: 0;
   scrollbar-width: none;
@@ -1531,9 +1535,9 @@
 }
 
 .kiosk-version-b .drink-filter-btn {
-  min-height: 34px;
-  padding: 4px 10px;
-  font-size: 10.5px;
+  min-height: 38px;
+  padding: 6px 12px;
+  font-size: 12.5px;
   font-weight: 700;
   flex-shrink: 0;
   border-radius: 14px;
@@ -1551,7 +1555,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   gap: 8px;
 }
 
@@ -1581,14 +1585,14 @@
 .kiosk-version-b .combo-elements-horizontal-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .kiosk-version-b .summary-item-card {
-  padding: 6px 4px;
-  gap: 3px;
+  padding: 8px 6px;
+  gap: 4px;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
   background: #ffffff;
@@ -1596,7 +1600,7 @@
 }
 
 .kiosk-version-b .summary-card-visual {
-  height: 36px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1604,24 +1608,25 @@
 
 .kiosk-version-b .summary-card-visual .visual-icon-svg,
 .kiosk-version-b .summary-card-visual .ingredient-visual {
-  width: 38px;
-  height: 30px;
+  width: 42px;
+  height: 34px;
   object-fit: contain;
 }
 
 .kiosk-version-b .summary-card-name {
-  font-size: 10px;
-  line-height: 1.15;
-  min-height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  min-height: 24px;
   word-break: break-word;
   text-align: center;
 }
 
 .kiosk-version-b .btn-summary-personalize,
 .kiosk-version-b .btn-summary-change {
-  min-height: 32px;
-  padding: 4px 6px;
-  font-size: 10px;
+  min-height: 34px;
+  padding: 5px 8px;
+  font-size: 12px;
   font-weight: 700;
   border-radius: 4px;
   border: 1px solid #cbd5e1;
@@ -1649,33 +1654,33 @@
 /* Zwężenie steppera przy powiększonej czcionce, by dać miejsce zawartości */
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-nav,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-nav {
-  width: 110px;
-  padding: 4px 2px;
-  gap: 2px;
+  width: 120px;
+  padding: 6px 3px;
+  gap: 3px;
 }
 
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn {
-  padding: 4px 2px;
-  gap: 4px;
-  min-height: 38px;
+  padding: 6px 4px;
+  gap: 5px;
+  min-height: 42px;
 }
 
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-circle,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-circle {
-  width: 18px;
-  height: 18px;
-  font-size: 9px;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
 }
 
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-text-wrap strong,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-text-wrap strong {
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .combo-stepper-btn .step-text-wrap span,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .combo-stepper-btn .step-text-wrap span {
-  font-size: 8.5px;
+  font-size: 10.5px;
 }
 
 /* 2 kolumny dla sosów i napojów przy dużej czcionce, by kafelki nie były zbyt wąskie i nie rozjeżdżały się */
@@ -1691,7 +1696,7 @@
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-1 .drink-tile-box,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .sauce-tile-box,
 .kiosk-version-b .kiosk-screen-viewport.font-size-level-2 .drink-tile-box {
-  min-height: 72px;
+  min-height: 80px;
   padding: 6px 4px;
 }
 
@@ -3109,12 +3114,12 @@
   min-height: 44px;
   width: auto;
   min-width: 44px;
-  padding: 0 12px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   color: #1e293b;
   background: #ffffff;
@@ -3149,11 +3154,11 @@
   height: 44px;
   min-height: 44px;
   min-width: 44px;
-  padding: 0 12px;
+  padding: 0 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 800;
   color: #1e293b;
   background: #ffffff;
@@ -3179,7 +3184,7 @@
 }
 
 .kiosk-version-b .combo-quantity-button .qty-text-label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -3198,8 +3203,8 @@
 .kiosk-version-b .combo-builder-bottom-controls .btn-secondary-control,
 .kiosk-version-b .combo-builder-bottom-controls .btn-primary-control {
   min-height: 48px;
-  padding: 10px 12px;
-  font-size: 13.5px;
+  padding: 10px 14px;
+  font-size: 14.5px;
   font-weight: 700;
   cursor: pointer;
   white-space: normal;
