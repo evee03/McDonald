@@ -35,6 +35,7 @@ export const ComboBuilderScreen: React.FC = () => {
   const [drinkCategory, setDrinkCategory] = useState<'all' | 'cold' | 'water' | 'hot'>('all');
   const isVersionB = interfaceVersion === 'B';
   const [comboQuantity, setComboQuantity] = useState(1);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const isEditingCombo = Boolean(selectedCartItemId);
   const comboTitle = t(getComboProductLabel(tempCombo?.baseProduct.name || ''));
 
@@ -76,7 +77,11 @@ export const ComboBuilderScreen: React.FC = () => {
 
   const handleRemoveProduct = (e: React.MouseEvent) => {
     eventLogger.logTouch('AOI_wstecz', 'Usuń produkt z zamówienia', e, 'combo-builder');
-    cancelComboBuilder(true);
+    if (isVersionB) {
+      setShowDeleteModal(true);
+    } else {
+      cancelComboBuilder(true);
+    }
   };
 
   const handleCancel = (e: React.MouseEvent) => {
@@ -475,8 +480,20 @@ export const ComboBuilderScreen: React.FC = () => {
               {comboStep === 6 && (
                 <div className="step-view-block combo-summary-view">
                   <div className="combo-summary-heading">
-                    <h1 className="combo-name-heading">{comboTitle}</h1>
-                    <span className="combo-total-price-tag">{formatPrice(currentPrice)} zł</span>
+                    <div className="combo-summary-title-wrap">
+                      <span className="combo-summary-eyebrow">{t('Twój zestaw')}:</span>
+                      <h1 className="combo-name-heading">{comboTitle}</h1>
+                    </div>
+                    <div className="combo-summary-price-wrap">
+                      <span className="combo-total-price-tag">
+                        {formatPrice(currentPrice * (comboQuantity || 1))} zł
+                      </span>
+                      {comboQuantity > 1 && (
+                        <span className="combo-unit-price-subtext">
+                          {formatPrice(currentPrice)} zł / szt.
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="summary-hero-visual" aria-hidden="true">
                     {tempCombo.side ? <VisualIcon kind="fries" label="" /> : <span>—</span>}
@@ -630,23 +647,23 @@ export const ComboBuilderScreen: React.FC = () => {
               <div className="combo-builder-bottom-controls">
                 <button
                   type="button"
-                  className={`btn-secondary-control ${comboStep === 6 ? 'btn-combo-cancel' : 'btn-combo-remove'}`}
-                  onClick={comboStep === 6 ? handleCancel : handleRemoveProduct}
+                  className="btn-secondary-control btn-combo-remove"
+                  onClick={handleRemoveProduct}
                   data-aoi="AOI_wstecz"
                 >
-                  {comboStep === 6 ? t('Anuluj') : t('Usuń produkt')}
+                  {t('Usuń produkt')}
                 </button>
 
-                {comboStep < 6 ? (
-                  <button
-                    type="button"
-                    className="btn-secondary-control btn-combo-cancel"
-                    onClick={handleCancel}
-                    data-aoi="AOI_wstecz"
-                  >
-                    {t('Anuluj')}
-                  </button>
-                ) : (
+                <button
+                  type="button"
+                  className="btn-secondary-control btn-combo-cancel"
+                  onClick={handleCancel}
+                  data-aoi="AOI_wstecz"
+                >
+                  {t('Cofnij')}
+                </button>
+
+                {comboStep === 6 && (
                   <button
                     type="button"
                     className="btn-primary-control btn-combo-finish"
@@ -1029,6 +1046,86 @@ export const ComboBuilderScreen: React.FC = () => {
           </main>
         )}
       </div>
+
+      {/* Modal potwierdzenia usunięcia pozycji (Wersja B) */}
+      {isVersionB && showDeleteModal && tempCombo && (
+        <div
+          className="kiosk-modal-backdrop"
+          onClick={(e) => {
+            eventLogger.logTouch('AOI_wstecz', 'Anuluj usunięcie pozycji (kliknięcie tła)', e, 'combo-builder');
+            setShowDeleteModal(false);
+          }}
+        >
+          <div
+            className="kiosk-remove-item-dialog animated-pop"
+            onClick={(e) => e.stopPropagation()}
+            data-aoi="AOI_cel"
+          >
+            <div className="remove-item-icon-bubble" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#dc2626" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
+              </svg>
+            </div>
+
+            <h2 className="remove-dialog-title">{t('Usunąć tę pozycję?')}</h2>
+            <p className="remove-dialog-subtitle">
+              {t('Czy na pewno chcesz usunąć tę pozycję ze swojego zamówienia?')}
+            </p>
+
+            <div className="remove-dialog-item-preview">
+              <div className="remove-item-visual">
+                {tempCombo.baseProduct.id.startsWith('sauce-') ? (
+                  <IngredientIcon id={tempCombo.baseProduct.id} label={tempCombo.baseProduct.name} />
+                ) : (
+                  <VisualIcon
+                    kind={tempCombo.baseProduct.image}
+                    label={tempCombo.baseProduct.name}
+                    photoKey={tempCombo.baseProduct.id}
+                  />
+                )}
+              </div>
+              <div className="remove-item-info">
+                <span className="remove-item-name">
+                  {(comboStep === 6 ? comboQuantity : 1)}× {t(comboTitle)}
+                </span>
+                <span className="remove-item-price">
+                  {formatPrice(currentPrice * (comboStep === 6 ? comboQuantity : 1))} zł
+                </span>
+              </div>
+            </div>
+
+            <div className="remove-dialog-buttons">
+              <button
+                type="button"
+                className="btn-remove-cancel"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_wstecz', 'Anuluj usunięcie pozycji', e, 'combo-builder');
+                  setShowDeleteModal(false);
+                }}
+                data-aoi="AOI_wstecz"
+              >
+                {t('Anuluj')}
+              </button>
+
+              <button
+                type="button"
+                className="btn-remove-confirm"
+                onClick={(e) => {
+                  eventLogger.logTouch('AOI_cel', `Potwierdź usunięcie pozycji: ${tempCombo.baseProduct.name}`, e, 'combo-builder');
+                  setShowDeleteModal(false);
+                  cancelComboBuilder(true);
+                }}
+                data-aoi="AOI_cel"
+              >
+                {t('Usuń')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <BottomBar />
     </div>
