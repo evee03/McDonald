@@ -1322,38 +1322,63 @@
 }
 
 /* Prawa zawartość kroku */
+.kiosk-version-b .combo-b-right-pane {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  overflow: hidden;
+}
+
+.kiosk-version-b .combo-b-scroll-shell {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  overflow: hidden;
+  background: transparent;
+}
+
+.kiosk-version-b .combo-b-scroll-content,
 .kiosk-version-b .combo-step-content-area {
   flex: 1;
   min-width: 0;
   min-height: 0;
-  padding: 10px;
+  padding: 10px 12px;
   overflow-y: auto;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   background: #f8fafc;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+.kiosk-version-b .combo-b-scroll-content::-webkit-scrollbar,
 .kiosk-version-b .combo-step-content-area::-webkit-scrollbar {
-  width: 6px;
-}
-
-.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-.kiosk-version-b .combo-step-content-area::-webkit-scrollbar-button {
   display: none;
 }
 
+.kiosk-version-b .combo-b-scroll-shell .allergens-custom-scrollbar {
+  flex: 0 0 44px;
+  width: 44px;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .combo-b-right-pane .combo-builder-actions {
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: 8px 12px 10px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.kiosk-version-b .combo-b-scroll-content > .step-view-block,
 .kiosk-version-b .combo-step-content-area > .step-view-block {
   min-height: 0;
   flex: 1 0 auto;
@@ -3101,6 +3126,15 @@
 
 .kiosk-version-b .combo-quantity-button:hover:not(:disabled) {
   background: #f1f5f9;
+}
+
+.kiosk-version-b .combo-quantity-button:disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+  background: #f8fafc !important;
+  color: #94a3b8 !important;
+  border-color: #cbd5e1 !important;
+  pointer-events: none !important;
 }
 
 .kiosk-version-b .combo-quantity-button:first-child,
