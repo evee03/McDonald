@@ -2,6 +2,7 @@ import React from 'react';
 import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { useT } from '../../i18n';
+import { BottomBar } from '../common/BottomBar';
 
 const languages = [
   { id: 'pl', label: 'Polski', nativeLabel: 'Polski' },
@@ -54,6 +55,8 @@ export const LanguageScreen: React.FC = () => {
           {t('Cofnij')}
         </button>
       </footer>
+
+      <BottomBar />
     </div>
   );
 };

@@ -3,11 +3,14 @@ import { useKioskStore } from '../../store/kioskStore';
 import { eventLogger } from '../../logger/eventLogger';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
+import { BottomBar } from '../common/BottomBar';
 
 export const WelcomeScreen: React.FC = () => {
-  const { navigateTo, toggleAccessibility, isAccessibilityMode, activeScenario } = useKioskStore();
+  const { navigateTo, toggleAccessibility, isAccessibilityMode, activeScenario, interfaceVersion } = useKioskStore();
   const t = useT();
   const [showScenarioInstructions, setShowScenarioInstructions] = useState(true);
+
+  const isVersionB = interfaceVersion === 'B';
 
   const scenarioInstructions = {
     S1: 'Zamów dwa burgery z bekonem na wynos i zapłać kartą.',
@@ -84,18 +87,20 @@ export const WelcomeScreen: React.FC = () => {
         </div>
 
         <div className="welcome-footer-row">
-          <button
-            type="button"
-            className={`welcome-a11y-btn ${isAccessibilityMode ? 'active' : ''}`}
-            onClick={handleAccessibility}
-            data-aoi="AOI_dostepnosc"
-            aria-pressed={isAccessibilityMode}
-            aria-label={t(isAccessibilityMode ? 'Wyłącz tryb dostępności' : 'Włącz tryb dostępności')}
-          >
-            <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
-            <span className="a11y-text">{t('Dostępność')}</span>
-            {isAccessibilityMode && <span className="a11y-enabled-check" aria-hidden="true">✓</span>}
-          </button>
+          {!isVersionB && (
+            <button
+              type="button"
+              className={`welcome-a11y-btn ${isAccessibilityMode ? 'active' : ''}`}
+              onClick={handleAccessibility}
+              data-aoi="AOI_dostepnosc"
+              aria-pressed={isAccessibilityMode}
+              aria-label={t(isAccessibilityMode ? 'Wyłącz tryb dostępności' : 'Włącz tryb dostępności')}
+            >
+              <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
+              <span className="a11y-text">{t('Dostępność')}</span>
+              {isAccessibilityMode && <span className="a11y-enabled-check" aria-hidden="true">✓</span>}
+            </button>
+          )}
 
           <button
             type="button"
@@ -109,6 +114,8 @@ export const WelcomeScreen: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {isVersionB && <BottomBar />}
     </div>
   );
 };

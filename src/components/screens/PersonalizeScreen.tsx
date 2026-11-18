@@ -5,6 +5,7 @@ import { Header } from '../common/Header';
 import { VisualIcon } from '../common/VisualIcon';
 import { IngredientIcon } from '../common/IngredientIcon';
 import { AllergensScrollbar } from '../common/AllergensScrollbar';
+import { BottomBar } from '../common/BottomBar';
 import { useT } from '../../i18n';
 import { formatPrice } from '../../utils/formatPrice';
 
@@ -158,6 +159,8 @@ export const PersonalizeScreen: React.FC = () => {
           </button>
         </div>
       </main>
+
+      <BottomBar />
     </div>
   );
 };

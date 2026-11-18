@@ -7,6 +7,7 @@ import { IngredientIcon } from '../common/IngredientIcon';
 import { useT } from '../../i18n';
 import { getDisplayedIngredients } from '../../utils/productIngredients';
 import { AllergensScrollbar } from '../common/AllergensScrollbar';
+import { BottomBar } from '../common/BottomBar';
 
 export const AllergensScreen: React.FC = () => {
   const t = useT();
@@ -138,6 +139,8 @@ export const AllergensScreen: React.FC = () => {
           {t('Cofnij')}
         </button>
       </footer>
+
+      <BottomBar />
     </div>
   );
 };

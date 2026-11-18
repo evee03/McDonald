@@ -24,8 +24,6 @@ export const BottomBar: React.FC = () => {
   const count = getCartItemsCount();
   const isVersionB = interfaceVersion === 'B';
 
-  if (currentScreen !== 'menu') return null;
-
   const handleCheckoutClick = (e: React.MouseEvent) => {
     if (count === 0) return;
     eventLogger.logTouch('AOI_cel', 'Przejdź do podsumowania', e, currentScreen, {
@@ -52,36 +50,39 @@ export const BottomBar: React.FC = () => {
 
   /* ---- WERSJA B ---- */
   if (isVersionB) {
+    const showCartSection = currentScreen === 'menu';
     return (
-      <div className="bottom-bar-container bottom-bar-b">
-        {/* Sekcja transakcyjna – koszyk */}
-        <div className="bb-b-cart-section">
-          <div className="bb-b-cart-info">
-            <div className="cart-icon-wrapper">
-              <span className="cart-icon"><VisualIcon kind="bag" label="Koszyk" /></span>
-              {count > 0 && <span className="cart-counter">{count}</span>}
+      <div className={`bottom-bar-container bottom-bar-b ${!showCartSection ? 'bottom-bar-b--a11y-only' : ''}`}>
+        {/* Sekcja transakcyjna – koszyk (tylko na ekranie menu) */}
+        {showCartSection && (
+          <div className="bb-b-cart-section">
+            <div className="bb-b-cart-info">
+              <div className="cart-icon-wrapper">
+                <span className="cart-icon"><VisualIcon kind="bag" label="Koszyk" /></span>
+                {count > 0 && <span className="cart-counter">{count}</span>}
+              </div>
+              <div className="bb-b-cart-text">
+                <span className="bb-b-cart-count">
+                  {count === 0
+                    ? t('Koszyk pusty')
+                    : count === 1
+                      ? t('1 produkt')
+                      : `${count} ${t('produkty/produktów')}`}
+                </span>
+                <span className="bb-b-cart-price">{formatPrice(total)} zł</span>
+              </div>
             </div>
-            <div className="bb-b-cart-text">
-              <span className="bb-b-cart-count">
-                {count === 0
-                  ? t('Koszyk pusty')
-                  : count === 1
-                    ? t('1 produkt')
-                    : `${count} ${t('produkty/produktów')}`}
-              </span>
-              <span className="bb-b-cart-price">{formatPrice(total)} zł</span>
-            </div>
+            <button
+              type="button"
+              className={`btn-checkout btn-checkout-b ${count > 0 ? 'active' : 'disabled'}`}
+              disabled={count === 0}
+              onClick={handleCheckoutClick}
+              data-aoi="AOI_cel"
+            >
+              {t('Przejdź do podsumowania')}
+            </button>
           </div>
-          <button
-            type="button"
-            className={`btn-checkout btn-checkout-b ${count > 0 ? 'active' : 'disabled'}`}
-            disabled={count === 0}
-            onClick={handleCheckoutClick}
-            data-aoi="AOI_cel"
-          >
-            {t('Przejdź do podsumowania')}
-          </button>
-        </div>
+        )}
 
         {/* Sekcja dostępności */}
         <div className="bb-b-a11y-section">
@@ -93,7 +94,7 @@ export const BottomBar: React.FC = () => {
             title={t('Obniża położenie elementów ekranu')}
           >
             <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
-            <span>{t('Obniż ekran')}</span>
+            <span>{isAccessibilityMode ? t('Przywróć ekran') : t('Obniż ekran')}</span>
           </button>
 
           <div className="bb-b-font-size-group" role="group" aria-label={t('Rozmiar czcionki')}>
@@ -121,6 +122,7 @@ export const BottomBar: React.FC = () => {
   }
 
   /* ---- WERSJA A (oryginalna) ---- */
+  if (currentScreen !== 'menu') return null;
   return (
     <div className="bottom-bar-container">
       {/* Pasek podsumowania koszyka */}

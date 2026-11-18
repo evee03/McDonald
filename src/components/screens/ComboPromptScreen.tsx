@@ -5,6 +5,7 @@ import { Header } from '../common/Header';
 import { VisualIcon } from '../common/VisualIcon';
 import { useT } from '../../i18n';
 import { formatPrice } from '../../utils/formatPrice';
+import { BottomBar } from '../common/BottomBar';
 
 export const ComboPromptScreen: React.FC = () => {
   const t = useT();
@@ -16,7 +17,10 @@ export const ComboPromptScreen: React.FC = () => {
     navigateTo,
     toggleAccessibility,
     isAccessibilityMode,
+    interfaceVersion,
   } = useKioskStore();
+
+  const isVersionB = interfaceVersion === 'B';
 
   if (!selectedProduct) {
     navigateTo('menu');
@@ -99,29 +103,33 @@ export const ComboPromptScreen: React.FC = () => {
         </div>
       </main>
 
-      <footer className="prompt-screen-utilities">
-        <button
-          type="button"
-          className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}
-          onClick={handleAccessibility}
-          data-aoi="AOI_dostepnosc"
-        >
-          <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
-          <span>{t('Dostępność')}</span>
-        </button>
+      {isVersionB ? (
+        <BottomBar />
+      ) : (
+        <footer className="prompt-screen-utilities">
+          <button
+            type="button"
+            className={`utility-action-btn accessibility-btn ${isAccessibilityMode ? 'active' : ''}`}
+            onClick={handleAccessibility}
+            data-aoi="AOI_dostepnosc"
+          >
+            <span className="a11y-icon"><VisualIcon kind="accessibility" label="Dostępność" /></span>
+            <span>{t('Dostępność')}</span>
+          </button>
 
-        <button
-          type="button"
-          className="utility-action-btn prompt-language-btn"
-          onClick={handleLanguageSelection}
-          data-aoi="AOI_cel"
-          aria-label={t('Dostępne języki')}
-          title={t('Dostępne języki')}
-        >
-          <span className="welcome-language-code" aria-hidden="true">文</span>
-          <span>{t('Języki')}</span>
-        </button>
-      </footer>
+          <button
+            type="button"
+            className="utility-action-btn prompt-language-btn"
+            onClick={handleLanguageSelection}
+            data-aoi="AOI_cel"
+            aria-label={t('Dostępne języki')}
+            title={t('Dostępne języki')}
+          >
+            <span className="welcome-language-code" aria-hidden="true">文</span>
+            <span>{t('Języki')}</span>
+          </button>
+        </footer>
+      )}
     </div>
   );
 };
