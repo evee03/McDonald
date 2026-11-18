@@ -2289,9 +2289,64 @@
   color: #1e293b;
 }
 
-.kiosk-version-b .btn-reset-changes {
-  background: #fff;
-  border: 1px solid var(--kiosk-border);
+/* Ekran personalizacji w wersji B */
+.kiosk-version-b .personalize-product-summary-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.kiosk-version-b .personalize-product-summary-card .summary-price {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #15803d;
+  margin-top: 2px;
+}
+
+.kiosk-version-b .personalize-product-summary-card .btn-reset-changes {
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.kiosk-version-b .personalize-product-summary-card .btn-reset-changes:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #1e293b;
+}
+
+.kiosk-version-b .personalize-product-summary-card .btn-reset-changes:active {
+  background: #e2e8f0;
 }
 
 .kiosk-version-b .personalize-bottom-actions {

@@ -50,12 +50,12 @@ export const PersonalizeScreen: React.FC = () => {
 
   return (
     <div className="kiosk-page-view personalize-page">
-      <Header showDineOption={false} />
+      <Header title={isVersionB ? 'Personalizuj' : undefined} showDineOption={false} />
 
       <main className="personalize-body-content">
         {/* Karta produktu na górze */}
         <div className="personalize-product-summary-card">
-          <h1 className="personalize-summary-heading">{t('Personalizuj')}</h1>
+          {!isVersionB && <h1 className="personalize-summary-heading">{t('Personalizuj')}</h1>}
           <div className="summary-left">
             <span className="summary-product-emoji"><VisualIcon kind={selectedProduct.image} label={selectedProduct.name} photoKey={selectedProduct.id} /></span>
             <div className="summary-text-block">
